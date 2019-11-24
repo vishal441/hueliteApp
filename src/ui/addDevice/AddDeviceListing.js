@@ -22,7 +22,10 @@ class Application extends Component {
                         renderItem={({item, index})=> {
                             return(
                             <Slider index = {index} name = {item.SSID}>
-                                <AddDevice name = {item.SSID}/>
+                                <AddDevice 
+                                    name = {item.SSID}
+                                    navigation = {this.props.navigation}
+                                    deviceList = {deviceList}/>
                             </Slider>)}}/>
                     </View>
                 </View>

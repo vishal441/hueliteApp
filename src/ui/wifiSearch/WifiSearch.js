@@ -41,7 +41,14 @@ class WifiSearchScreen extends Component {
         return(
             <View style={styles.container}>
                 <View style = {styles.imageContainer}>
-                <Pulse style={styles.container1} color='white' numPulses={4} diameter={400} speed={15} duration={1000} image={{style: styles.imageStyle, source: ICON.BULB}}/>                
+                    <Pulse 
+                        style={styles.container1} 
+                        color='white' 
+                        numPulses={4} 
+                        diameter={400} 
+                        speed={15} 
+                        duration={1000} 
+                        image={{style: styles.imageStyle, source: ICON.BULB}}/>                
                 </View>
                 <View style = {styles.textContainer}>
                     <Text style = {styles.textContent}>Searching Bulbs...</Text>

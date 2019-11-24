@@ -7,6 +7,7 @@ import WifiSearchScreen from "../ui/wifiSearch/WifiSearch";
 import EmptyResultScreen from "../ui/common/customComponents/EmptyResultScreen";
 import RouteHeader from "../ui/common/customComponents/RouteHeader";
 import Dashboard from '../ui/dashboard/Dashboard';
+import PairingForm from '../ui/pairDevice/PairingForm';
 
 export const AppStackNavigator = createStackNavigator(
       { 
@@ -46,6 +47,12 @@ export const AppStackNavigator = createStackNavigator(
             screen: Dashboard,
             navigationOptions:{
                 header:null
+            }
+        },
+        PairingForm: {
+            screen: PairingForm,
+            navigationOptions: {
+                header: null
             }
         }
       },

@@ -10,8 +10,21 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "fs": "0.0.1-security",
+    "node-wifi": "^2.0.12",
     "react": "16.9.0",
-    "react-native": "0.61.5"
+    "react-native": "0.61.5",
+    "react-native-android-location-enabler": "^1.2.0",
+    "react-native-android-wifi": "0.0.41",
+    "react-native-gesture-handler": "^1.5.0",
+    "react-native-linear-gradient": "^2.5.6",
+    "react-native-pulse": "^1.0.7",
+    "react-native-reanimated": "^1.4.0",
+    "react-native-screens": "^1.0.0-alpha.23",
+    "react-navigation": "^4.0.10",
+    "react-navigation-stack": "^1.10.3",
+    "realm": "^3.4.2",
+    "wifi-control": "^2.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

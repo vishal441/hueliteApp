@@ -3,10 +3,11 @@ import {View, Text,FlatList, StyleSheet} from 'react-native';
 import Pulse from "react-native-pulse";
 import {getAvailableDevice} from './WifiScan';
 import {ICON} from '../common/constants/ImageConstant';
+import {connect} from 'react-redux';
+import {deviceListAction} from '../../redux/actions/DeviceListAction';
 
 class WifiSearchScreen extends Component {
     constructor(props){
-        console.log("Construct")
         super(props);
         this.state={startSearching: false, deviceList: []};
         this.getWifiList = this.getWifiList.bind(this); 
@@ -23,7 +24,8 @@ class WifiSearchScreen extends Component {
                 hueDeviceList = deviceList.length && deviceList.filter((item) => !item.SSID.includes("HUE"));            
                 setTimeout(function(){
                         if(hueDeviceList.length){
-                            self.redirectToPage("AddDevice", hueDeviceList);
+                            self.props.deviceListAction(hueDeviceList);
+                            self.redirectToPage("AddDevice");
                         }
                         else{
                             self.redirectToPage("EmptySerachScreen", []);
@@ -80,5 +82,10 @@ const styles = StyleSheet.create({
     }
 })
 
-export default WifiSearchScreen;
+function mapStateToProps(state) {
+    return{
+        deviceList: state
+    }
+}
 
+export default connect(mapStateToProps, {deviceListAction})(WifiSearchScreen);

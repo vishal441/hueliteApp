@@ -2,6 +2,8 @@ import React,{Component} from 'react';
 import {View, Text,FlatList, StyleSheet, Image, Button} from 'react-native';
 import {ICON} from '../common/constants/ImageConstant';
 import {getDeviceListFromDb,deleteDeviceTable,} from '../../database/table/DeviceTable';
+import {connect} from 'react-redux';
+import {deviceListAction} from '../../redux/actions/DeviceListAction';
 
 class Splash extends Component{
     constructor(props){
@@ -14,7 +16,8 @@ class Splash extends Component{
         let self = this;
         getDeviceListFromDb(cb => {
             if(cb.success){
-                this.setState({deviceList: cb.data})
+                //this.setState({deviceList: cb.data})
+                this.props.deviceListAction(cb.data);
             }
         })
         setTimeout(function(){
@@ -45,7 +48,10 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Splash;
+function mapStateToProps(state) {
+    return {
+        deviceList: state
+    }
+}
 
-
-
+export default connect(mapStateToProps, {deviceListAction})(Splash);

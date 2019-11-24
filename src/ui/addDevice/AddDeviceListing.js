@@ -2,17 +2,14 @@ import React,{Component} from 'react';
 import {View, Text,FlatList, StyleSheet, Image} from 'react-native';
 import Slider from "../common/customComponents/SliderAnimation";
 import AddDevice from "./AddDevice";
-
+import {connect} from 'react-redux';
 
 class Application extends Component {
     constructor(props){
         super(props);
-        this.state = {
-            deviceList : this.props.navigation.getParam('deviceList', 'NO-ID')
-        }
     }
     render(){
-        let {deviceList = []} = this.state;
+        let {deviceList = []} = this.props;
         return(
             <View style={styles.container}>
                 <View style={styles.dashBoardContainer}>
@@ -50,5 +47,10 @@ const styles = StyleSheet.create({
     }
 })
 
+function mapStateToProps(state) {
+    return{
+        deviceList: state
+    }
+}
 
-export default Application;
+export default connect(mapStateToProps, null)(Application);

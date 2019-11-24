@@ -8,10 +8,14 @@
 
 import React from 'react';
 import AppStackNavigator from "./src/routes/Routes";
+import {Provider} from 'react-redux';
+import {store} from './src/redux/ReduxStore';
 
 const App = ()  => {
   return (
-    <AppStackNavigator />
+    <Provider store = {store}>
+      <AppStackNavigator />
+    </Provider>
   );
 };
 

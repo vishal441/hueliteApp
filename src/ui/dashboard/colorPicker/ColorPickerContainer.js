@@ -54,7 +54,7 @@ class ColorPickerContainer extends React.Component{
             <View style={{backgroundColor: selectedColor, height:'100%'}}>
                 <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={gradColorArr} style={styles.linearGradient}>
                     <View style={{height:'40%'}}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('DashboardScreen')} style={{marginHorizontal:15, marginTop:10}}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Dashboard')} style={{marginHorizontal:15, marginTop:10}}>
                             <Image source={ICON.LEFT_ARROW} style={{height:35, width:35}}/>
                         </TouchableOpacity>
                         <ColorPickerHeader sliderVal={sliderVal} deviceName={" Device Bulb-1"}/>

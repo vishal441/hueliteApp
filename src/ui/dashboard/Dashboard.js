@@ -16,7 +16,7 @@ class Dashboard extends Component{
          <View style={styles.container}>
              <View style={styles.header}>
                  <Image style={styles.image} source={ICON.HamburgerIcon}/>
-                 <RouteHeader onPress={()=>{this.props.navigation.navigate('WifiScreen')}}/>
+                 <RouteHeader onPress={()=>{this.props.navigation.navigate('ColorPickerContainer')}}/>
              </View>
              <View style={styles.body}>
                 <Text style={styles.textinput}>Dashboard</Text>

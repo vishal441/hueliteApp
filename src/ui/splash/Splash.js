@@ -1,9 +1,10 @@
 import React,{Component} from 'react';
 import {View, Text,FlatList, StyleSheet, Image, Button} from 'react-native';
 import {ICON} from '../common/constants/ImageConstant';
-import {getDeviceListFromDb,deleteDeviceTable,} from '../../database/table/DeviceTable';
+import {getDeviceListFromDb,deleteDeviceTable, insertDevices} from '../../database/table/DeviceTable';
 import {connect} from 'react-redux';
 import {deviceListAction} from '../../redux/actions/DeviceListAction';
+import {insertUserInfo, getUserInfoFromDb, deleteUserInfoTable} from '../../database/table/UserInfoTable';
 
 class Splash extends Component{
     constructor(props){
@@ -18,6 +19,23 @@ class Splash extends Component{
             if(cb.success){
                 //this.setState({deviceList: cb.data})
                 this.props.deviceListAction(cb.data);
+                let deviceList = cb.data;
+                getUserInfoFromDb(cbRes => {
+                    let userInfo = cbRes.data[0];
+                    let kitchenDevice = deviceList.filter(item => {
+                        let dashboardType = JSON.parse(item.Dashoard_Type);
+                        if(dashboardType.hasOwnProperty("Kitchen"))
+                           return item;
+                    })
+
+                    let bedroomDevice = deviceList.filter(item => {
+                        let dashboardType = JSON.parse(item.Dashoard_Type);
+                        if(dashboardType.hasOwnProperty("Bedroom"))
+                           return item;
+                    })
+                    let device = {Bedroom: bedroomDevice, Kitchen: kitchenDevice}
+                    userInfo.Device = device;
+                });
             }
         })
         setTimeout(function(){

@@ -8,6 +8,7 @@ export const insertOrUpdateQuery = (schemaName,array, callback) => {
     Realm.open(dataOptions).then( realm => {
         try {
             array.forEach( (obj) => {
+                console.log("obj------->",obj);
                 realm.write(() =>{
                     realm.create(schemaName, obj, true);
                 })

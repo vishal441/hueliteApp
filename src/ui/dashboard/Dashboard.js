@@ -3,6 +3,7 @@ import {ICON} from '../common/constants/ImageConstant';
 import CardComponent from './components/CardComponent';
 import {View, Text,FlatList, StyleSheet, Image, Button, ScrollView} from 'react-native';
 import RouteHeader from "../common/customComponents/RouteHeader";
+import {handleAndroidBackButton, removeAndroidBackButtonHandler} from '../../routes/AndroidBackButtonHandler';
 
 class Dashboard extends Component{
     constructor(props){
@@ -10,6 +11,11 @@ class Dashboard extends Component{
     }
     componentDidMount(){
         let self = this;
+        handleAndroidBackButton('ExitApp');
+    }
+
+    componentWillUnmount(){
+        removeAndroidBackButtonHandler();
     }
     render(){
         return(

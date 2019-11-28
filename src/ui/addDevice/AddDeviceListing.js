@@ -3,11 +3,21 @@ import {View, Text,FlatList, StyleSheet, Image} from 'react-native';
 import Slider from "../common/customComponents/SliderAnimation";
 import AddDevice from "./AddDevice";
 import {connect} from 'react-redux';
+import {handleAndroidBackButton, removeAndroidBackButtonHandler} from '../../routes/AndroidBackButtonHandler';
 
 class Application extends Component {
     constructor(props){
         super(props);
     }
+
+    componentDidMount(){
+        handleAndroidBackButton('Dashboard', this.props.navigation);
+    }
+
+    componentWillUnmount() {
+        removeAndroidBackButtonHandler();
+      }
+
     render(){
         let {deviceList = []} = this.props;
         return(

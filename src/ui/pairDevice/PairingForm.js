@@ -4,6 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {ICON} from '../../ui/common/constants/ImageConstant';
 import {FONT_SIZE, FONT_COLOR} from '../common/constants/StyleConstant';
 import { Dropdown } from 'react-native-material-dropdown';
+import {handleAndroidBackButton, removeAndroidBackButtonHandler} from '../../routes/AndroidBackButtonHandler';
 
 const TextInputField = (props) => {
     let {name, value, isPassword} = props;
@@ -42,8 +43,13 @@ export default class PairingForm extends Component{
                 wifiArray.push(wifiName);
             })
         }
-        this.setState({deviceName: payload.name, wifiList: wifiArray})
+        this.setState({deviceName: payload.name, wifiList: wifiArray});
+        handleAndroidBackButton("AddDevice", this.props.navigation);
     }
+
+    componentWillUnmount() {
+        removeAndroidBackButtonHandler();
+      }
 
     backButton = () => {
         this.props.navigation.navigate('AddDevice');
@@ -104,7 +110,7 @@ export default class PairingForm extends Component{
                                 {rememberPass ?
                                 <LinearGradient 
                                     colors = {['#2d90e8', '#3aafda', '#8ac5eb']}
-                                    style = {styles.rememberPassButton}></LinearGradient>: 
+                                    style = {styles.rememberPassButtonClicked}></LinearGradient>: 
                                     null}
                             </View>
                         </TouchableOpacity>
@@ -176,6 +182,11 @@ const styles = StyleSheet.create({
         width: 30,
         borderWidth: 1,
         borderRadius: 20,
+    },
+    rememberPassButtonClicked: {
+        height: 28, 
+        width: 28, 
+        borderRadius: 20
     },
     footer: {
         flexDirection: 'row',

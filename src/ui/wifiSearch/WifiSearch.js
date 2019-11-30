@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         height: 100,
         position: "absolute",
         bottom: "38%",
-        left: "38%"
+        left: "37.5%"
     },
     textContainer:{
         width: "100%",

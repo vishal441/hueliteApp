@@ -14,7 +14,7 @@ class Application extends Component {
             <View style={styles.container}>
                 <View style={styles.dashBoardContainer}>
                     <View>
-                        <Text style={styles.dashboard}>Dashboard</Text>
+                        <Text style={styles.dashboard}>Click on the bulbs to start.</Text>
                         <FlatList
                         style={styles.list}
                         data={deviceList}

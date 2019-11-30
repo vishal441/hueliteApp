@@ -1,9 +1,10 @@
 import React,{Component} from 'react';
 import {View, Text,FlatList, StyleSheet, Image, Button} from 'react-native';
 import {ICON} from '../common/constants/ImageConstant';
-import {getDeviceListFromDb,deleteDeviceTable,} from '../../database/table/DeviceTable';
+import {getDeviceListFromDb,deleteDeviceTable, insertDevices} from '../../database/table/DeviceTable';
 import {connect} from 'react-redux';
 import {deviceListAction} from '../../redux/actions/DeviceListAction';
+import {deviceArr} from '../../util/DummyData'
 
 class Splash extends Component{
     constructor(props){
@@ -14,6 +15,7 @@ class Splash extends Component{
     }
     componentDidMount(){
         let self = this;
+        //insertDevices(deviceArr)
         getDeviceListFromDb(cb => {
             if(cb.success){
                 //this.setState({deviceList: cb.data})

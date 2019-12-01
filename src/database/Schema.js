@@ -1,5 +1,23 @@
 const Realm = require('realm');
 
+export const DeviceIdSchema = {
+    name: 'DeviceId',
+    primaryKey: 'Device_Id',
+    properties: {
+        Device_Id: {type: 'string', default: ''},
+    }
+}
+
+export const DashboardTypeSchema = {
+    name: 'DashboardType',
+    primaryKey: 'Dashboard_Id',
+    properties: {
+        Dashboard_Id: {type: 'string', default:''},
+        Type_Name: {type:'string', default:''},
+        Device_List: {type: 'list', objectType: 'DeviceId'},
+    }
+}
+
 export const DeviceSchema = {
     name: 'Device',
     primaryKey: 'Mac',
@@ -14,7 +32,6 @@ export const DeviceSchema = {
         Last_Heart_Time_Stamp: {type: 'int', default: 0},
         Connected: {type: 'bool', default: false},
         Last_State: {type: 'string', default: ''},
-        Dashoard_Type: {type: 'string', default: ''},
     }
 };
 
@@ -41,8 +58,8 @@ export const UserInfoSchema = {
 
 export const dataOptions = {
     path: 'Huelite_App.realm',
-    schema: [DeviceSchema, TutorialSchema, UserInfoSchema],
-    schemaVersion: 8,
+    schema: [DeviceSchema, TutorialSchema, UserInfoSchema, DeviceIdSchema, DashboardTypeSchema],
+    schemaVersion: 12,
 };
 
 export default new Realm(dataOptions);

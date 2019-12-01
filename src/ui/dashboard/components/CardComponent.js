@@ -1,35 +1,47 @@
 import React,{Component} from 'react';
 import {ICON} from '../../common/constants/ImageConstant';
 import {View, Text,FlatList, StyleSheet, Image, Button} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import {CustomeSlider} from '../colorPicker/Slider';
 
 class Card extends Component{
     constructor(props){
         super(props)
+        this.state = { 
+            sliderVal: 0 
+        }
     }
-    componentDidMount(){
-        let self = this;
+    
+    onSlidingComplete = (value) => {
+        let sliderValue = Math.round(value*100);
+        this.setState({ sliderVal: sliderValue})
     }
+
     render(){
         return(
-         <View style={styles.cardContainer}>
+         <LinearGradient start={{x: 1, y: 0}} end={{x: 0, y: 0}} colors={['#2d90e8', '#3aafda', '#8ac5eb']} style={styles.cardContainer}>
              <View style = {styles.cardHeader}>
                 <Image style={styles.image1} source={ICON.HamburgerIcon}/> 
             </View>
             <View style={styles.cardBody}>
-                <Image style = {styles.image2} source={ICON.LOGO}/>
+                <Image style = {styles.image2} source={ICON.BULB}/>
                 <View style={{justifyContent: 'space-evenly'}}>
-                    <Text style={styles.textInput1}>25%</Text>
-                    <Text style={styles.textInput2}>Device Bulb-01</Text>
+        <Text style={styles.textInput1}>{this.state.sliderVal + '%'}</Text>
+                    <Text style={styles.textInput2}>{this.props.data.Mac}</Text>
                 </View>
             </View>
-         </View>
+                <CustomeSlider  customStyle = {styles.sliderStyle}  
+                                onSlidingComplete={this.onSlidingComplete}
+                                selectedColor={"#2d90e8"}
+                                gradColorArr={['#2d90e8', '#3aafda', '#8ac5eb']}/>
+         </LinearGradient>
         )
     }
 }
 
 const styles = StyleSheet.create({
     cardContainer:{
-        backgroundColor: "#ff0000",
+        backgroundColor: "#893400",
         paddingHorizontal: 20,
         paddingVertical: 10,
         marginTop: 10,
@@ -45,6 +57,7 @@ const styles = StyleSheet.create({
         justifyContent:'space-between'
     },
     textInput1:{
+        fontSize: 16,
         fontWeight: "bold",
         textAlign: 'right',
         color: '#fff'
@@ -54,14 +67,17 @@ const styles = StyleSheet.create({
     },
     image1:{
         alignItems:'flex-end',
-        width: 20,
-        height: 20,
-        margin: 5
+        width: 12,
+        height: 12
     },
     image2: {
-        height: 50,
-        width: 50,
-    }
+        height: 60,
+        width: 60,
+    }, 
+   sliderStyle:{
+    marginHorizontal: 10,
+    marginTop: 20
+   }
 })
 
 export default Card;

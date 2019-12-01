@@ -3,15 +3,16 @@ import {ICON} from '../common/constants/ImageConstant';
 import CardComponent from './components/CardComponent';
 import {View, Text,FlatList, StyleSheet, Image, Button, ScrollView} from 'react-native';
 import RouteHeader from "../common/customComponents/RouteHeader";
+import Slider from '../common/customComponents/SliderAnimation';
+import {connect} from 'react-redux';
 
 class Dashboard extends Component{
     constructor(props){
-        super(props)
+        super(props);
     }
-    componentDidMount(){
-        let self = this;
-    }
+   
     render(){
+        let {deviceList} = this.props;
         return(
          <View style={styles.container}>
              <View style={styles.header}>
@@ -20,18 +21,12 @@ class Dashboard extends Component{
              </View>
              <View style={styles.body}>
                 <Text style={styles.textinput}>Dashboard</Text>
-                <ScrollView>
-                    <CardComponent></CardComponent>
-                    <CardComponent></CardComponent>
-                    <CardComponent></CardComponent>
-                    <CardComponent></CardComponent>
-                    <CardComponent></CardComponent>
-                    <CardComponent></CardComponent>
-                    <CardComponent></CardComponent>
-                    <CardComponent></CardComponent>
-                    <CardComponent></CardComponent>
-                    <CardComponent></CardComponent> 
-                </ScrollView>
+                <FlatList data={deviceList} keyExtractor={(item, index) => item.SSID+index}
+                    renderItem={({item, index})=> {
+                        return(
+                        <Slider index = {index} name = {item.SSID}>
+                            <CardComponent data = {item}/>
+                        </Slider>)}}/>
              </View>
          </View>
         )
@@ -51,7 +46,8 @@ const styles = StyleSheet.create({
         justifyContent:'space-between',
     },
     body: {
-        padding: 10
+        padding: 10,
+        height: '95%'
     },
     textinput:{
         fontSize: 20,
@@ -64,7 +60,13 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Dashboard;
+mapStateToProps = (state) => {
+    return{
+        deviceList: state
+    }
+}
+
+export default connect(mapStateToProps, null)(Dashboard);
 
 
 

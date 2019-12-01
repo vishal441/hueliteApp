@@ -24,8 +24,8 @@ class WifiSearchScreen extends Component {
                 hueDeviceList = deviceList.length && deviceList.filter((item) => !item.SSID.includes("HUE"));            
                 setTimeout(function(){
                         if(hueDeviceList.length){
-                            self.props.deviceListAction(hueDeviceList);
-                            self.redirectToPage("AddDevice");
+                            //self.props.deviceListAction(hueDeviceList);
+                            self.redirectToPage("AddDevice", hueDeviceList);
                         }
                         else{
                             self.redirectToPage("EmptySerachScreen", []);
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         height: 100,
         position: "absolute",
         bottom: "38%",
-        left: "38%"
+        left: "37.5%"
     },
     textContainer:{
         width: "100%",

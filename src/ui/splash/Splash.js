@@ -25,13 +25,13 @@ class Splash extends Component{
         //insertDashboard(dashboardArr);
         //deleteDashboard()
         // getDashoardList(cb => {
-            
+
         // });
         //deleteDeviceTable()
         getAppData(appData => {
             // console.log("appData---->", appData);
         });
-        
+
         setTimeout(function(){
             self.props.navigation.navigate('WifiScreen');
         },2000)

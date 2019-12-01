@@ -10,7 +10,7 @@ export const ColorPickerHeader = (props) => {
                 <Image source={ICON.BULB} style={{width:50, height:50}}/>
                 <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between', width:'85%'}}>
                     <Text style={[styles.txt,{marginLeft:20}]}>{deviceName}</Text>
-                    <Text style={styles.txt}>{sliderVal  + "%"}</Text>
+                    <Text style={styles.txt}>{sliderVal + "%"}</Text>
                 </View>
             </View>
         </View>

@@ -4,7 +4,7 @@ import {insertOrUpdateQuery, getQuery, deleteSchema} from '../DbAction';
 
 export const insertDevices = (deviceArr) => {
     insertOrUpdateQuery(DeviceSchema.name,deviceArr, cb => {
-    
+
    });
   
 }
@@ -22,6 +22,6 @@ export const getDeviceListFromDb = async(callback) => {
 
 export const deleteDeviceTable = () => {
     deleteSchema([DeviceSchema.name], cb => {
-       
+
     });
 }

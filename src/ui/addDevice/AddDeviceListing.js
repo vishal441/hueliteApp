@@ -2,19 +2,28 @@ import React,{Component} from 'react';
 import {View, Text,FlatList, StyleSheet, Image} from 'react-native';
 import Slider from "../common/customComponents/SliderAnimation";
 import AddDevice from "./AddDevice";
-import {connect} from 'react-redux';
 
 class Application extends Component {
     constructor(props){
         super(props);
+        this.state = {
+            deviceList: []
+        }
     }
+
+    componentDidMount(){
+        let {navigation} = this.props,
+        devices = navigation.getParam('deviceList');
+        this.setState({deviceList: devices});
+    }
+
     render(){
-        let {deviceList = []} = this.props;
+        let {deviceList} = this.state;
         return(
             <View style={styles.container}>
                 <View style={styles.dashBoardContainer}>
                     <View>
-                        <Text style={styles.dashboard}>Dashboard</Text>
+                        <Text style={styles.dashboard}>Click on the bulbs to start.</Text>
                         <FlatList
                         style={styles.list}
                         data={deviceList}
@@ -50,10 +59,4 @@ const styles = StyleSheet.create({
     }
 })
 
-function mapStateToProps(state) {
-    return{
-        deviceList: state
-    }
-}
-
-export default connect(mapStateToProps, null)(Application);
+export default Application;

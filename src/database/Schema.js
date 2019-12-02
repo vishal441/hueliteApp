@@ -1,9 +1,28 @@
 const Realm = require('realm');
 
+export const DeviceIdSchema = {
+    name: 'DeviceId',
+    primaryKey: 'Device_Id',
+    properties: {
+        Device_Id: {type: 'string', default: ''},
+    }
+}
+
+export const DashboardTypeSchema = {
+    name: 'DashboardType',
+    primaryKey: 'Dashboard_Id',
+    properties: {
+        Dashboard_Id: {type: 'string', default:''},
+        Type_Name: {type:'string', default:''},
+        Device_List: {type: 'list', objectType: 'DeviceId'},
+    }
+}
+
 export const DeviceSchema = {
     name: 'Device',
     primaryKey: 'Mac',
     properties: {
+        Type: {type:'string', default:'Device'},
         Mac: {type: 'string', default: ''},
         Host_Name: {type: 'string', default: ''},
         SSID: {type: 'string', default: ''},
@@ -26,20 +45,23 @@ export const TutorialSchema = {
     }
 }
 
-// export const UserInfoSchema = {
-//     name: 'UserInfo',
-//     properties: {
-//         User_Id : {type: 'bool', default: false},
-//         Device_Id : {type: 'bool', default: false},
-//     }
-// }
+export const UserInfoSchema = {
+    name: 'UserInfo',
+    primaryKey: 'User_Id',
+    properties: {
+        User_Id : {type: 'string', default: ""},
+        Email_Id : {type: 'string', default: ""},
+        Phone_Version : {type: 'string', default: ""},
+        Device_Id : {type: 'string', default: ""},
+    }
+}
 
 
 
 export const dataOptions = {
     path: 'Huelite_App.realm',
-    schema: [DeviceSchema, TutorialSchema],
-    schemaVersion: 14,
+    schema: [DeviceSchema, TutorialSchema, UserInfoSchema, DeviceIdSchema, DashboardTypeSchema],
+    schemaVersion: 15,
 };
 
 export default new Realm(dataOptions);

@@ -23,11 +23,10 @@ class Splash extends Component{
          */
         //deleteDeviceTable();
 
-        getDeviceListFromDb(cb => {
-            if(cb.success){
+        getDeviceListFromDb(deviceList => {
+            console.log("getDeviceListFromDb :", deviceList );
                 //this.setState({deviceList: cb.data})
-                this.props.deviceListAction(cb.data);
-            }
+                this.props.deviceListAction(deviceList);
         })
         setTimeout(function(){
             self.props.navigation.navigate('WifiScreen');

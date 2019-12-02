@@ -12,7 +12,9 @@ export const DeviceSchema = {
         Last_WS_Msg_Received_Time_Stamp: {type: 'int', default: 0},
         Last_Heart_Time_Stamp: {type: 'int', default: 0},
         Connected: {type: 'bool', default: false},
-        Last_State: {type: 'string', default: ''}
+        Last_State: {type: 'string', default: '#ff0000'},
+        Web_Socket: {type: 'string', default: ''},
+        Intensity: {type: 'int', default: 0}
     }
 };
 
@@ -37,7 +39,7 @@ export const TutorialSchema = {
 export const dataOptions = {
     path: 'Huelite_App.realm',
     schema: [DeviceSchema, TutorialSchema],
-    schemaVersion: 9,
+    schemaVersion: 14,
 };
 
 export default new Realm(dataOptions);

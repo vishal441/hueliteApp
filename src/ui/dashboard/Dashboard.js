@@ -25,7 +25,7 @@ class Dashboard extends Component{
                     renderItem={({item, index})=> {
                         return(
                         <Slider index = {index} name = {item.SSID}>
-                            <CardComponent data = {item}/>
+                            <CardComponent data = {item} navigation = {this.props.navigation}/>
                         </Slider>)}}/>
              </View>
          </View>

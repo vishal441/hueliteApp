@@ -1,15 +1,41 @@
 import React,{Component} from 'react';
 import {ICON} from '../../common/constants/ImageConstant';
-import {View, Text,FlatList, StyleSheet, Image, Button} from 'react-native';
+import {View, Text,FlatList, StyleSheet, Image, Button, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {CustomeSlider} from '../colorPicker/Slider';
+import {changeColorBrigntess} from '../colorPicker/ColorUtil';
 
 class Card extends Component{
     constructor(props){
         super(props)
         this.state = { 
-            sliderVal: 0 
+            sliderVal: 0,
+            cardColor: [] 
         }
+    }
+
+    componentWillMount(){
+        let cardColors = this.getCardGradentColor();
+        this.setState({cardColor: cardColors});
+    }
+
+    // componentDidUpdate(prevProps, prevState){
+    //     let updatedColor = this.getCardGradentColor();
+    //     console.log("componentDidUpdate : 1", prevProps.data.Last_State);
+    //     console.log("componentDidUpdate : 2", prevState, updatedColor)
+    //     if(updatedColor !== prevState.cardColor){
+    //         this.setState({cardColor: updatedColor})
+    //     }
+    // }
+
+    getCardGradentColor = () => {
+        let {data} = this.props,
+        colorArr = [],
+        color_1 = changeColorBrigntess(data.Last_State, 30),
+        color_2 = changeColorBrigntess(data.Last_State, 60),
+        color_3 = changeColorBrigntess(data.Last_State, 90);
+        colorArr.push(color_1, color_2, color_3);
+        return colorArr;
     }
     
     onSlidingComplete = (value) => {
@@ -17,9 +43,16 @@ class Card extends Component{
         this.setState({ sliderVal: sliderValue})
     }
 
+    openColorPicker = () => {
+        let {data} = this.props;
+        this.props.navigation.navigate('ColorPickerContainer', {selectedDevice: data});
+    }
+
     render(){
+        let {cardColor} = this.state;
         return(
-         <LinearGradient start={{x: 1, y: 0}} end={{x: 0, y: 0}} colors={['#2d90e8', '#3aafda', '#8ac5eb']} style={styles.cardContainer}>
+        <TouchableOpacity onPress = {() => {this.openColorPicker()}}>
+         <LinearGradient start={{x: 1, y: 0}} end={{x: 0, y: 0}} colors={cardColor} style={styles.cardContainer}>
              <View style = {styles.cardHeader}>
                 <Image style={styles.image1} source={ICON.HamburgerIcon}/> 
             </View>
@@ -35,6 +68,7 @@ class Card extends Component{
                                 selectedColor={"#2d90e8"}
                                 gradColorArr={['#2d90e8', '#3aafda', '#8ac5eb']}/>
          </LinearGradient>
+        </TouchableOpacity>
         )
     }
 }

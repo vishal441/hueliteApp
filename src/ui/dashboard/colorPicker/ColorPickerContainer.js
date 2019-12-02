@@ -3,9 +3,11 @@ import {View, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import ColorChooser from './ColorPicker';
 import {ColorPickerHeader} from './ColorPickerHeader';
 import {CustomeSlider} from './Slider';
-import {hsvToRgb, changeColorBrigntess, hexToRgb, rgbToHex} from './ColorUtil';
 import {ICON} from '../../common/constants/ImageConstant';
 import LinearGradient from 'react-native-linear-gradient';
+import {getSelectedGradientColors} from '../DashboardUtil';
+import {changeColorBrigntess} from '../colorPicker/ColorUtil';
+import {connect} from 'react-redux';
 
 
 class ColorPickerContainer extends React.Component{
@@ -18,28 +20,20 @@ class ColorPickerContainer extends React.Component{
         }
     }
 
-    onColorChange = (color) => {
-        let {h,s,v} = color, gradientColorArr = [];
-        if(h < 0){
-             h = 360 + h;   
-        }
-        let rgb = hsvToRgb(h,s,v),
-            rgbColor = `rgb(${rgb.r},${rgb.g},${rgb.b})`;
-        let gradColor_1 = this.changeBrightness(30, rgb),
-            gradColor_2 = this.changeBrightness(50, rgb),
-            gradColor_3 = this.changeBrightness(70, rgb);
-        gradientColorArr.push(gradColor_3);
-        gradientColorArr.push(gradColor_2);
-        gradientColorArr.push(gradColor_1);
-        gradientColorArr.push(rgbColor);    
-       this.setState({selectedColor: rgbColor, gradColorArr: gradientColorArr});
+    componentWillMount() {
+        let selDevice = this.props.navigation.getParam('selectedDevice'),
+        colorArr = [],
+        selectedColor = selDevice.Last_State ? selDevice.Last_State : '#ff0000',
+        col_1 = changeColorBrigntess(selectedColor, 30),
+        col_2 = changeColorBrigntess(selectedColor, 60),
+        col_3 = changeColorBrigntess(selectedColor, 90);
+        colorArr.push(col_1, col_2, col_3);
+        this.setState({selectedColor: selectedColor, gradColorArr: colorArr})
     }
 
-    changeBrightness = (value, rgb)=>{
-        let hexColoor = rgbToHex(rgb),
-         brightenColor = changeColorBrigntess(hexColoor, value),
-         rgbColor = hexToRgb(brightenColor);
-        return `rgb(${rgbColor.r},${rgbColor.g},${rgbColor.b})`;
+    onColorChange = (color) => {   
+       let {selectedColor, gradColorArr} =  getSelectedGradientColors(color);
+       this.setState({selectedColor: selectedColor, gradColorArr: gradColorArr});
     }
 
     onSlidingComplete = (value) => {
@@ -47,8 +41,15 @@ class ColorPickerContainer extends React.Component{
         this.setState({ sliderVal: sliderValue})
     }
 
+    onColorChangeComplete = (color) => {
+        let {selectedColor} =  getSelectedGradientColors(color),
+            {navigation} = this.props,
+            selectedDevice = navigation.getParam('selectedDevice');
+        this.props.updateDeviceLastState(selectedColor, selectedDevice.Mac);
+    }
+
     render() {
-       let {color,sliderVal, selectedColor, gradColorArr} = this.state;
+       let {sliderVal, selectedColor, gradColorArr} = this.state;
         return (
             <View style={{backgroundColor: selectedColor, height:'100%'}}>
                 <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={gradColorArr} style={styles.linearGradient}>
@@ -65,7 +66,8 @@ class ColorPickerContainer extends React.Component{
                     </View>
                 </LinearGradient>
                 <ColorChooser onColorChange={this.onColorChange} 
-                              selectedColor={selectedColor}/>
+                              selectedColor={selectedColor} 
+                              onColorChangeComplete = {this.onColorChangeComplete} />
             </View>
         )
     }
@@ -80,4 +82,10 @@ const styles = StyleSheet.create({
 
 });
 
-export  default ColorPickerContainer;
+mapDispatchToProps = dispatch => {
+    return{
+        updateDeviceLastState: (selectedColor, mac) => dispatch({type: 'UPDATE_LAST_STATE', payload: {lastColor: selectedColor, Mac: mac}})
+    }
+}
+
+export  default connect(null, mapDispatchToProps)(ColorPickerContainer);

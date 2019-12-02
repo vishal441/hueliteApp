@@ -20,7 +20,7 @@ class Splash extends Component{
     }
     componentDidMount(){
         let self = this;
-        insertDevices(deviceArr);
+        //insertDevices(deviceArr);
         //insertUserInfo(userInfo);
         //insertDashboard(dashboardArr);
         //deleteDashboard()
@@ -31,7 +31,12 @@ class Splash extends Component{
         getAppData(appData => {
             // console.log("appData---->", appData);
         });
-
+        getDeviceListFromDb(cb => {
+            if(cb.success){
+                //this.setState({deviceList: cb.data})
+                this.props.deviceListAction(cb.data);
+            }
+        })
         setTimeout(function(){
             self.props.navigation.navigate('WifiScreen');
         },2000)

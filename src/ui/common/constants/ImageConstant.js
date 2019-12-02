@@ -3,5 +3,7 @@ export const ICON = {
     BULB : require('../../../assets/images/bulb.png'),
     HamburgerIcon : require('../../../assets/images/HamburgerIcon.png'),
     LEFT_ARROW : require('../../../assets/images/leftArrow.png'),
-    ADD:  require('../../../assets/images/add.png')
+    ADD:  require('../../../assets/images/add.png'),
+    VER_MORE_INFO: require('../../../assets/images/verMoreInfo.png'),
+    HOR_MORE_INFO: require('../../../assets/images/horMoreInfo.png')
 };

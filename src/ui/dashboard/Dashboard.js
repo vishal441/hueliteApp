@@ -5,6 +5,8 @@ import {View, Text,FlatList, StyleSheet, Image, Button, ScrollView} from 'react-
 import RouteHeader from "../common/customComponents/RouteHeader";
 import Slider from '../common/customComponents/SliderAnimation';
 import {connect} from 'react-redux';
+import {deviceListAction} from '../../redux/actions/DeviceListAction';
+
 
 class Dashboard extends Component{
     constructor(props){
@@ -12,7 +14,7 @@ class Dashboard extends Component{
     }
    
     render(){
-        let {deviceList} = this.props;
+        let {deviceList, deviceListAction} = this.props;
         return(
          <View style={styles.container}>
              <View style={styles.header}>
@@ -25,7 +27,9 @@ class Dashboard extends Component{
                     renderItem={({item, index})=> {
                         return(
                         <Slider index = {index} name = {item.SSID}>
-                            <CardComponent data = {item}/>
+                            <CardComponent data = {item} 
+                                deviceList = {deviceList}
+                                deviceListAction = {deviceListAction}/>
                         </Slider>)}}/>
              </View>
          </View>
@@ -66,7 +70,7 @@ mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, null)(Dashboard);
+export default connect(mapStateToProps, {deviceListAction})(Dashboard);
 
 
 

@@ -4,6 +4,12 @@ import {ICON} from '../common/constants/ImageConstant';
 import {getDeviceListFromDb,deleteDeviceTable, insertDevices} from '../../database/table/DeviceTable';
 import {connect} from 'react-redux';
 import {deviceListAction} from '../../redux/actions/DeviceListAction';
+import {insertUserInfo, getUserInfoFromDb, deleteUserInfoTable} from '../../database/table/UserInfoTable';
+import {deviceArr, userInfo, dashboardArr} from '../../util/DummyData';
+import {DASHOARD_TYPE} from '../../ui/common/constants/StringConstant';
+import {filterDashoard} from '../../util/AppUtil';
+import {insertDashboard, getDashoardList, deleteDashboard} from '../../database/table/DashboardTable';
+import {getAppData} from '../../database/table/AppData';
 
 class Splash extends Component{
     constructor(props){
@@ -14,13 +20,18 @@ class Splash extends Component{
     }
     componentDidMount(){
         let self = this;
-        //insertDevices(deviceArr)
-        getDeviceListFromDb(cb => {
-            if(cb.success){
-                //this.setState({deviceList: cb.data})
-                this.props.deviceListAction(cb.data);
-            }
-        })
+        insertDevices(deviceArr);
+        //insertUserInfo(userInfo);
+        //insertDashboard(dashboardArr);
+        //deleteDashboard()
+        // getDashoardList(cb => {
+
+        // });
+        //deleteDeviceTable()
+        getAppData(appData => {
+            // console.log("appData---->", appData);
+        });
+
         setTimeout(function(){
             self.props.navigation.navigate('WifiScreen');
         },2000)

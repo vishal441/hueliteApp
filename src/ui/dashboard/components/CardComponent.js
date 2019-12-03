@@ -3,18 +3,39 @@ import {ICON} from '../../common/constants/ImageConstant';
 import {View, Text,FlatList, StyleSheet, Image, Button} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {CustomeSlider} from '../colorPicker/Slider';
+import {connectToDevice} from '../../../backGroundServices/Connector';
+import {getWebSocket} from "../../../backGroundServices/webSocketProcess/webSocket";
+import {authoriseApi,getStatusApi} from '../../../backGroundServices/webApi/WebApi';
+
+hero = null;
 
 class Card extends Component{
     constructor(props){
         super(props)
         this.state = { 
-            sliderVal: 0 
+            sliderVal: 0,
+            ws: null
         }
     }
     
     onSlidingComplete = (value) => {
         let sliderValue = Math.round(value*100);
         this.setState({ sliderVal: sliderValue})
+    }
+
+    handleWebSocket = (wsVal)=>{
+        this.setState({ws: wsVal})
+    }
+
+    async componentDidMount(){
+        // // if(this.props.data.IP_Address === "192.168.1.70"){
+        //     var x = await connectToDevice(this.props.data.IP_Address);
+        //     console.log("XXXXXXXXXXX::  ",x);
+        // // }
+        hero = await connectToDevice('', this.handleWebSocket);
+        console.log("XXXXXXXXXXX::  ",hero);
+        // let STATURESULT = await getStatusApi();
+        // console.log("STATUSURL: ",STATURESULT);
     }
 
     render(){
@@ -34,7 +55,12 @@ class Card extends Component{
                                 onSlidingComplete={this.onSlidingComplete}
                                 selectedColor={"#2d90e8"}
                                 gradColorArr={['#2d90e8', '#3aafda', '#8ac5eb']}/>
+            <View>
+            <Button title = "Green" onPress = {()=>{hero.send("STATUS")}}></Button>
+            <Button title = "Red" onPress = {()=>{hero.send("Red")}}></Button>
+            <Button title = "Blue" onPress = {()=>{hero.send("Blue")}}></Button></View>
          </LinearGradient>
+
         )
     }
 }

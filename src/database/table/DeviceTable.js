@@ -3,9 +3,7 @@ import {DeviceSchema} from '../Schema';
 import {insertOrUpdateQuery, getQuery, deleteSchema} from '../DbAction';
 
 export const insertDevices = (deviceArr) => {
-    console.log("insertDevices----->",deviceArr);
     insertOrUpdateQuery(DeviceSchema.name,deviceArr, cb => {
-        console.log("insertDevices----->",cb);
    });
   
 }

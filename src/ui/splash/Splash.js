@@ -24,7 +24,6 @@ class Splash extends Component{
         //deleteDeviceTable();
 
         getDeviceListFromDb(deviceList => {
-            console.log("getDeviceListFromDb :", deviceList );
                 //this.setState({deviceList: cb.data})
                 this.props.deviceListAction(deviceList);
         })

@@ -8,7 +8,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import {getSelectedGradientColors} from '../DashboardUtil';
 import {changeColorBrigntess} from '../colorPicker/ColorUtil';
 import {connect} from 'react-redux';
-
+import {updateDeviceList} from '../../../util/AppUtil';
+import {deviceListAction} from '../../../redux/actions/DeviceListAction';
 
 class ColorPickerContainer extends React.Component{
     constructor(props){
@@ -21,7 +22,8 @@ class ColorPickerContainer extends React.Component{
     }
 
     componentWillMount() {
-        let selDevice = this.props.navigation.getParam('selectedDevice'),
+        let param = this.props.navigation.getParam('otherParam'),
+        selDevice = param.selectedDevice, 
         colorArr = [],
         selectedColor = selDevice.Last_State ? selDevice.Last_State : '#ff0000',
         col_1 = changeColorBrigntess(selectedColor, 30),
@@ -43,9 +45,13 @@ class ColorPickerContainer extends React.Component{
 
     onColorChangeComplete = (color) => {
         let {selectedColor} =  getSelectedGradientColors(color),
-            {navigation} = this.props,
-            selectedDevice = navigation.getParam('selectedDevice');
-        this.props.updateDeviceLastState(selectedColor, selectedDevice.Mac);
+            {navigation, deviceListAction} = this.props,
+            {deviceList, selectedDevice} = navigation.getParam('otherParam'),
+            updateObj = {
+                Last_State: selectedColor
+            };
+            let newList = updateDeviceList(updateObj, selectedDevice, deviceList);
+            deviceListAction(newList);
     }
 
     render() {
@@ -82,10 +88,4 @@ const styles = StyleSheet.create({
 
 });
 
-mapDispatchToProps = dispatch => {
-    return{
-        updateDeviceLastState: (selectedColor, mac) => dispatch({type: 'UPDATE_LAST_STATE', payload: {lastColor: selectedColor, Mac: mac}})
-    }
-}
-
-export  default connect(null, mapDispatchToProps)(ColorPickerContainer);
+export  default connect(null, {deviceListAction})(ColorPickerContainer);

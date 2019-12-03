@@ -3,33 +3,20 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {ICON} from '../common/constants/ImageConstant';
 
-
-class AddDevice extends Component{
-    constructor(props){
-        super(props);
-    }
-
-    onDeviceClick = () => {
-        this.props.navigation.navigate('PairingForm', {
-            otherParam: {wifiList: this.props.deviceList, name: this.props.name}
-        })
-    }
-
-    render(){
+export const AddDevice = (props) => {
         return (
-            <TouchableOpacity onPress = {this.onDeviceClick}>
+            <TouchableOpacity onPress = {() => props.onDeviceClick(props.name)}>
                 <LinearGradient colors={['#2d90e8', '#3aafda', '#8ac5eb']} style={styles.wifiList}>
                     <View style = {styles.imageContainer}>
                         <Image style = {styles.image} source = {ICON.BULB}/>
                     </View>
                     <View style = {styles.textContatiner}>
-                        <Text style={styles.name}>{this.props.name}</Text>
+                        <Text style={styles.name}>{props.name}</Text>
                         <Text style={styles.unpaired}>Unpaired</Text>
                     </View>
                 </LinearGradient>
             </TouchableOpacity>
         )
-    }
 }
 
 
@@ -73,4 +60,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default AddDevice;
+//export default AddDevice;

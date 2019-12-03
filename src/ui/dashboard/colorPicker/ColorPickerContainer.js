@@ -43,8 +43,7 @@ class ColorPickerContainer extends React.Component{
     }
 
     onSlidingComplete = (value) => {
-        let sliderValue = value.toFixed(2);
-        sliderValue = sliderValue * 100;
+        let sliderValue = Math.round(value*100);
         this.setState({ sliderVal: sliderValue})
     }
 
@@ -58,7 +57,8 @@ class ColorPickerContainer extends React.Component{
                             <Image source={ICON.LEFT_ARROW} style={{height:35, width:35}}/>
                         </TouchableOpacity>
                         <ColorPickerHeader sliderVal={sliderVal} deviceName={" Device Bulb-1"}/>
-                        <CustomeSlider onSlidingComplete={this.onSlidingComplete}
+                        <CustomeSlider customStyle = {styles.sliderStyle}   
+                                    onSlidingComplete={this.onSlidingComplete}
                                     selectedColor={selectedColor}
                                     gradColorArr={gradColorArr}/>
                 
@@ -73,8 +73,9 @@ class ColorPickerContainer extends React.Component{
 
 
 const styles = StyleSheet.create({
-   container:{
-
+   sliderStyle:{
+       marginHorizontal: 20,
+       marginTop: 80
    },
 
 });

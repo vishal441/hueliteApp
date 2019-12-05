@@ -12,9 +12,14 @@ class Dashboard extends Component{
     constructor(props){
         super(props);
     }
+
+    componentDidMount(){
+        console.log("deviceList--------->222",this.props.deviceList);
+    }
    
     render(){
         let {deviceList, deviceListAction} = this.props;
+        console.log("deviceList--------->",deviceList);
         return(
          <View style={styles.container}>
              <View style={styles.header}>
@@ -26,6 +31,7 @@ class Dashboard extends Component{
              <View style={styles.body}>
                 <Text style={styles.textinput}>Dashboard</Text>
                 <FlatList data={deviceList} keyExtractor={(item, index) => item.SSID+index}
+                        extraData={deviceList}
                     renderItem={({item, index})=> {
                         return(
                         <Slider index = {index} name = {item.SSID}>

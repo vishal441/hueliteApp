@@ -17,7 +17,7 @@ class Splash extends Component{
          * After first attempt please comment it for now,
          * Add few dummay data on util/DummayData file
          */
-        //insertDevices(deviceArr)
+        insertDevices(deviceArr)
 
         /**
          * To delete all the data from DB unComment the next line, otherwise no need for same.
@@ -30,7 +30,7 @@ class Splash extends Component{
         })
         setTimeout(function(){
             self.props.navigation.navigate('WifiScreen');
-        },2000)
+        },0)
     }
     render(){
         return(

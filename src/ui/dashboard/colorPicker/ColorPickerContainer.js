@@ -88,4 +88,11 @@ const styles = StyleSheet.create({
 
 });
 
-export  default connect(null, {deviceListAction})(ColorPickerContainer);
+mapStateToProps = (state) => {
+    return{
+        deviceList: state
+    }
+}
+
+
+export  default connect(mapStateToProps, {deviceListAction})(ColorPickerContainer);

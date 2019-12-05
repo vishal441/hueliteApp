@@ -12,23 +12,8 @@ class Card extends Component {
         this.state = { 
             sliderVal: 0,
             isShowEditDashoard: false,
-            cardColor: [] 
         }
     }
-
-    componentWillMount(){
-        let cardColors = this.getCardGradentColor();
-        this.setState({cardColor: cardColors});
-    }
-
-    // componentDidUpdate(prevProps, prevState){
-    //     let updatedColor = this.getCardGradentColor();
-    //     console.log("componentDidUpdate : 1", prevProps.data.Last_State);
-    //     console.log("componentDidUpdate : 2", prevState, updatedColor)
-    //     if(updatedColor !== prevState.cardColor){
-    //         this.setState({cardColor: updatedColor})
-    //     }
-    // }
 
     getCardGradentColor = () => {
         let {data} = this.props,
@@ -55,8 +40,9 @@ class Card extends Component {
     }
 
     render(){
-        let {isShowEditDashoard, cardColor} = this.state,
-            {deviceListAction, data, deviceList} = this.props;
+        let {isShowEditDashoard,} = this.state,
+            {deviceListAction, data, deviceList} = this.props,
+            cardColor  = this.getCardGradentColor();
         return(
             <View style={{ paddingVertical: 10 }}>
                 <TouchableOpacity onPress = {() => {this.openColorPicker()}}>

@@ -4,7 +4,6 @@ import {ICON} from '../common/constants/ImageConstant';
 import {getDeviceListFromDb,deleteDeviceTable, insertDevices} from '../../database/table/DeviceTable';
 import {connect} from 'react-redux';
 import {deviceListAction} from '../../redux/actions/DeviceListAction';
-import {deviceArr} from '../../util/DummyData'
 
 class Splash extends Component{
     constructor(props){

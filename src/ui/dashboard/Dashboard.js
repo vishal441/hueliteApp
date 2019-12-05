@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import {ICON} from '../common/constants/ImageConstant';
 import CardComponent from './components/CardComponent';
-import {View, Text,FlatList, StyleSheet, Image, Button, ScrollView} from 'react-native';
+import {View, Text,FlatList, StyleSheet, Image, Button, ScrollView, TouchableOpacity} from 'react-native';
 import RouteHeader from "../common/customComponents/RouteHeader";
 import Slider from '../common/customComponents/SliderAnimation';
 import {connect} from 'react-redux';
@@ -16,8 +16,10 @@ class Dashboard extends Component{
         return(
          <View style={styles.container}>
              <View style={styles.header}>
-                 <Image style={styles.image} source={ICON.HamburgerIcon}/>
-                 <RouteHeader onPress={()=>{this.props.navigation.navigate('ColorPickerContainer')}}/>
+                 <TouchableOpacity onPress={() => { this.props.navigation.navigate("MainPanel")}}>
+                    <Image style={styles.image} source={ICON.HamburgerIcon}/>
+                 </TouchableOpacity>
+                 <RouteHeader onPress={()=>{this.props.navigation.navigate('WifiSearchScreen')}}/>
              </View>
              <View style={styles.body}>
                 <Text style={styles.textinput}>Dashboard</Text>

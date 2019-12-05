@@ -21,7 +21,8 @@ class WifiSearchScreen extends Component {
          getAvailableDevice(cbRes =>{
             let deviceList = cbRes,
                 self = this,
-                hueDeviceList = deviceList.length && deviceList.filter((item) => !item.SSID.includes("HUE"));            
+                // hueDeviceList = deviceList.length && deviceList.filter((item) => !item.SSID.includes("HUE"));  
+                hueDeviceList = deviceList; 
                 setTimeout(function(){
                         if(hueDeviceList.length){
                             //self.props.deviceListAction(hueDeviceList);

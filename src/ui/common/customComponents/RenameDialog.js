@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { ICON } from '../../common/constants/ImageConstant';
 import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput } from 'react-native';
 import { Button } from 'react-native-elements';

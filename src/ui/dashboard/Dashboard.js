@@ -12,14 +12,9 @@ class Dashboard extends Component{
     constructor(props){
         super(props);
     }
-
-    componentDidMount(){
-        console.log("deviceList--------->222",this.props.deviceList);
-    }
    
     render(){
         let {deviceList, deviceListAction} = this.props;
-        console.log("deviceList--------->",deviceList);
         return(
          <View style={styles.container}>
              <View style={styles.header}>

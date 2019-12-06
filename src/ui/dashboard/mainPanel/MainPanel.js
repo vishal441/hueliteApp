@@ -14,7 +14,7 @@ class MainPanel extends React.Component {
     }
 
     moveToColorPicker = () => {
-        this.props.navigation.navigate("ColorPickerContainer");
+        //this.props.navigation.navigate("ColorPickerContainer");
     }
 
     render() {

@@ -15,23 +15,24 @@ class AddDevice extends Component{
     }
 
     onDeviceClick = () => {
+        let {deviceInfo: {SSID}} = this.props;
         NetInfo.fetch().then(info => {
             console.log("connection state: ", info);
-            this.setState({deviceHotspot: info.details.ssid});
-            if(info.type === 'wifi'){
-                /**Condition needs to implement for redirection to wifi setting or pairing form screen */
-                    //this.navigateToPairingForm();
+            this.setState({deviceHotspot: SSID});
+            /**Condition needs to implement for redirection to wifi setting or pairing form screen */
+                if(info.type === 'wifi' && info.details.ssid === SSID){
+                    this.navigateToPairingForm();
+                }
+                else{
                     this.showPopup();
-            }
-            else{
-                this.showPopup();
-            }
+                }
           });
     }
 
     navigateToPairingForm = () => {
+        let {deviceList, deviceInfo: {SSID}} = this.props;
         this.props.navigation.navigate('PairingForm', {
-            otherParam: {wifiList: this.props.deviceList, name: this.props.name}
+            otherParam: {wifiList: deviceList, name: SSID}
         })
     };
 

@@ -34,6 +34,7 @@ class Application extends Component {
                                 <AddDevice 
                                     name = {item.SSID}
                                     navigation = {this.props.navigation}
+                                    deviceInfo = {item}
                                     deviceList = {deviceList}/>
                             </Slider>)}}/>
                     </View>

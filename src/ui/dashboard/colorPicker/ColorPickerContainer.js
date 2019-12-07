@@ -10,6 +10,7 @@ import {changeColorBrigntess} from '../colorPicker/ColorUtil';
 import {connect} from 'react-redux';
 import {updateDeviceList} from '../../../util/AppUtil';
 import {deviceListAction} from '../../../redux/actions/DeviceListAction';
+import {insertDevices} from '../../../database/table/DeviceTable';
 
 class ColorPickerContainer extends React.Component{
     constructor(props){
@@ -52,6 +53,8 @@ class ColorPickerContainer extends React.Component{
             };
             let newList = updateDeviceList(updateObj, selectedDevice, deviceList);
             deviceListAction(newList);
+            /** Update the list in DB so user get the updated list when he came back */
+            insertDevices(newList);
     }
 
     render() {

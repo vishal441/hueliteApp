@@ -45,7 +45,7 @@ class Card extends Component {
             cardColor  = this.getCardGradentColor();
         return(
             <View style={{ paddingVertical: 10 }}>
-                <TouchableOpacity onPress = {() => {this.openColorPicker()}}>
+                <TouchableOpacity activeOpacity = {0.9} onPress = {() => {this.openColorPicker()}}>
                     <LinearGradient start={{x: 1, y: 0}} end={{x: 0, y: 0}} 
                         colors={cardColor} 
                         style={[styles.cardContainer, { elevation: isShowEditDashoard ? 15 : 5 }]}>

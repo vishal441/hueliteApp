@@ -26,11 +26,12 @@ class ColorChooser extends Component {
                 <View style={styles.body}>
                     <View style={{height:300, alignItems:'center'}}>
                         <Text style={styles.txt}>Select Color</Text>
-                        <ColorWheel initialColor="#637AFF"
+                        <ColorWheel initialColor= {selectedColor}
                                     onColorChange={color => this.props.onColorChange(color)}
                                     style={{width: 300}}
                                     thumbSize={20}
                                     thumbStyle={{alignItems:'center'}}
+                                    onColorChangeComplete= {color => this.props.onColorChangeComplete(color)}
                             />
                     </View>
                     <View style={{flexDirection:'row'}}>

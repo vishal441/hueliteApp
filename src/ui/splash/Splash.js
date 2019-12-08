@@ -3,28 +3,34 @@ import {View, Text,FlatList, StyleSheet, Image, Button} from 'react-native';
 import {ICON} from '../common/constants/ImageConstant';
 import {getDeviceListFromDb,deleteDeviceTable, insertDevices} from '../../database/table/DeviceTable';
 import {connect} from 'react-redux';
-import {deviceListAction} from '../../redux/actions/DeviceListAction';
+import {reduxConstant} from '../../redux/ReduxConstant';
 import {deviceArr} from '../../util/DummyData'
+import {deviceListAction} from '../../redux/actions/DeviceListAction';
 
 class Splash extends Component{
     constructor(props){
-        super(props)
-        this.state = {
-            deviceList : [],
-        }
+        super(props);
     }
     componentDidMount(){
         let self = this;
+        /**UnComment the next line for the very first time to insert dummay device in DB,
+         * After first attempt please comment it for now,
+         * Add few dummay data on util/DummayData file
+         */
         //insertDevices(deviceArr)
-        getDeviceListFromDb(cb => {
-            if(cb.success){
+
+        /**
+         * To delete all the data from DB unComment the next line, otherwise no need for same.
+         */
+        //deleteDeviceTable();
+
+        getDeviceListFromDb(deviceList => {
                 //this.setState({deviceList: cb.data})
-                this.props.deviceListAction(cb.data);
-            }
+                this.props.deviceListAction(deviceList);
         })
         setTimeout(function(){
             self.props.navigation.navigate('WifiScreen');
-        },2000)
+        },0)
     }
     render(){
         return(
@@ -50,10 +56,16 @@ const styles = StyleSheet.create({
     }
 })
 
-function mapStateToProps(state) {
+mapStateToProps = (state) => {
     return {
         deviceList: state
     }
 }
 
-export default connect(mapStateToProps, {deviceListAction})(Splash);
+mapDispatchToProps = dispatch => {
+    return{
+        deviceListAction: (deviceList) => dispatch({type: reduxConstant.DEVICE_LIST, deviceList: deviceList})
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Splash);

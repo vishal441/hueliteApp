@@ -1,10 +1,12 @@
 import React,{Component} from 'react';
 import {ICON} from '../common/constants/ImageConstant';
 import CardComponent from './components/CardComponent';
-import {View, Text,FlatList, StyleSheet, Image, Button, ScrollView} from 'react-native';
+import {View, Text,FlatList, StyleSheet, Image, Button, ScrollView, TouchableOpacity} from 'react-native';
 import RouteHeader from "../common/customComponents/RouteHeader";
 import Slider from '../common/customComponents/SliderAnimation';
 import {connect} from 'react-redux';
+import {deviceListAction} from '../../redux/actions/DeviceListAction';
+
 
 class Dashboard extends Component{
     constructor(props){
@@ -12,20 +14,26 @@ class Dashboard extends Component{
     }
    
     render(){
-        let {deviceList} = this.props;
+        let {deviceList, deviceListAction} = this.props;
         return(
          <View style={styles.container}>
              <View style={styles.header}>
-                 <Image style={styles.image} source={ICON.HamburgerIcon}/>
-                 <RouteHeader onPress={()=>{this.props.navigation.navigate('ColorPickerContainer')}}/>
+                 <TouchableOpacity onPress={() => { this.props.navigation.navigate("MainPanel")}}>
+                    <Image style={styles.image} source={ICON.HamburgerIcon}/>
+                 </TouchableOpacity>
+                 <RouteHeader onPress={()=>{this.props.navigation.navigate('WifiSearchScreen')}}/>
              </View>
              <View style={styles.body}>
                 <Text style={styles.textinput}>Dashboard</Text>
                 <FlatList data={deviceList} keyExtractor={(item, index) => item.SSID+index}
+                        extraData={deviceList}
                     renderItem={({item, index})=> {
                         return(
                         <Slider index = {index} name = {item.SSID}>
-                            <CardComponent data = {item}/>
+                            <CardComponent data = {item} 
+                                deviceList = {deviceList}
+                                deviceListAction = {deviceListAction} 
+                                navigation = {this.props.navigation}/>
                         </Slider>)}}/>
              </View>
          </View>
@@ -66,7 +74,7 @@ mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, null)(Dashboard);
+export default connect(mapStateToProps, {deviceListAction})(Dashboard);
 
 
 

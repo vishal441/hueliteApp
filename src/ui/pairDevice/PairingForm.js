@@ -36,8 +36,8 @@ export default class PairingForm extends Component{
         wifilist = payload.wifiList,
         wifiArray = [];
         if(wifilist && wifilist.length){
-            let wifiName = {}
             wifilist.forEach((item) => {
+                let wifiName = {};
                 wifiName['value'] = item.SSID;
                 wifiArray.push(wifiName);
             })

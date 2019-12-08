@@ -9,6 +9,7 @@ import RouteHeader from "../ui/common/customComponents/RouteHeader";
 import Dashboard from '../ui/dashboard/Dashboard';
 import PairingForm from '../ui/pairDevice/PairingForm';
 import ColorPickerContainer from '../ui/dashboard/colorPicker/ColorPickerContainer'; 
+import MainPanel from '../ui/dashboard/mainPanel/MainPanel';
 
 export const AppStackNavigator = createStackNavigator(
       { 
@@ -58,6 +59,12 @@ export const AppStackNavigator = createStackNavigator(
         },
         ColorPickerContainer: {
             screen: ColorPickerContainer,
+            navigationOptions: {
+                header: null
+            }
+        },
+        MainPanel: {
+            screen: MainPanel,
             navigationOptions: {
                 header: null
             }

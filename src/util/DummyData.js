@@ -9,7 +9,7 @@ export const deviceArr = [
         Last_WS_Msg_Received_Time_Stam : 0,
         Last_Heart_Time_Stamp : 0,
         Connected : false,
-        Last_State : "",
+        Last_State : "#637AFF",
         Dashoard_Type : "",
     },
     {
@@ -22,20 +22,20 @@ export const deviceArr = [
         Last_WS_Msg_Received_Time_Stam : 0,
         Last_Heart_Time_Stamp : 0,
         Connected : false,
-        Last_State : "",
+        Last_State : "#90ee90",
         Dashoard_Type : "",
     },
-    {
-        Type : "Device",
-        Mac : "DC:4F:22:5F:63:EC",
-        Host_Name : "",
-        SSID : "Homelink1",
-        IP_Address : "192.168.1.72",
-        Last_WS_Msg_Sent_Time_Stamp : 0,
-        Last_WS_Msg_Received_Time_Stam : 0,
-        Last_Heart_Time_Stamp : 0,
-        Connected : false,
-        Last_State : "",
-        Dashoard_Type : "",
-    }
+    // {
+    //     Type : "Device",
+    //     Mac : "DC:4F:22:5F:63:EC",
+    //     Host_Name : "",
+    //     SSID : "Homelink1",
+    //     IP_Address : "192.168.1.72",
+    //     Last_WS_Msg_Sent_Time_Stamp : 0,
+    //     Last_WS_Msg_Received_Time_Stam : 0,
+    //     Last_Heart_Time_Stamp : 0,
+    //     Connected : false,
+    //     Last_State : "#637AFF",
+    //     Dashoard_Type : "",
+    // }
 ]

@@ -1,4 +1,4 @@
-import {reduxConstant} from '../ReduxConstant'
+import {reduxConstant} from '../ReduxConstant';
 
 const initialState = {
     deviceList: []
@@ -6,8 +6,9 @@ const initialState = {
 
 export const deviceReducer = (state = initialState, action) => {
     switch(action.type){
-        case reduxConstant.DEVICE_LIST:
-            return action.payload;
+        case reduxConstant.DEVICE_LIST :
+            return action.deviceList;
+        
         default:
             return state;
     }

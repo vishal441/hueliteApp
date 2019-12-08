@@ -1,19 +1,63 @@
 import React,{Component} from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity, Alert} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {ICON} from '../common/constants/ImageConstant';
-
+import NetInfo from "@react-native-community/netinfo";
+import DeviceSettings from 'react-native-device-settings';
 
 class AddDevice extends Component{
     constructor(props){
         super(props);
+        this.state = {
+            deviceHotspot: '', 
+            password: '12345678'
+        }
     }
 
     onDeviceClick = () => {
-        this.props.navigation.navigate('PairingForm', {
-            otherParam: {wifiList: this.props.deviceList, name: this.props.name}
-        })
+        let {deviceInfo: {SSID}} = this.props;
+        NetInfo.fetch().then(info => {
+            console.log("connection state: ", info);
+            this.setState({deviceHotspot: SSID});
+            /**Condition needs to implement for redirection to wifi setting or pairing form screen */
+                if(info.type === 'wifi' && info.details.ssid === SSID){
+                    this.navigateToPairingForm();
+                }
+                else{
+                    this.showPopup();
+                }
+          });
     }
+
+    navigateToPairingForm = () => {
+        let {deviceList, deviceInfo: {SSID}} = this.props;
+        this.props.navigation.navigate('PairingForm', {
+            otherParam: {wifiList: deviceList, name: SSID}
+        })
+    };
+
+    showPopup = () => {
+        let {deviceHotspot, password} = this.state;
+        Alert.alert(
+            'Alert',
+            `You need to connect your device from wifi '${deviceHotspot}' with password ${password}.`,
+            [
+                {
+                    text: 'Pairing Form',
+                    onPress: () => this.navigateToPairingForm()
+                },
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                {
+                    text: 'OK', 
+                    onPress: () => DeviceSettings.wifi()
+                }
+            ],
+            
+          );
+    };
 
     render(){
         return (

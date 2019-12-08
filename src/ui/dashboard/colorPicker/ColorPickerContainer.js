@@ -3,10 +3,14 @@ import {View, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import ColorChooser from './ColorPicker';
 import {ColorPickerHeader} from './ColorPickerHeader';
 import {CustomeSlider} from './Slider';
-import {hsvToRgb, changeColorBrigntess, hexToRgb, rgbToHex} from './ColorUtil';
 import {ICON} from '../../common/constants/ImageConstant';
 import LinearGradient from 'react-native-linear-gradient';
-
+import {getSelectedGradientColors} from '../DashboardUtil';
+import {changeColorBrigntess} from '../colorPicker/ColorUtil';
+import {connect} from 'react-redux';
+import {updateDeviceList} from '../../../util/AppUtil';
+import {deviceListAction} from '../../../redux/actions/DeviceListAction';
+import {insertDevices} from '../../../database/table/DeviceTable';
 
 class ColorPickerContainer extends React.Component{
     constructor(props){
@@ -18,28 +22,21 @@ class ColorPickerContainer extends React.Component{
         }
     }
 
-    onColorChange = (color) => {
-        let {h,s,v} = color, gradientColorArr = [];
-        if(h < 0){
-             h = 360 + h;   
-        }
-        let rgb = hsvToRgb(h,s,v),
-            rgbColor = `rgb(${rgb.r},${rgb.g},${rgb.b})`;
-        let gradColor_1 = this.changeBrightness(30, rgb),
-            gradColor_2 = this.changeBrightness(50, rgb),
-            gradColor_3 = this.changeBrightness(70, rgb);
-        gradientColorArr.push(gradColor_3);
-        gradientColorArr.push(gradColor_2);
-        gradientColorArr.push(gradColor_1);
-        gradientColorArr.push(rgbColor);    
-       this.setState({selectedColor: rgbColor, gradColorArr: gradientColorArr});
+    componentWillMount() {
+        let param = this.props.navigation.getParam('otherParam'),
+        selDevice = param.selectedDevice, 
+        colorArr = [],
+        selectedColor = selDevice.Last_State ? selDevice.Last_State : '#ff0000',
+        col_1 = changeColorBrigntess(selectedColor, 30),
+        col_2 = changeColorBrigntess(selectedColor, 60),
+        col_3 = changeColorBrigntess(selectedColor, 90);
+        colorArr.push(col_1, col_2, col_3);
+        this.setState({selectedColor: selectedColor, gradColorArr: colorArr})
     }
 
-    changeBrightness = (value, rgb)=>{
-        let hexColoor = rgbToHex(rgb),
-         brightenColor = changeColorBrigntess(hexColoor, value),
-         rgbColor = hexToRgb(brightenColor);
-        return `rgb(${rgbColor.r},${rgbColor.g},${rgbColor.b})`;
+    onColorChange = (color) => {   
+       let {selectedColor, gradColorArr} =  getSelectedGradientColors(color);
+       this.setState({selectedColor: selectedColor, gradColorArr: gradColorArr});
     }
 
     onSlidingComplete = (value) => {
@@ -47,13 +44,26 @@ class ColorPickerContainer extends React.Component{
         this.setState({ sliderVal: sliderValue})
     }
 
+    onColorChangeComplete = (color) => {
+        let {selectedColor} =  getSelectedGradientColors(color),
+            {navigation, deviceListAction} = this.props,
+            {deviceList, selectedDevice} = navigation.getParam('otherParam'),
+            updateObj = {
+                Last_State: selectedColor
+            };
+            let newList = updateDeviceList(updateObj, selectedDevice, deviceList);
+            deviceListAction(newList);
+            /** Update the list in DB so user get the updated list when he came back */
+            insertDevices(newList);
+    }
+
     render() {
-       let {color,sliderVal, selectedColor, gradColorArr} = this.state;
+       let {sliderVal, selectedColor, gradColorArr} = this.state;
         return (
             <View style={{backgroundColor: selectedColor, height:'100%'}}>
                 <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={gradColorArr} style={styles.linearGradient}>
                     <View style={{height:'40%'}}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Dashboard')} style={{marginHorizontal:15, marginTop:10}}>
+                        <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={{marginHorizontal:15, marginTop:10}}>
                             <Image source={ICON.LEFT_ARROW} style={{height:35, width:35}}/>
                         </TouchableOpacity>
                         <ColorPickerHeader sliderVal={sliderVal} deviceName={" Device Bulb-1"}/>
@@ -65,7 +75,8 @@ class ColorPickerContainer extends React.Component{
                     </View>
                 </LinearGradient>
                 <ColorChooser onColorChange={this.onColorChange} 
-                              selectedColor={selectedColor}/>
+                              selectedColor={selectedColor} 
+                              onColorChangeComplete = {this.onColorChangeComplete} />
             </View>
         )
     }
@@ -80,4 +91,11 @@ const styles = StyleSheet.create({
 
 });
 
-export  default ColorPickerContainer;
+mapStateToProps = (state) => {
+    return{
+        deviceList: state
+    }
+}
+
+
+export  default connect(mapStateToProps, {deviceListAction})(ColorPickerContainer);

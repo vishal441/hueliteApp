@@ -86,8 +86,8 @@ class Card extends Component {
                             gradColorArr={['#2d90e8', '#3aafda', '#8ac5eb']} />
                         <View>
                             <Button title="Green" onPress={() => { hero.send("STATUS") }}></Button>
-                            <Button title="Red" onPress={() => { hero.send("Red") }}></Button>
-                            <Button title="Blue" onPress={() => { hero.send("Blue") }}></Button>
+                            <Button title="Red" onPress={() => { hero.send("#ff0000") }}></Button>
+                            <Button title="Blue" onPress={() => { hero.send("#0000ff") }}></Button>
                         </View>
                     </LinearGradient>
                 </TouchableOpacity>

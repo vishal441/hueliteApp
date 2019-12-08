@@ -13,4 +13,21 @@ const getStatusApi = async (ipAddr) => {
     }).catch((e)=>{console.log("Error: ",e);});
 }
 
-export{ getStatusApi, authoriseApi };
+const pairDeviceApi = async ()=>{
+    return await fetch("http://192.168.4.1/config",
+    {
+        method: "POST",
+        headers: {
+            "Accept": "application/json, application/text",
+            "Content-Type" : "application/x-www-form-urlencoded",
+        },
+        body: "config=wifi_connect&ssid=Homelink1&pass=Ioplmkjnb@1"
+        
+    }).then((res)=>{
+        return  res.text()
+    }).catch((e)=>{console.log("Error: ",e);});
+};
+
+
+
+export{ getStatusApi, authoriseApi, pairDeviceApi};

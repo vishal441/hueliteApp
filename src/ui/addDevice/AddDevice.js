@@ -61,7 +61,7 @@ class AddDevice extends Component{
 
     render(){
         return (
-            <TouchableOpacity onPress = {this.onDeviceClick}>
+            <TouchableOpacity activeOpacity = {0.6} onPress = {this.onDeviceClick}>
                 <LinearGradient colors={['#2d90e8', '#3aafda', '#8ac5eb']} style={styles.wifiList}>
                     <View style = {styles.imageContainer}>
                         <Image style = {styles.image} source = {ICON.BULB}/>

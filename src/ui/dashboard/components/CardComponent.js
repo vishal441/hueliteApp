@@ -56,7 +56,7 @@ class Card extends Component {
                             <Image style = {styles.image2} source={ICON.BULB}/>
                             <View style={{justifyContent: 'space-evenly'}}>
                                 <Text style={styles.textInput1}>{this.state.sliderVal + '%'}</Text>
-                                <Text style={styles.textInput2}>{this.props.data.Mac}</Text>
+                                <Text style={styles.textInput2}>{this.props.data.SSID}</Text>
                             </View>
                         </View>
                             <CustomeSlider  customStyle = {styles.sliderStyle}  

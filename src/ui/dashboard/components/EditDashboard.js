@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ICON } from '../../common/constants/ImageConstant';
 import { View, Text, FlatList, StyleSheet, Image, Button, TouchableOpacity } from 'react-native';
 import { RenameDialog } from '../../common/customComponents/RenameDialog';
+import _ from 'underscore';
 
 class EditDashboard extends Component {
     constructor(props) {
@@ -13,8 +14,8 @@ class EditDashboard extends Component {
     }
 
     componentDidMount() {
-        let { selectedCard:{Mac} } = this.props;
-        this.setState({deviceName: Mac});
+        let { selectedCard:{SSID} } = this.props;
+        this.setState({deviceName: SSID});
     }
 
     onRenamingDevice = (text) => {
@@ -24,14 +25,17 @@ class EditDashboard extends Component {
     onRenamePress = () => {
         let { deviceList, deviceListAction, selectedCard } = this.props,
             {deviceName} = this.state;
-        let newList = deviceList.map(item => {
-            if(item.IP_Address === selectedCard.IP_Address){
-                item.Mac = deviceName;
+        let newList = deviceList.map((item) => {
+            let clonedItem = _.clone(item);
+            if(item.Mac === selectedCard.Mac){
+                clonedItem.SSID = deviceName;
             }
-            return item;
+            return clonedItem;
         })
-        deviceListAction(newList);
         this.renameDlgHadler();
+        setTimeout(function(){
+            deviceListAction(newList);
+        })
     }
 
     renameDlgHadler = () =>{

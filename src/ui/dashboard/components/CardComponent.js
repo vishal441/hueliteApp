@@ -4,8 +4,6 @@ import { View, Text, FlatList, StyleSheet, Image, Button, TouchableOpacity } fro
 import LinearGradient from 'react-native-linear-gradient';
 import { CustomeSlider } from '../colorPicker/Slider';
 import { connectToDevice } from '../../../backGroundServices/Connector';
-import { getWebSocket } from "../../../backGroundServices/webSocketProcess/webSocket";
-import { authoriseApi, getStatusApi } from '../../../backGroundServices/webApi/WebApi';
 import { changeColorBrigntess } from '../colorPicker/ColorUtil';
 import EditDashboard from './EditDashboard';
 
@@ -46,18 +44,19 @@ class Card extends Component {
     }
 
     handleWebSocket = (wsVal) => {
-        this.setState({ ws: wsVal })
+        let {deviceListAction, data, deviceList } = this.props,
+            newList = deviceList.map(item => {
+            if(item.Mac === data.Mac){
+                item.Web_Socket = wsVal;
+            }
+            return item;
+        });
+        deviceListAction(newList);
+        this.setState({ ws: wsVal });
     }
 
     async componentDidMount() {
-        // // if(this.props.data.IP_Address === "192.168.1.70"){
-        //     var x = await connectToDevice(this.props.data.IP_Address);
-        //     console.log("XXXXXXXXXXX::  ",x);
-        // // }
-        hero = await connectToDevice('', this.handleWebSocket);
-        console.log("XXXXXXXXXXX::  ", hero);
-        // let STATURESULT = await getStatusApi();
-        // console.log("STATUSURL: ",STATURESULT);
+        await connectToDevice(this.props.data.IP_Address, this.handleWebSocket);
     }
 
     render() {
@@ -77,18 +76,13 @@ class Card extends Component {
                             <Image style={styles.image2} source={ICON.BULB} />
                             <View style={{ justifyContent: 'space-evenly' }}>
                                 <Text style={styles.textInput1}>{this.state.sliderVal + '%'}</Text>
-                                <Text style={styles.textInput2}>{this.props.data.SSID}</Text>
+                                <Text style={styles.textInput2}>{data.SSID}</Text>
                             </View>
                         </View>
                         <CustomeSlider customStyle={styles.sliderStyle}
                             onSlidingComplete={this.onSlidingComplete}
                             selectedColor={"#2d90e8"}
                             gradColorArr={['#2d90e8', '#3aafda', '#8ac5eb']} />
-                        <View>
-                            <Button title="Green" onPress={() => { hero.send("STATUS") }}></Button>
-                            <Button title="Red" onPress={() => { hero.send("#ff0000") }}></Button>
-                            <Button title="Blue" onPress={() => { hero.send("#0000ff") }}></Button>
-                        </View>
                     </LinearGradient>
                 </TouchableOpacity>
                 {isShowEditDashoard ?

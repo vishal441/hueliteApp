@@ -52,6 +52,7 @@ class ColorPickerContainer extends React.Component{
                 Last_State: selectedColor
             };
             let newList = updateDeviceList(updateObj, selectedDevice, deviceList);
+            selectedDevice.Web_Socket.send(selectedColor);
             deviceListAction(newList);
             /** Update the list in DB so user get the updated list when he came back */
             insertDevices(newList);

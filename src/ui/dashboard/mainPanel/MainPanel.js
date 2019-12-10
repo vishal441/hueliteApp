@@ -42,25 +42,25 @@ class MainPanel extends React.Component {
                 <View style={styles.panelRow}>
                     <PanelItem panelName={"Dashboard"}
                         panelTxtStyle={{ color: "red" }}
-                        icon={ICON.HamburgerIcon}
+                        icon={ICON.BULB}
                         gradColorArr={["#40b9ed","#0faef2","#0980b3"]} />
 
                     <PanelItem panelName={"Color Picker"}
                         panelTxtStyle={{ color: "#810699" }}
                         containerStyle={{ backgroundColor: '#fff' }}
-                        icon={ICON.HamburgerIcon}
+                        icon={ICON.TWITER}
                         onPanelPress={this.moveToColorPicker}
                         gradColorArr={["#fff", "#fff"]} />
 
                     <PanelItem panelName={"Modes"}
                         panelTxtStyle={{ color: "#05b071" }}
-                        icon={ICON.HamburgerIcon} 
+                        icon={ICON.TWITER} 
                         gradColorArr={["#fff", "#fff"]}/>
 
                     <PanelItem panelName={"Add Device"}
                         panelTxtStyle={{ color: "#ff6a00" }}
                         containerStyle={{ backgroundColor: '#fff' }}
-                        icon={ICON.HamburgerIcon} 
+                        icon={ICON.TWITER} 
                         gradColorArr={["#fff", "#fff"]}/>
                 </View>
 

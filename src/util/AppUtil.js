@@ -68,7 +68,27 @@ const updateDeviceList = (updateObj, selectedDevice, deviceArr) => {
     return updatedList;
 }
 
+/** 
+ * this helps to create a device by providing all the below args, mac and ip is necessary.
+*/
+const createNewDevice = (type, mac, hostName, ssid, ip, lastMsgSent, lastMsgRec, lastHbeat, connected, lastState, dashboardType) => {
+    return {
+        Type : type ? type : "Device",
+        Mac : mac,
+        Host_Name : hostName ? hostName : "",
+        SSID : ssid ? ssid : "",
+        IP_Address : ip,
+        Last_WS_Msg_Sent_Time_Stamp : lastMsgSent ? lastMsgSent : 0,
+        Last_WS_Msg_Received_Time_Stam : lastMsgRec ? lastMsgRec : 0,
+        Last_Heart_Time_Stamp : lastHbeat ? lastHbeat : 0,
+        Connected : connected ? connected : false,
+        Last_State : lastState ? lastState : "#637AFF",
+        Dashoard_Type : dashboardType ? dashboardType : "",
+    }
+};
+
 export {
     currentTimeStamp,
-    updateDeviceList
+    updateDeviceList,
+    createNewDevice
 }

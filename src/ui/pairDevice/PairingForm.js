@@ -4,6 +4,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import {ICON} from '../../ui/common/constants/ImageConstant';
 import {FONT_SIZE, FONT_COLOR} from '../common/constants/StyleConstant';
 import { Dropdown } from 'react-native-material-dropdown';
+import {connectToDevice} from '../../backGroundServices/Connector';
+import {pairDeviceApi} from '../../backGroundServices/webApi/WebApi';
+import {createNewDevice} from '../../util/AppUtil';
+import {insertDevices} from '../../database/table/DeviceTable';
+import {connect} from 'react-redux';
+import {deviceListAction} from '../../redux/actions/DeviceListAction';
 
 const TextInputField = (props) => {
     let {name, value, isPassword} = props;
@@ -21,20 +27,28 @@ const TextInputField = (props) => {
     )
 }
 
-export default class PairingForm extends Component{
+class PairingForm extends Component{
+    socket = null;
     constructor(props){
         super(props);
         this.state = {
             deviceName: '',
             wifiList: [],
-            rememberPass: false
+            selectedWifi: '',
+            password: '8512019785',
+            rePassword: '',
+            rememberPass: false,
+            deviceMAC: ''
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         let payload = this.props.navigation.getParam('otherParam', 'default value'),
         wifilist = payload.wifiList,
-        wifiArray = [];
+        selectedDevice = payload.selectedDevice,
+        wifiArray = [],
+        {deviceList, deviceListAction} = this.props;
+        console.log("Selected device : ", selectedDevice, deviceList);
         if(wifilist && wifilist.length){
             wifilist.forEach((item) => {
                 let wifiName = {};
@@ -42,22 +56,47 @@ export default class PairingForm extends Component{
                 wifiArray.push(wifiName);
             })
         }
-        this.setState({deviceName: payload.name, wifiList: wifiArray})
+        this.setState({deviceName: selectedDevice.SSID, wifiList: wifiArray, selectedWifi: wifilist[0].SSID, deviceMAC: selectedDevice.BSSID})
+        console.log("device list: ",  deviceList);
+        this.socket = await connectToDevice('', selectedDevice, deviceList, deviceListAction);
+    }
+
+    async componentWillUnmount(){
+        this.socket.close();
     }
 
     backButton = () => {
         this.props.navigation.navigate('AddDevice');
     }
 
+    selectWifiConn = (value, index, list) => {
+        this.setState({selectedWifi: value});
+    }
+
+    changePassword = (value) => {
+        this.setState({password: value})
+    }
+
     rememberPassword = () => {
         this.setState({rememberPass : !this.state.rememberPass});
     }
 
-    moveToNextScreen = () => {
-        console.log("move to next screen");
+    moveToNextScreen = async () => {
+        let {selectedWifi, password} = this.state,
+            pair = await pairDeviceApi(selectedWifi, password);
+        console.log("moveToNextScreen pair res: ", pair);
+        
+        //let newDevice = createNewDevice();
     }
 
     onSkip = () => {
+        let {deviceMAC, deviceName} = this.state,
+            deviceArr = [],
+            newDevice = createNewDevice('', deviceMAC, '', deviceName, '192.168.4.1');
+            deviceArr.push(newDevice);
+        console.log("onSkip : ", deviceArr);
+        insertDevices(deviceArr);
+
         this.props.navigation.navigate('AddDevice')
     }
 
@@ -86,7 +125,8 @@ export default class PairingForm extends Component{
                     <Dropdown 
                         data = {wifiList}
                         value = {wifiList && wifiList.length ? wifiList[0].value : ''}
-                        containerStyle = {{marginTop: -15}} />
+                        containerStyle = {{marginTop: -15}} 
+                        onChangeText = {(value, index) => this.selectWifiConn(value, index)}/>
 
                     <TextInputField 
                         name = {'Password'} 
@@ -191,3 +231,11 @@ const styles = StyleSheet.create({
         marginRight: 20
     }
 }) 
+
+mapStateToProps = (state) => {
+    return{
+        deviceList: state
+    }
+}
+
+export default connect(mapStateToProps, {deviceListAction})(PairingForm)

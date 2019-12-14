@@ -4,8 +4,7 @@ import {getWebSocket} from './webSocketProcess/webSocket';
 const connectToDevice = async (ipAddr, wsHandler) =>{
     let authoriseResponse = await authoriseApi(ipAddr),
     webSocket;
-
-    if(authoriseResponse.includes("Authorized")){
+    if(authoriseResponse && authoriseResponse.includes("Authorized")){
         webSocket = await getWebSocket(ipAddr, wsHandler);
     }
     if(webSocket){

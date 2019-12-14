@@ -7,5 +7,7 @@ export const ICON = {
     VER_MORE_INFO: require('../../../assets/images/verMoreInfo.png'),
     HOR_MORE_INFO: require('../../../assets/images/horMoreInfo.png'),
     BLACK_NOTIFICATION: require('../../../assets/images/notification.png'),
-    WHITE_SETTING: require('../../../assets/images/setting.png')
+    WHITE_SETTING: require('../../../assets/images/setting.png'),
+    RGB_COLOR_PICKER:  require('../../../assets/images/colorWheel.png'),
+    RGBWA_COLOR_PICKER:  require('../../../assets/images/RGBWA_ColorWheel.png')
 };

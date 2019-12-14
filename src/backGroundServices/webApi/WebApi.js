@@ -1,6 +1,7 @@
 const authoriseApi = async (ipAddr) => {
     let authUrl = `http://${ipAddr}/auth`;
     return await fetch(authUrl).then((res)=>{
+        console.log("RESPONSE: ",res);
         return  res.text();
     }).catch((e)=>{console.log("Error: ",e);});
 };

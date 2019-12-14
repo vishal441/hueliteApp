@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, Image, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Image, TouchableOpacity, Button} from 'react-native';
 import {ICON} from '../../common/constants/ImageConstant';
-import { ColorWheel } from 'react-native-color-wheel';
+import { ColorWheel } from './ColorWheel';
 
 
 class ColorChooser extends Component {
@@ -9,6 +9,7 @@ class ColorChooser extends Component {
         super(props)
         this.state = { 
             circleArr: [],
+            rgbColor: true
          }
     }
 
@@ -16,6 +17,11 @@ class ColorChooser extends Component {
         let circleArray = Object.assign([], this.state.circleArr);
         circleArray.push(circleColor);
         this.setState({circleArr: circleArray});
+    }
+    changePicker = ()=>{
+            let {rgbColor} = this.state;
+            console.log("rgbColor--->", rgbColor);
+            this.setState({rgbColor: !rgbColor});
     }
 
     render() {
@@ -32,7 +38,11 @@ class ColorChooser extends Component {
                                     thumbSize={20}
                                     thumbStyle={{alignItems:'center'}}
                                     onColorChangeComplete= {color => this.props.onColorChangeComplete(color)}
+                                    pickerImage = {this.state.rgbColor ? ICON.RGB_COLOR_PICKER : ICON.RGBWA_COLOR_PICKER}
                             />
+                        {/* <TouchableOpacity onPress={()=>this.changePicker()}>
+                            <Text> Change Picker</Text>
+                        </TouchableOpacity> */}
                     </View>
                     <View style={{flexDirection:'row'}}>
                         <View style={{width:'85%'}}>

@@ -56,6 +56,7 @@ class Card extends Component {
     }
 
     async componentDidMount() {
+        console.log("IP_Address: ",this.props.data.IP_Address);
         await connectToDevice(this.props.data.IP_Address, this.handleWebSocket);
     }
 

@@ -9,15 +9,14 @@ export const insertUserInfo = (userInfo) => {
   
 }
 
-export const getUserInfoFromDb = async(callback) => {
-    getQuery(UserInfoSchema.name,false, cb => {
-        if(cb.success){
-            callback (cb.data[0]);
-        }
-        else{
-            callback(false);
-        }
-    })
+export const getUserInfoFromDb = async() => {
+    let dbRes = await getQuery(UserInfoSchema.name,false);
+    if(dbRes.success){
+       return dbRes.data[0];
+    }
+    else{
+        return false;
+    }
 }
 
 export const deleteUserInfoTable = () => {

@@ -1,4 +1,4 @@
- const getWebSocket = async (ipAddr, wsHandler) =>{
+ const getWebSocket = async (ipAddr, wsHandler, OnMessageRecieved) =>{
     let wsUrl = `ws://${ipAddr}/ws`;
     let ws = await new WebSocket(wsUrl);
     ws.onopen = (res)=>{
@@ -13,6 +13,7 @@
 
     ws.onmessage = (e)=>{
         console.log("Message: ",e.data);
+        OnMessageRecieved(e.data);
     };
     
     ws.onclose = (e)=>{

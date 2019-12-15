@@ -11,18 +11,15 @@ export const insertOrUpdateTutorial = (array) => {
   
 }
 
-export const getTutorial = (callback) => {
-
-    getQuery(TutorialSchema.name,false, cb => {
-        console.log("getTutorial......",cb);
-        if(cb.success){
-            let res = cb.data;
-            callback(res);
-        }
-        else{
-            callback(cb);
-        }
-    })
+export const getTutorial = async() => {
+    let dbRes = await getQuery(TutorialSchema.name,false);
+    if(dbRes.success){
+        let res = dbRes.data;
+        return res;
+    }
+    else{
+        return dbRes;
+    }
 }
 
 export const deleteTutorial = () => {

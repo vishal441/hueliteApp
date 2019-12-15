@@ -1,14 +1,14 @@
 import Realm from 'realm';
-import {dataOptions} from './Schema';
-import {convertToArray} from './DbUtils';
-import {DeviceSchema, TutorialSchema} from './Schema';
+import { dataOptions } from './Schema';
+import { convertToArray } from './DbUtils';
+import { DeviceSchema, TutorialSchema } from './Schema';
 
-export const insertOrUpdateQuery = (schemaName,array, callback) => {
+export const insertOrUpdateQuery = (schemaName, array, callback) => {
     let dbResponse = {}
-    Realm.open(dataOptions).then( realm => {
+    Realm.open(dataOptions).then(realm => {
         try {
-            array.forEach( (obj) => {
-                realm.write(() =>{
+            array.forEach((obj) => {
+                realm.write(() => {
                     realm.create(schemaName, obj, true);
                 })
             });
@@ -24,37 +24,37 @@ export const insertOrUpdateQuery = (schemaName,array, callback) => {
 }
 
 
-export const getQuery = (schemaName,filter,callback) => {    
-    /** filter eg - ' id = "1" AND name BEGINSWITH "B" ' */ 
+export const getQuery = async (schemaName, filter) => {
+    /** filter eg - ' id = "1" AND name BEGINSWITH "B" ' */
     let dbResponse = {};
-    Realm.open(dataOptions).then(realm =>{
-        try{
-            let res = null, resArr = [];
-            if(filter) {
-                res = realm.objects(schemaName).filtered(filter);
-            }
-            else {
-                res = realm.objects(schemaName);
-            }            
-            resArr = convertToArray(res);
-            dbResponse.success = true;
-            dbResponse.data = resArr;
-            callback(dbResponse);
+    let realm = await Realm.open(dataOptions);
+    try {
+        let res = null, resArr = [];
+        if (filter) {
+            res = realm.objects(schemaName).filtered(filter);
         }
-        catch(e){
-            dbResponse.success = false;
-            dbResponse.error = e;
-            callback(dbResponse);
+        else {
+            res = realm.objects(schemaName);
         }
-    })
+        resArr = convertToArray(res);
+        dbResponse.success = true;
+        dbResponse.data = resArr;
+        return dbResponse;
+    }
+    catch (e) {
+        dbResponse.success = false;
+        dbResponse.error = e;
+        return dbResponse;
+    }
+
 }
 
-export const deleteSchema = (delSchemaArr,callback) => {
+export const deleteSchema = (delSchemaArr, callback) => {
     let dbResponse = {}
-    Realm.open(dataOptions).then( realm => {
+    Realm.open(dataOptions).then(realm => {
         try {
-            delSchemaArr.forEach( (schemaName) => {
-                realm.write(() =>{
+            delSchemaArr.forEach((schemaName) => {
+                realm.write(() => {
                     let schema = realm.objects(schemaName);
                     realm.delete(schema);
                 })

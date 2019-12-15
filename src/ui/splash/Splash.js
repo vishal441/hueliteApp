@@ -6,12 +6,13 @@ import {connect} from 'react-redux';
 import {reduxConstant} from '../../redux/ReduxConstant';
 import {deviceArr} from '../../util/DummyData'
 import {deviceListAction} from '../../redux/actions/DeviceListAction';
+import {heartBeatHandler} from '../../backGroundServices/Heartbeat';
 
 class Splash extends Component{
     constructor(props){
         super(props);
     }
-    componentDidMount(){
+    async componentDidMount(){
         let self = this;
         /**UnComment the next line for the very first time to insert dummay device in DB,
          * After first attempt please comment it for now,
@@ -24,13 +25,14 @@ class Splash extends Component{
          */
         //deleteDeviceTable();
 
-        getDeviceListFromDb(deviceList => {
-                //this.setState({deviceList: cb.data})
-                this.props.deviceListAction(deviceList);
-        })
+        let dbRes = await getDeviceListFromDb(),
+            deviceList = dbRes.data;
+        this.props.deviceListAction(deviceList);
         setTimeout(function(){
             self.props.navigation.navigate('WifiScreen');
         },0)
+
+        await heartBeatHandler(deviceList, deviceListAction);
     }
     render(){
         return(

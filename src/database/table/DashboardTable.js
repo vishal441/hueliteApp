@@ -36,10 +36,10 @@ const insertDashoardAndDeviceIds = (dashboardArr,callback) => {
     })
 }
 
-export const getDashoardList = (callback) => {
-    getQuery(DashboardTypeSchema.name,false, cb => {
-        let {data, success} = cb, 
-            res = [];
+export const getDashoardList = async() => {
+    let dbRes = await getQuery(DashboardTypeSchema.name,false),
+       {data, success} = dbRes, 
+        res = [];
         if(success){
             data && data.length && data.forEach(item => {
                let dashObj = _.clone(item);
@@ -47,8 +47,7 @@ export const getDashoardList = (callback) => {
                res.push(dashObj);
             })
         }
-        callback(res);
-    })
+    return res;
 }
 
 export const deleteDashboard = () => {

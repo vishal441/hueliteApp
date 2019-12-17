@@ -13,6 +13,8 @@ export default class PairingForm extends Component {
         super(props);
         this.state = {
             deviceName: '',
+            password: "",
+            cnfPass: "",
             wifiList: [],
             rememberPass: false
         }
@@ -52,8 +54,12 @@ export default class PairingForm extends Component {
         this.props.navigation.navigate('AddDevice')
     }
 
+    onTextChange = (name, text) => {
+        this.setState({[name]: text});
+    }
+
     render() {
-        let { deviceName, wifiList, rememberPass } = this.state;
+        let { deviceName, wifiList, rememberPass, password,  cnfPass} = this.state;
         return (
             <View>
                 <LinearGradient colors={['#2d90e8', '#3aafda', '#8ac5eb']} style={{ height: '30%' }}>
@@ -67,8 +73,10 @@ export default class PairingForm extends Component {
                 <ScrollView style={{ height: '70%' }}>
                     <View style={styles.form}>
                         <InputField
-                            label={'Device Name'}
-                            value={deviceName} />
+                            placeholder={'Device Name'}
+                            name={"deviceName"}
+                            value={deviceName}
+                            onChangeText={(text) => this.onTextChange("deviceName", text)} />
 
                         <View style={{flexDirection:'row', marginTop: 10, alignItems:'center'}}>
                             <View style={{width:'90%'}}>
@@ -86,14 +94,18 @@ export default class PairingForm extends Component {
                         </View>
 
                         <InputField
-                            label={'Password'}
-                            value=''
-                            secureTextEntry={true} />
+                            placeholder={'Password'}
+                            name={'password'}
+                            value={password}
+                            secureTextEntry={true}
+                            onChangeText={(text) => this.onTextChange("password", text)} />
 
                         <InputField
-                            label={'Re-type Password'}
-                            value=''
-                            secureTextEntry={true} />
+                            placeholder={'Re-type Password'}
+                            name={'cnfPass'}
+                            value={cnfPass}
+                            secureTextEntry={true}
+                            onChangeText={(text) => this.onTextChange("cnfPass", text)}/>
 
                         <View style={styles.rememberPassView}>
                             <TouchableOpacity onPress={() => this.rememberPassword()}>

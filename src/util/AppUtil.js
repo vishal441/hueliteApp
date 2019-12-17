@@ -68,7 +68,17 @@ const updateDeviceList = (updateObj, selectedDevice, deviceArr) => {
     return updatedList;
 }
 
+const setDeviceListInWindow = (deviceList) => {
+    window.DeviceList = deviceList;
+}
+
+const getDeviceListFromWindow = () => {
+    return window.DeviceList;
+}
+
 export {
     currentTimeStamp,
-    updateDeviceList
+    updateDeviceList,
+    setDeviceListInWindow,
+    getDeviceListFromWindow
 }

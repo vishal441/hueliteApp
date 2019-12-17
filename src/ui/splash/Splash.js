@@ -7,6 +7,7 @@ import {reduxConstant} from '../../redux/ReduxConstant';
 import {deviceArr} from '../../util/DummyData'
 import {deviceListAction} from '../../redux/actions/DeviceListAction';
 import {heartBeatHandler} from '../../backGroundServices/Heartbeat';
+import {setDeviceListInWindow, getDeviceListFromWindow} from '../../util/AppUtil';
 
 class Splash extends Component{
     constructor(props){
@@ -28,11 +29,17 @@ class Splash extends Component{
         let dbRes = await getDeviceListFromDb(),
             deviceList = dbRes.data;
         this.props.deviceListAction(deviceList);
+        setDeviceListInWindow(deviceList);
         setTimeout(function(){
             self.props.navigation.navigate('WifiScreen');
         },0)
 
-        await heartBeatHandler(deviceList, deviceListAction);
+        setInterval(async () => {
+            let updatedList = await heartBeatHandler(getDeviceListFromWindow());
+           // console.log("updatedList----->", updatedList);
+          // setDeviceListInWindow(updatedList);
+            //self.props.deviceListAction(updatedList);
+        }, 3000);
     }
     render(){
         return(

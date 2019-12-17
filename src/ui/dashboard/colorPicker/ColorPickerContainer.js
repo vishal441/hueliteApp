@@ -11,6 +11,7 @@ import {connect} from 'react-redux';
 import {updateDeviceList} from '../../../util/AppUtil';
 import {deviceListAction} from '../../../redux/actions/DeviceListAction';
 import {insertDevices} from '../../../database/table/DeviceTable';
+import {reduxConstant} from '../../../redux/ReduxConstant' 
 
 class ColorPickerContainer extends React.Component{
     constructor(props){
@@ -52,6 +53,7 @@ class ColorPickerContainer extends React.Component{
                 Last_State: selectedColor
             };
             let newList = updateDeviceList(updateObj, selectedDevice, deviceList);
+            selectedDevice.Web_Socket.send(selectedColor);
             deviceListAction(newList);
             /** Update the list in DB so user get the updated list when he came back */
             insertDevices(newList);
@@ -97,5 +99,10 @@ mapStateToProps = (state) => {
     }
 }
 
+mapDispatchToProps = dispatch => {
+    return{
+        deviceListAction: (deviceList) => dispatch({type: reduxConstant.DEVICE_LIST, deviceList: deviceList})
+    }
+}
 
-export  default connect(mapStateToProps, {deviceListAction})(ColorPickerContainer);
+export  default connect(mapStateToProps, mapDispatchToProps)(ColorPickerContainer);

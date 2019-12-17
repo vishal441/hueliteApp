@@ -1,13 +1,9 @@
- import {createNewDevice} from '../../util/AppUtil';
- import {insertDevices, getDeviceListFromDb} from '../../database/table/DeviceTable';
-
- const getWebSocket = async (ipAddr,selectedDevice, deviceList, deviceListAction, wsHandler) =>{
+ const getWebSocket = async (ipAddr, wsHandler, response) =>{
     let wsUrl = `ws://${ipAddr}/ws`;
-    let ws = await new WebSocket("ws://192.168.4.1/ws"),
-        {BSSID, SSID} = selectedDevice;
+    let ws = await new WebSocket("ws://192.168.4.1/ws");
     ws.onopen = (res)=>{
         ws.send("Connected");
-        // wsHandler(ws);
+        wsHandler(ws);
         // return ws; 
     };
     
@@ -16,32 +12,12 @@
     };
 
     ws.onmessage = (e)=>{
-        console.log("Message: ",e.data);
-        console.log("onmessage : selectedDevice", BSSID, SSID, deviceList);
         let IP;
-        if(e.data.includes("192.168")){
-            IP = e.data.substring(71,84);
-            let newList = [],
-            newDevice = createNewDevice('', BSSID, '', SSID, IP);
-            newList.push(newDevice);
-            insertDevices(newList);
-            getDeviceListFromDb(newList => {
-                console.log("condition success 12", newList);
-                deviceListAction ? deviceListAction(newList) : null;
-            });
-                // updatedList = deviceList && deviceList.length ? [...deviceList] : [];
-                // updatedList.push(newDevice);
-                // deviceListAction ? deviceListAction(updatedList) : null;
-            console.log("condition success 11", IP, newDevice, newList);
-            
-
-        };
-        //console.log("IP: ",IP);
-
+        response  && response(e, ws);
     };
     
     ws.onclose = (e)=>{
-        console.log(e.code,"   baaki ka: ", e);
+        console.log("Close: ", e);
     };
     return ws;
 }

@@ -22,9 +22,10 @@ class Splash extends Component{
         /**
          * To delete all the data from DB unComment the next line, otherwise no need for same.
          */
-        deleteDeviceTable();
+        //deleteDeviceTable();
 
         getDeviceListFromDb(deviceList => {
+            console.log("deviceList : ", deviceList);
                 //this.setState({deviceList: cb.data})
                 this.props.deviceListAction(deviceList);
         })

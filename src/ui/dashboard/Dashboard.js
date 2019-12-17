@@ -29,7 +29,7 @@ class Dashboard extends Component{
                         extraData={deviceList}
                     renderItem={({item, index})=> {
                         return(
-                        <Slider index = {index} name = {item.SSID}>
+                        <Slider index = {index}>
                             <CardComponent data = {item} 
                                 deviceList = {deviceList}
                                 deviceListAction = {deviceListAction} 
@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
 })
 
 mapStateToProps = (state) => {
+    console.log("mapStateToProps : ",state);
     return{
         deviceList: state
     }

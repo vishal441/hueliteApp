@@ -20,9 +20,10 @@ class PairingForm extends Component{
         super(props);
         this.state = {
             deviceName: '',
+            cnfPass: "",
             wifiList: [],
             selectedWifi: '',
-            password: '8512019785',
+            password: '',
             rePassword: '',
             rememberPass: false,
             deviceMAC: ''
@@ -88,8 +89,8 @@ class PairingForm extends Component{
     }
 
     moveToNextScreen = async () => {
-        let {selectedWifi, password} = this.state,
-            pair = await pairDeviceApi(selectedWifi, password);        
+        let {selectedWifi, password} = this.state;
+            await pairDeviceApi(selectedWifi, password);        
     }
 
     onSkip = () => {
@@ -102,12 +103,12 @@ class PairingForm extends Component{
         this.props.navigation.navigate('AddDevice')
     }
 
-    changeDeviceName = (value) => {
-        this.setState({deviceName : value})
-    };
+    onTextChange = (name, text) => {
+        this.setState({[name]: text});
+    }
 
     render() {
-        let { deviceName, wifiList, rememberPass, password } = this.state;
+        let { deviceName, wifiList, rememberPass, password,  cnfPass} = this.state;
         return (
             <View>
                 <LinearGradient colors={['#2d90e8', '#3aafda', '#8ac5eb']} style={{ height: '30%' }}>
@@ -121,9 +122,10 @@ class PairingForm extends Component{
                 <ScrollView style={{ height: '70%' }}>
                     <View style={styles.form}>
                         <InputField
-                            label={'Device Name'}
+                            placeholder={'Device Name'}
+                            name={"deviceName"}
                             value={deviceName}
-                            onChangeText = {this.changeDeviceName} />
+                            onChangeText={(text) => this.onTextChange("deviceName", text)} />
 
                         <View style={{flexDirection:'row', marginTop: 10, alignItems:'center'}}>
                             <View style={{width:'90%'}}>
@@ -142,14 +144,18 @@ class PairingForm extends Component{
                         </View>
 
                         <InputField
-                            label={'Password'}
-                            value= {password}
-                            secureTextEntry={true} />
+                            placeholder={'Password'}
+                            name={'password'}
+                            value={password}
+                            secureTextEntry={true}
+                            onChangeText={(text) => this.onTextChange("password", text)} />
 
                         <InputField
-                            label={'Re-type Password'}
-                            value=''
-                            secureTextEntry={true} />
+                            placeholder={'Re-type Password'}
+                            name={'cnfPass'}
+                            value={cnfPass}
+                            secureTextEntry={true}
+                            onChangeText={(text) => this.onTextChange("cnfPass", text)}/>
 
                         <View style={styles.rememberPassView}>
                             <TouchableOpacity onPress={() => this.rememberPassword()}>

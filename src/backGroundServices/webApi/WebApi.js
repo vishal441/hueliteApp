@@ -23,8 +23,9 @@ const pairDeviceApi = async (wifiName, password)=>{
         body: `config=wifi_connect&ssid=${wifiName}&pass=${password}`
         
     }).then((res)=>{
-        console.log("pairDeviceApi res : ",res);
-        return  res.text();
+        let resText =res.text();
+        console.log("pairDeviceApi res : ",resText);
+        return  resText;
     }).catch((e)=>{console.log("Error: ",e);});
 };
 

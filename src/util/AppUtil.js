@@ -94,8 +94,15 @@ const parseStringToObject = (value) =>{
     macAndData = result.split(">"),
     data = JSON.parse(JSON.stringify(macAndData[1])),
     ip = '';
-    if(data.includes('192.168')){
-        ip = data.substring(52,65)
+    data = data.replace("{","").replace("}","").replace(/"/g, '');
+    let properties = data.split(',');
+    let obj = {};
+    properties.forEach(function(property) {
+        var tup = property.split(':');
+        obj[tup[0]] = tup[1];
+    });
+    if(obj.Status === 'Connected'){
+        ip = obj["IP Add"]
     }
     return ip;
 }

@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
 })
 
 mapStateToProps = (state) => {
-    console.log("mapStateToProps : ",state);
     return{
         deviceList: state
     }

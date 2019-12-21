@@ -35,25 +35,22 @@ class PairingForm extends Component{
     }
 
     getWifiList = async () => {
-        let payload = this.props.navigation.getParam('otherParam', 'default value'),
-            wifilist = payload.wifiList,
-            selectedDevice = payload.selectedDevice,
+        let {wifiList, selectedDevice: {SSID, BSSID}} = this.props.navigation.getParam('otherParam', 'default value'),
             wifiArray = [];
-        if (wifilist && wifilist.length) {
-            wifilist.forEach((item) => {
+        if (wifiList && wifiList.length) {
+            wifiList.forEach((item) => {
                 let wifiName = {};
                 wifiName['value'] = item.SSID;
                 wifiArray.push(wifiName);
             })
         }
-        this.setState({deviceName: selectedDevice.SSID, wifiList: wifiArray, selectedWifi: wifilist[0].SSID, deviceMAC: selectedDevice.BSSID})
+        this.setState({deviceName: SSID, wifiList: wifiArray, selectedWifi: wifiList[0].SSID, deviceMAC: BSSID})
         this.socket = await connectToDevice('192.168.4.1', wsHandler => {},
         (message, ws)=>{
             if(message.data){
                 let IP = parseStringToObject(message.data);
                 if(IP && IP.length){
-                    let {BSSID, SSID} = selectedDevice,
-                        newDevice = [createNewDevice({BSSID: BSSID.toUpperCase(), SSID, IP})];
+                    let newDevice = [createNewDevice({BSSID: BSSID.toUpperCase(), SSID, IP})];
                     insertDevices(newDevice);
                     getDeviceListFromDb(newList => {
                         this.props.deviceListAction(newList);
@@ -69,6 +66,7 @@ class PairingForm extends Component{
     }
 
     async componentWillUnmount(){
+        console.log("componentWillUnmount");
         this.socket.close();
     }
 

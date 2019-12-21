@@ -6,7 +6,7 @@ export const insertOrUpdateTutorial = (array) => {
         {'Tutorial_1' : false,'Tutorial_2' : false,}
     ]
     insertOrUpdateQuery(TutorialSchema.name,arr, cb => {
-    console.log("updateTutorial......",cb);
+    // console.log("updateTutorial......",cb);
    });
   
 }
@@ -14,7 +14,7 @@ export const insertOrUpdateTutorial = (array) => {
 export const getTutorial = (callback) => {
 
     getQuery(TutorialSchema.name,false, cb => {
-        console.log("getTutorial......",cb);
+        // console.log("getTutorial......",cb);
         if(cb.success){
             let res = cb.data;
             callback(res);
@@ -27,6 +27,6 @@ export const getTutorial = (callback) => {
 
 export const deleteTutorial = () => {
     deleteSchema([TutorialSchema.name], cb => {
-        console.log("deleteTutorial......",cb);
+        // console.log("deleteTutorial......",cb);
     });
 }

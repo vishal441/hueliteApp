@@ -55,6 +55,10 @@ class Card extends Component {
         this.setState({ ws: wsVal });
     }
 
+    componentWillReceiveProps(){
+        console.log("componentWillReceiveProps: ",this.props.deviceList.length);
+    }
+
     async componentDidMount() {
         await connectToDevice(this.props.data.IP_Address, this.handleWebSocket);
     }

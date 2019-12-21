@@ -3,11 +3,12 @@ import {View, Text,FlatList, StyleSheet, Image, Button} from 'react-native';
 import {ICON} from '../common/constants/ImageConstant';
 import {getDeviceListFromDb,deleteDeviceTable, insertDevices} from '../../database/table/DeviceTable';
 import {connect} from 'react-redux';
+import store from '../../redux/ReduxStore';
 import {reduxConstant} from '../../redux/ReduxConstant';
 import {deviceArr} from '../../util/DummyData'
-import {deviceListAction} from '../../redux/actions/DeviceListAction';
 import {heartBeatHandler} from '../../backGroundServices/Heartbeat';
 import {setDeviceListInWindow, getDeviceListFromWindow} from '../../util/AppUtil';
+import { withNavigationFocus } from 'react-navigation';
 
 class Splash extends Component{
     constructor(props){
@@ -19,27 +20,37 @@ class Splash extends Component{
          * After first attempt please comment it for now,
          * Add few dummay data on util/DummayData file
          */
-        //insertDevices(deviceArr)
+        insertDevices(deviceArr)
 
         /**
          * To delete all the data from DB unComment the next line, otherwise no need for same.
          */
-        //deleteDeviceTable();
+        // deleteDeviceTable();
 
         let dbRes = await getDeviceListFromDb(),
-            deviceList = dbRes.data;
-        this.props.deviceListAction(deviceList);
-        setDeviceListInWindow(deviceList);
+            deviceListing = dbRes.data;
+        this.props.deviceListAction(deviceListing);
         setTimeout(function(){
             self.props.navigation.navigate('WifiScreen');
-        },0)
+        },2000);
+    }
 
+    componentDidUpdate(){
+        let self = this;
+        console.log("componentDidUpdate: ",this.props.deviceList);
+        let {deviceList, deviceListAction} = this.props;
         setInterval(async () => {
-            let updatedList = await heartBeatHandler(getDeviceListFromWindow());
-           // console.log("updatedList----->", updatedList);
+            // console.log("GET STATE: ",store.getState());
+            console.log("getDeviceListFromWindow----->", deviceList);
+            await heartBeatHandler( deviceList, (updateList) => {
+                console.log("updateList----->", updateList);
+                self.props.deviceListAction(updateList);
+                console.log("updateList----->.....2222222222222", self.props.deviceList)
+            });
+           // 
           // setDeviceListInWindow(updatedList);
             //self.props.deviceListAction(updatedList);
-        }, 3000);
+        }, 5000);
     }
     render(){
         return(

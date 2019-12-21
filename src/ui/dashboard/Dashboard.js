@@ -15,6 +15,9 @@ class Dashboard extends Component{
    
     render(){
         let {deviceList, deviceListAction} = this.props;
+        console.log("")
+        console.log("DEVICE LIST: ",deviceList);
+        console.log("");
         return(
          <View style={styles.container}>
              <View style={styles.header}>

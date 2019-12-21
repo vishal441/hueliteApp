@@ -16,7 +16,7 @@
 
     ws.onmessage = (e)=>{
         console.log("Message: ",e.data);
-        OnMessageRecieved(e.data);
+        OnMessageRecieved(e.data, ws);
     };
     
     ws.onclose = (e)=>{

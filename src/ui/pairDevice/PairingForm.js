@@ -11,6 +11,7 @@ import {insertDevices, getDeviceListFromDb} from '../../database/table/DeviceTab
 import {connect} from 'react-redux';
 import {deviceListAction} from '../../redux/actions/DeviceListAction';
 import { InputField } from '../common/customComponents/InputField';
+import { Loader } from '../common/customComponents/Loader';
 import {reduxConstant} from '../../redux/ReduxConstant';
 
 
@@ -26,7 +27,10 @@ class PairingForm extends Component{
             password: '',
             rePassword: '',
             rememberPass: false,
-            deviceMAC: ''
+            deviceMAC: '',
+            isDialogVisible: false,
+            showBtn: false,
+            message: ""
         }
     }
 
@@ -47,26 +51,36 @@ class PairingForm extends Component{
         this.setState({deviceName: SSID, wifiList: wifiArray, selectedWifi: wifiList[0].SSID, deviceMAC: BSSID})
         this.socket = await connectToDevice('192.168.4.1', wsHandler => {},
         (message, ws)=>{
+            let self = this;
             if(message.data){
-                let IP = parseStringToObject(message.data);
-                if(IP && IP.length){
-                    let newDevice = [createNewDevice({BSSID: BSSID.toUpperCase(), SSID, IP})];
-                    insertDevices(newDevice);
-                    getDeviceListFromDb(newList => {
-                        this.props.deviceListAction(newList);
-                        setTimeout(()=> {
-                            this.props.navigation.replace('Dashboard')
-                        }, 2000)
-                    });
+                let {data = ""} = message;
+                if(data.includes("Attempting CONN")){
+                    !this.state.isDialogVisible && this.setState({isDialogVisible: true});
                 }
-            }
-                
+                else if(data.includes("ERR")){
+                     this.setState({isDialogVisible: true, showBtn: true, message: "Something went wrong"});
+                }
+                else{
+                    let IP = parseStringToObject(message.data);
+                    if(IP && IP.length){
+                        let newDevice = [createNewDevice({BSSID: BSSID.toUpperCase(), SSID, IP})];
+                        insertDevices(newDevice);
+                        getDeviceListFromDb(newList => {
+                            this.props.deviceListAction(newList);
+                            setTimeout(()=> {
+                                self.setState({isDialogVisible: false, showBtn: false, message: ""});
+                                self.props.navigation.replace('Dashboard');
+                            }, 2000)
+                        });
+                    }
+                }
+            }   
         }
         );
     }
 
     async componentWillUnmount(){
-        console.log("componentWillUnmount");
+        this.setState({isDialogVisible: false, showBtn: false, message: ""});
         this.socket.close();
     }
 
@@ -87,7 +101,14 @@ class PairingForm extends Component{
     }
 
     moveToNextScreen = async () => {
-        let {selectedWifi, password} = this.state;
+        let {selectedWifi, password} = this.state,
+            self = this;
+            this.setState({isDialogVisible: true, message: "Connecting...."});
+            setTimeout(()=>{
+                if(self.state.isDialogVisible){
+                    this.setState({showBtn: true, message: "Something went wrong"});
+                }
+            }, 30000);
             await pairDeviceApi(selectedWifi, password);        
     }
 
@@ -103,6 +124,12 @@ class PairingForm extends Component{
 
     onTextChange = (name, text) => {
         this.setState({[name]: text});
+    }
+
+    onBtnPress = ()=>{
+        this.setState({isDialogVisible: false},()=>{
+            this.props.navigation.navigate('AddDevice');
+        });
     }
 
     render() {
@@ -179,6 +206,7 @@ class PairingForm extends Component{
                             </View>
                         </TouchableOpacity>
                     </View>
+                    <Loader isDialogVisile = {this.state.isDialogVisible} showBtn = {this.state.showBtn} message ={this.state.message} onBtnPress={this.onBtnPress}/>
                 </ScrollView>
             </View>
         )

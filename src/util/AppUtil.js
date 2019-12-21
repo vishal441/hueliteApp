@@ -90,9 +90,9 @@ const createNewDevice = ({type, BSSID, hostName, SSID, IP, webSocket ="", lastMs
 };
 
 const parseStringToObject = (value) =>{
-    let result = JSON.parse(JSON.stringify(value)),
-    macAndData = result.split(">"),
-    data = JSON.parse(JSON.stringify(macAndData[1])),
+    let result = value && JSON.parse(JSON.stringify(value)),
+    macAndData = result.split(">") || [],
+    data = (macAndData[1] && JSON.parse(JSON.stringify(macAndData[1]))) || "",
     ip = '';
     data = data.replace("{","").replace("}","").replace(/"/g, '');
     let properties = data.split(',');

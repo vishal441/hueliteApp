@@ -57,9 +57,6 @@ class PairingForm extends Component{
                 if(data.includes("Attempting CONN")){
                     !this.state.isDialogVisible && this.setState({isDialogVisible: true});
                 }
-                else if(data.includes("ERR")){
-                     this.setState({isDialogVisible: true, showBtn: true, message: "Something went wrong"});
-                }
                 else{
                     let IP = parseStringToObject(message.data);
                     if(IP && IP.length){
@@ -73,6 +70,9 @@ class PairingForm extends Component{
                             }, 2000)
                         });
                     }
+                //     else if(data.includes("ERR")){
+                //         this.setState({isDialogVisible: true, showBtn: true, message: "Something went wrong"});
+                //    }
                 }
             }   
         }

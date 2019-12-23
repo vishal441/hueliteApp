@@ -99,11 +99,12 @@ const parseStringToObject = (value) =>{
     let obj = {};
     properties.forEach(function(property) {
         var tup = property.split(':');
-        obj[tup[0]] = tup[1];
+        obj[tup[0].toLowerCase()] = tup[1];
     });
-    if(obj.Status === 'Connected'){
-        ip = obj["IP Add"]
+    if(obj && obj.status && (obj.status === 'WL_CONNECTED' || obj.status.toUpperCase() === 'CONNECTED')){
+        ip = obj["ip"] || obj["ip add"];
     }
+
     return ip;
 }
 

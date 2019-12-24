@@ -11,7 +11,7 @@
     
     ws.onerror = (e) => {
         console.log("Error: ",e.message);
-        wsHandler(null);
+        OnMessageRecieved(e, null);
     };
 
     ws.onmessage = (e)=>{
@@ -21,7 +21,7 @@
     
     ws.onclose = (e)=>{
         console.log("Close: ", e);
-        wsHandler(null);
+        OnMessageRecieved(e, null);
     };
     return ws;
 }

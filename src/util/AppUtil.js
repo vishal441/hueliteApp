@@ -1,4 +1,4 @@
-export const filterDashoard = (array, filterName) => {
+ const filterDashoard = (array, filterName) => {
     let arr = [];
     if(array && filterName) {
         arr =  array.filter(item => {
@@ -11,7 +11,7 @@ export const filterDashoard = (array, filterName) => {
     return arr;
 }
 
-export const parseJson = (str) => {
+ const parseJson = (str) => {
     try {
         return JSON.parse(str);
     } catch (e) {
@@ -19,7 +19,7 @@ export const parseJson = (str) => {
     }
 }
 
-export const CnvrtObjOfObjIntoArrOfObj = (obj) => {
+ const CnvrtObjOfObjIntoArrOfObj = (obj) => {
     let arr = [];
     if(obj){
        arr = Object.entries(obj).map(item => item[1]);
@@ -27,7 +27,7 @@ export const CnvrtObjOfObjIntoArrOfObj = (obj) => {
     return arr;
 }
 
-export const findOjectInArr = (myArray,keyName, value) => {
+ const findOjectInArr = (myArray,keyName, value) => {
     if(myArray && keyName) {
         for (var i=0; i < myArray.length; i++) {
                 if (myArray[i][keyName] == value) {
@@ -40,9 +40,6 @@ export const findOjectInArr = (myArray,keyName, value) => {
     }
 }
 
-const currentTimeStamp = () => {
-    return +new Date();
-}
 
 /**
  * 
@@ -68,17 +65,10 @@ const updateDeviceList = (updateObj, selectedDevice, deviceArr) => {
     return updatedList;
 }
 
-const setDeviceListInWindow = (deviceList) => {
-    window.DeviceList = deviceList;
-}
-
-const getDeviceListFromWindow = () => {
-    return window.DeviceList;
-}
-
 export {
-    currentTimeStamp,
+    filterDashoard,
+    parseJson,
+    CnvrtObjOfObjIntoArrOfObj,
+    findOjectInArr,
     updateDeviceList,
-    setDeviceListInWindow,
-    getDeviceListFromWindow
 }

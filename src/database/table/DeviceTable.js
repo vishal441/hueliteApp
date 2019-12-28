@@ -4,6 +4,7 @@ import {insertOrUpdateQuery, getQuery, deleteSchema} from '../DbAction';
 
 export const insertDevices = (deviceArr) => {
     insertOrUpdateQuery(DeviceSchema.name,deviceArr, cb => {
+        console.log("insertOrUpdateQuery : ", cb);
    });
   
 }

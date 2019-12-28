@@ -40,7 +40,6 @@
     }
 }
 
-
 /**
  * 
  * @param {object need to update in device list} updateObj 
@@ -65,10 +64,44 @@ const updateDeviceList = (updateObj, selectedDevice, deviceArr) => {
     return updatedList;
 }
 
+/**
+ * this helps to create a device by providing all the below args, mac and ip is necessary.
+*/
+const createNewDevice = ({type, BSSID, hostName, SSID, IP, webSocket ="", lastMsgSent, lastMsgRec, lastHbeat, connected, lastState, dashboardType}) => {
+    let val =  {
+        Type : type ? type : "Device",
+        Mac : BSSID,
+        Host_Name : hostName ? hostName : "",
+        SSID : SSID ? SSID : "",
+        IP_Address : IP,
+        Last_WS_Msg_Sent_Time_Stamp : lastMsgSent ? lastMsgSent : 0,
+        Last_WS_Msg_Received_Time_Stam : lastMsgRec ? lastMsgRec : 0,
+        Last_Heart_Time_Stamp : lastHbeat ? lastHbeat : 0,
+        Connected : connected ? connected : false,
+        Last_State : lastState ? lastState : "#637AFF",
+        Web_Socket: webSocket,
+        Dashoard_Type : dashboardType ? dashboardType : "",
+    };
+    return val;
+};
+
+const parseStringToObject = (value) =>{
+    let result = JSON.parse(JSON.stringify(value)),
+    macAndData = result.split(">"),
+    data = JSON.parse(JSON.stringify(macAndData[1])),
+    ip = '';
+    if(data.includes('192.168')){
+        ip = data.substring(52,65)
+    }
+    return ip;
+}
+
 export {
     filterDashoard,
     parseJson,
     CnvrtObjOfObjIntoArrOfObj,
     findOjectInArr,
     updateDeviceList,
+    createNewDevice,
+    parseStringToObject
 }

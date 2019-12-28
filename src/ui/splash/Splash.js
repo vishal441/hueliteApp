@@ -5,13 +5,14 @@ import {getDeviceListFromDb,deleteDeviceTable, insertDevices} from '../../databa
 import {connect} from 'react-redux';
 import {reduxConstant} from '../../redux/ReduxConstant';
 import {deviceArr} from '../../util/DummyData'
-import {deviceListAction} from '../../redux/actions/DeviceListAction';
+import {heartBeatHandler} from '../../backGroundServices/Heartbeat';
+
 
 class Splash extends Component{
     constructor(props){
         super(props);
     }
-    componentDidMount(){
+    async componentDidMount(){
         let self = this;
         /**UnComment the next line for the very first time to insert dummay device in DB,
          * After first attempt please comment it for now,
@@ -22,16 +23,29 @@ class Splash extends Component{
         /**
          * To delete all the data from DB unComment the next line, otherwise no need for same.
          */
-        //deleteDeviceTable();
+         //deleteDeviceTable();
 
-        getDeviceListFromDb(deviceList => {
-            console.log("deviceList : ", deviceList);
-                //this.setState({deviceList: cb.data})
-                this.props.deviceListAction(deviceList);
-        })
-        setTimeout(function(){
-            self.props.navigation.navigate('WifiScreen');
-        },0)
+        let dbRes = await getDeviceListFromDb(),
+            deviceListing = dbRes.data;
+        this.props.deviceListAction(deviceListing);
+        if(deviceListing.length) {
+            this.props.navigation.navigate('Dashboard');
+        }
+        else {
+            setTimeout(function(){
+                self.props.navigation.navigate('WifiScreen');
+            },2000);
+        }
+    }
+
+    componentDidUpdate(){
+        let self = this;
+        let {deviceList, deviceListAction} = this.props;
+        setInterval(async () => {
+            await heartBeatHandler( deviceList, (updateList) => {
+                self.props.deviceListAction(updateList);
+            });
+        }, 3000);
     }
     render(){
         return(

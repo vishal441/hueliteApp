@@ -52,7 +52,7 @@ class PairingForm extends Component{
         }
         this.setState({deviceName: SSID, wifiList: wifiArray, selectedWifi: wifiList[0].SSID, deviceMAC: BSSID})
         this.socket = await connectToDevice('192.168.4.1', wsHandler => {},
-        (message)=>{
+        async (message)=>{
             let self = this;
             if(message.data){
                 let {data = ""} = message;
@@ -64,13 +64,15 @@ class PairingForm extends Component{
                     if(IP && IP.length){
                         let newDevice = [createNewDevice({BSSID: BSSID.toUpperCase(), SSID, IP})];
                         insertDevices(newDevice);
-                        getDeviceListFromDb(newList => {
-                            this.props.deviceListAction(newList);
+                        let dbRes = await getDeviceListFromDb(),
+                            newDeviceList = dbRes.data;
+                        if(newDeviceList.length){
+                            this.props.deviceListAction(newDeviceList);
                             setTimeout(()=> {
                                 self.setState({isDialogVisible: false, showBtn: false, message: ""});
                                 self.props.navigation.replace('Dashboard');
                             }, 1000)
-                        });
+                        }
                     }
                     else if(resCode && SOCKET_ERROR_TYPES.hasOwnProperty(resCode)){
                         this.setState({message: SOCKET_ERROR_TYPES[resCode], showBtn: true});

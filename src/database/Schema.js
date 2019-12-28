@@ -61,7 +61,7 @@ export const UserInfoSchema = {
 export const dataOptions = {
     path: 'Huelite_App.realm',
     schema: [DeviceSchema, TutorialSchema, UserInfoSchema, DeviceIdSchema, DashboardTypeSchema],
-    schemaVersion: 16,
+    schemaVersion: 23,
 };
 
 export default new Realm(dataOptions);

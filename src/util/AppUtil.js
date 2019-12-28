@@ -1,4 +1,6 @@
-export const filterDashoard = (array, filterName) => {
+import {currentTimeStamp} from './DateTimeUtil'; 
+
+ const filterDashoard = (array, filterName) => {
     let arr = [];
     if(array && filterName) {
         arr =  array.filter(item => {
@@ -11,7 +13,7 @@ export const filterDashoard = (array, filterName) => {
     return arr;
 }
 
-export const parseJson = (str) => {
+ const parseJson = (str) => {
     try {
         return JSON.parse(str);
     } catch (e) {
@@ -19,7 +21,7 @@ export const parseJson = (str) => {
     }
 }
 
-export const CnvrtObjOfObjIntoArrOfObj = (obj) => {
+ const CnvrtObjOfObjIntoArrOfObj = (obj) => {
     let arr = [];
     if(obj){
        arr = Object.entries(obj).map(item => item[1]);
@@ -27,7 +29,7 @@ export const CnvrtObjOfObjIntoArrOfObj = (obj) => {
     return arr;
 }
 
-export const findOjectInArr = (myArray,keyName, value) => {
+ const findOjectInArr = (myArray,keyName, value) => {
     if(myArray && keyName) {
         for (var i=0; i < myArray.length; i++) {
                 if (myArray[i][keyName] == value) {
@@ -38,10 +40,6 @@ export const findOjectInArr = (myArray,keyName, value) => {
     else{
         return {};
     }
-}
-
-const currentTimeStamp = () => {
-    return +new Date();
 }
 
 /**
@@ -68,7 +66,7 @@ const updateDeviceList = (updateObj, selectedDevice, deviceArr) => {
     return updatedList;
 }
 
-/** 
+/**
  * this helps to create a device by providing all the below args, mac and ip is necessary.
 */
 const createNewDevice = ({type, BSSID, hostName, SSID, IP, webSocket ="", lastMsgSent, lastMsgRec, lastHbeat, connected, lastState, dashboardType}) => {
@@ -113,7 +111,10 @@ const parseStringToObject = (value) =>{
 }
 
 export {
-    currentTimeStamp,
+    filterDashoard,
+    parseJson,
+    CnvrtObjOfObjIntoArrOfObj,
+    findOjectInArr,
     updateDeviceList,
     createNewDevice,
     parseStringToObject

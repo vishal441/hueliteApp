@@ -1,4 +1,16 @@
-export const DASHOARD_TYPE = {
+const DASHOARD_TYPE = {
     KITCHEN: "Kitchen",
     BEDROOM: "Bedroom"
+}
+
+const SOCKET_ERROR_TYPES = {
+    "ERR-042": 'Device is already paired..!!',
+    "ERR-044": 'Unexpected error..!!',
+    "ERR-045": 'Time out..!!',
+    "ERR-046": 'Incorrect Password..!!',
+}
+
+export {
+    DASHOARD_TYPE,
+    SOCKET_ERROR_TYPES
 }

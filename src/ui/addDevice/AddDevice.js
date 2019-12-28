@@ -43,10 +43,6 @@ class AddDevice extends Component{
             `You need to connect your device from wifi '${deviceHotspot}' with password ${password}.`,
             [
                 {
-                    text: 'Pairing Form',
-                    onPress: () => this.navigateToPairingForm()
-                },
-                {
                     text: 'Cancel',
                     style: 'cancel',
                 },

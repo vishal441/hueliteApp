@@ -8,16 +8,18 @@
     };
     
     ws.onerror = (e) => {
-        console.log("Error: ",e.message);
+        console.log("Error: ",e);
+        response  && response(e);
     };
 
     ws.onmessage = (e)=>{
         console.log("Message: ", e.data);
-        response  && response(e, ws);
+        response  && response(e);
     };
     
     ws.onclose = (e)=>{
         console.log("Close: ", e);
+        response  && response(e);
     };
     return ws;
 }

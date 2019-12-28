@@ -13,7 +13,7 @@ import {deviceListAction} from '../../redux/actions/DeviceListAction';
 import { InputField } from '../common/customComponents/InputField';
 import { Loader } from '../common/customComponents/Loader';
 import {reduxConstant} from '../../redux/ReduxConstant';
-
+import {SOCKET_ERROR_TYPES} from '../common/constants/StringConstant';
 
 class PairingForm extends Component{
     socket = null;
@@ -30,7 +30,9 @@ class PairingForm extends Component{
             deviceMAC: '',
             isDialogVisible: false,
             showBtn: false,
-            message: ""
+            message: "",
+            isPassFilled: true,
+            error: ''
         }
     }
 
@@ -50,7 +52,7 @@ class PairingForm extends Component{
         }
         this.setState({deviceName: SSID, wifiList: wifiArray, selectedWifi: wifiList[0].SSID, deviceMAC: BSSID})
         this.socket = await connectToDevice('192.168.4.1', wsHandler => {},
-        (message, ws)=>{
+        (message)=>{
             let self = this;
             if(message.data){
                 let {data = ""} = message;
@@ -58,7 +60,7 @@ class PairingForm extends Component{
                     !this.state.isDialogVisible && this.setState({isDialogVisible: true});
                 }
                 else{
-                    let IP = parseStringToObject(message.data);
+                    let {IP, resCode }= parseStringToObject(message.data);
                     if(IP && IP.length){
                         let newDevice = [createNewDevice({BSSID: BSSID.toUpperCase(), SSID, IP})];
                         insertDevices(newDevice);
@@ -67,12 +69,12 @@ class PairingForm extends Component{
                             setTimeout(()=> {
                                 self.setState({isDialogVisible: false, showBtn: false, message: ""});
                                 self.props.navigation.replace('Dashboard');
-                            }, 2000)
+                            }, 1000)
                         });
                     }
-                //     else if(data.includes("ERR")){
-                //         this.setState({isDialogVisible: true, showBtn: true, message: "Something went wrong"});
-                //    }
+                    else if(resCode && SOCKET_ERROR_TYPES.hasOwnProperty(resCode)){
+                        this.setState({message: SOCKET_ERROR_TYPES[resCode], showBtn: true});
+                    }
                 }
             }   
         }
@@ -103,13 +105,21 @@ class PairingForm extends Component{
     moveToNextScreen = async () => {
         let {selectedWifi, password} = this.state,
             self = this;
-            this.setState({isDialogVisible: true, message: "Connecting...."});
+            if(password && password.length){
+            this.setState({isPassFilled: true, isDialogVisible: true, message: "Connecting...", showBtn: false});
             setTimeout(()=>{
                 if(self.state.isDialogVisible){
-                    this.setState({showBtn: true, message: "Something went wrong"});
+                    this.setState({showBtn: true, message: "Time out..!!"});
                 }
             }, 30000);
+            
+                await pairDeviceApi(selectedWifi, password);        
             await pairDeviceApi(selectedWifi, password);        
+                await pairDeviceApi(selectedWifi, password);        
+            }
+            else{
+                this.setState({isPassFilled: false})
+            }
     }
 
     onSkip = () => {
@@ -123,17 +133,20 @@ class PairingForm extends Component{
     }
 
     onTextChange = (name, text) => {
+        if(name = "password"){
+            this.setState({isPassFilled: true})
+        }
         this.setState({[name]: text});
     }
 
     onBtnPress = ()=>{
         this.setState({isDialogVisible: false},()=>{
-            this.props.navigation.navigate('AddDevice');
+            //this.props.navigation.navigate('AddDevice');
         });
     }
 
     render() {
-        let { deviceName, wifiList, rememberPass, password,  cnfPass} = this.state;
+        let { deviceName, wifiList, rememberPass, password, cnfPass, isPassFilled} = this.state;
         return (
             <View>
                 <LinearGradient colors={['#2d90e8', '#3aafda', '#8ac5eb']} style={{ height: '30%' }}>
@@ -174,6 +187,7 @@ class PairingForm extends Component{
                             value={password}
                             secureTextEntry={true}
                             onChangeText={(text) => this.onTextChange("password", text)} />
+                        {!isPassFilled ? <Text style = {{color: 'red'}}>Please enter password</Text> : null}
 
                         <InputField
                             placeholder={'Re-type Password'}

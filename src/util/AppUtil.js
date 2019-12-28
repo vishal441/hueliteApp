@@ -91,21 +91,25 @@ const createNewDevice = ({type, BSSID, hostName, SSID, IP, webSocket ="", lastMs
 
 const parseStringToObject = (value) =>{
     let result = value && JSON.parse(JSON.stringify(value)),
-    macAndData = result.split(">") || [],
-    data = (macAndData[1] && JSON.parse(JSON.stringify(macAndData[1]))) || "",
-    ip = '';
-    data = data.replace("{","").replace("}","").replace(/"/g, '');
+    ip = '',
+    resCode = '',
+    data = result.replace("{","").replace("}","").replace(/"/g, '');
     let properties = data.split(',');
     let obj = {};
     properties.forEach(function(property) {
         var tup = property.split(':');
         obj[tup[0].toLowerCase()] = tup[1];
     });
-    if(obj && obj.status && (obj.status === 'WL_CONNECTED' || obj.status.toUpperCase() === 'CONNECTED')){
-        ip = obj["ip"] || obj["ip add"];
+    if(obj && obj.status && (obj.status === 'WL_CONNECTED')){
+        ip = obj["ip_add"];
     }
-
-    return ip;
+    if(obj && obj.res_code){
+        resCode = obj["res_code"]
+    }
+    return {
+        IP: ip,
+        resCode: resCode
+    };
 }
 
 export {

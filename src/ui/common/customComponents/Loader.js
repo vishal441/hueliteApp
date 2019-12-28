@@ -13,7 +13,7 @@ export const Loader =({isDialogVisile, showBtn = false, message = "Connecting...
                  </View>
                  {showBtn && 
                  <View style = {styles.btnContainer}>
-                      <Button title={"OK"} titleStyle={[styles.btnTxt]} buttonStyle={[styles.btn]} onPress={onBtnPress}/>
+                      <Button title={"Try again"} titleStyle={[styles.btnTxt]} buttonStyle={[styles.btn]} onPress={onBtnPress}/>
                  </View>}
              </DialogContent>
         </Dialog>
@@ -23,7 +23,7 @@ export const Loader =({isDialogVisile, showBtn = false, message = "Connecting...
 
 const styles = StyleSheet.create({
     dialogStyle: {
-        height: '15%',
+        height: '20%',
         width: '80%'
     },
     contentStyle:{
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         alignItems: "center"    
     },
     label: {
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: '400',
         width: "100%",
         flexDirection: 'row',

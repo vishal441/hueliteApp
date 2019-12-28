@@ -37,11 +37,10 @@ class Splash extends Component{
         let self = this;
         let {deviceList, deviceListAction} = this.props;
         setInterval(async () => {
-            console.log("device.....list--------->",deviceList);
             await heartBeatHandler( deviceList, (updateList) => {
                 self.props.deviceListAction(updateList);
             });
-        }, 5000);
+        }, 3000);
     }
     render(){
         return(

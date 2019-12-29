@@ -7,5 +7,18 @@ export const ICON = {
     VER_MORE_INFO: require('../../../assets/images/verMoreInfo.png'),
     HOR_MORE_INFO: require('../../../assets/images/horMoreInfo.png'),
     BLACK_NOTIFICATION: require('../../../assets/images/notification.png'),
-    WHITE_SETTING: require('../../../assets/images/setting.png')
+    WHITE_SETTING: require('../../../assets/images/setting.png'),
+    COLOR_WHEEL: require('../../../assets/images/colorWheel.png'),
+    PARTY: require('../../../assets/images/modes/party.png'),
+    STUDY: require('../../../assets/images/modes/study.png'),
+    DINNER: require('../../../assets/images/modes/dinner.png'),
+    MOVIE: require('../../../assets/images/modes/movie.png'),
+    BREATHING: require('../../../assets/images/scenes/breathing.png'),
+    MEDICATION: require('../../../assets/images/scenes/medication.png'),
+    PEACE: require('../../../assets/images/scenes/peace.png'),
+    RAINBOW: require('../../../assets/images/scenes/rainbow.png'),
+    SNOWY: require('../../../assets/images/shades/SNOWY.png'),
+    RAINY: require('../../../assets/images/shades/RAINY.png'),
+    SUNNY: require('../../../assets/images/shades/SUNNY.png'),
+    CLOUDY: require('../../../assets/images/shades/CLOUDY.png')
 };

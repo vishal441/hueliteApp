@@ -11,7 +11,7 @@ import {connect} from 'react-redux';
 import {updateDeviceList} from '../../../util/AppUtil';
 import {deviceListAction} from '../../../redux/actions/DeviceListAction';
 import {insertDevices} from '../../../database/table/DeviceTable';
-
+import ChangePicker from "./ChangePicker";
 class ColorPickerContainer extends React.Component{
     constructor(props){
         super(props)
@@ -52,7 +52,7 @@ class ColorPickerContainer extends React.Component{
                 Last_State: selectedColor
             };
             let newList = updateDeviceList(updateObj, selectedDevice, deviceList);
-            selectedDevice.Web_Socket.send(selectedColor);
+           // selectedDevice.Web_Socket.send(selectedColor);
             deviceListAction(newList);
             /** Update the list in DB so user get the updated list when he came back */
             insertDevices(newList);
@@ -61,24 +61,24 @@ class ColorPickerContainer extends React.Component{
     render() {
        let {sliderVal, selectedColor, gradColorArr} = this.state;
         return (
-            <View style={{backgroundColor: selectedColor, height:'100%'}}>
-                <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={gradColorArr} style={styles.linearGradient}>
-                    <View style={{height:'40%'}}>
-                        <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={{marginHorizontal:15, marginTop:10}}>
-                            <Image source={ICON.LEFT_ARROW} style={{height:35, width:35}}/>
-                        </TouchableOpacity>
-                        <ColorPickerHeader sliderVal={sliderVal} deviceName={" Device Bulb-1"}/>
-                        <CustomeSlider customStyle = {styles.sliderStyle}   
-                                    onSlidingComplete={this.onSlidingComplete}
-                                    selectedColor={selectedColor}
-                                    gradColorArr={gradColorArr}/>
-                
-                    </View>
-                </LinearGradient>
-                <ColorChooser onColorChange={this.onColorChange} 
-                              selectedColor={selectedColor} 
-                              onColorChangeComplete = {this.onColorChangeComplete} />
-            </View>
+            <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={gradColorArr} style={{height:'100%'}}>
+                <View style={{height:'100%'}}>
+                        <View style={{height:'40%'}}>
+                            <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={{marginHorizontal:15, height: "10%", marginTop:10}}>
+                                <Image source={ICON.LEFT_ARROW} style={{height:"100%"}}/>
+                            </TouchableOpacity>
+                            <ColorPickerHeader sliderVal={sliderVal} deviceName={" Device Bulb-1"}/>
+                            <CustomeSlider customStyle = {styles.sliderStyle}   
+                                        onSlidingComplete={this.onSlidingComplete}
+                                        selectedColor={selectedColor}
+                                        gradColorArr={gradColorArr}/>
+                    
+                        </View>
+                    <ChangePicker onColorChange={this.onColorChange} 
+                                selectedColor={selectedColor} 
+                                onColorChangeComplete = {this.onColorChangeComplete} />
+                </View>
+            </LinearGradient>
         )
     }
 }
@@ -86,10 +86,8 @@ class ColorPickerContainer extends React.Component{
 
 const styles = StyleSheet.create({
    sliderStyle:{
-       marginHorizontal: 20,
-       marginTop: 80
-   },
-
+       marginHorizontal: 20
+   }
 });
 
 mapStateToProps = (state) => {

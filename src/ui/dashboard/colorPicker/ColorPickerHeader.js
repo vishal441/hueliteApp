@@ -5,7 +5,7 @@ import { ICON } from '../../common/constants/ImageConstant';
 export const ColorPickerHeader = (props) => {
     let {sliderVal, deviceName} = props;
     return(
-        <View style={{paddingHorizontal:20, alignItems:'center'}}> 
+        <View style={{paddingHorizontal:20, height: "40%", alignItems:'center'}}> 
             <View style={{flexDirection:'row', marginTop:20,  width:'100%'}}>
                 <Image source={ICON.BULB} style={{width:50, height:50}}/>
                 <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between', width:'85%'}}>

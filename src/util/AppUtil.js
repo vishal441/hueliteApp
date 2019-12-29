@@ -101,13 +101,25 @@ const parseStringToObject = (value) =>{
     if(obj && obj.status && (obj.status === 'WL_CONNECTED')){
         ip = obj["ip_add"];
     }
-    if(obj && obj.res_code){
-        resCode = obj["res_code"]
+    if(obj && obj.res_code || obj.err_code){
+        resCode = obj["res_code"] || obj["err_code"]
     }
     return {
         IP: ip,
         resCode: resCode
     };
+}
+
+const isEmptyFields = (...fields) => {
+    let status = false;
+    if(fields && fields.length){
+        for(let i = 0; i < fields.length; i++){
+            status = fields[i].length ? false : true;
+            if(status)
+            break;
+        }
+    }
+    return status;
 }
 
 export {
@@ -117,5 +129,6 @@ export {
     findOjectInArr,
     updateDeviceList,
     createNewDevice,
-    parseStringToObject
+    parseStringToObject,
+    isEmptyFields
 }

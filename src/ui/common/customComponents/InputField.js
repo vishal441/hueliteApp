@@ -9,7 +9,7 @@ export const InputField = (props) => {
     return (
         <TextInput
             placeholder={placeholder}
-            value={value}
+            // value={value}
             onChangeText={(text) => onChangeText ? onChangeText(text) : {} }
             onBlur={() => onBlur ? onBlur() : {}}
             onFocus={() => onFocus ? onFocus() : {}}
@@ -17,7 +17,7 @@ export const InputField = (props) => {
             keyboardType={keyboardType ? keyboardType : 'default'}
             onSubmitEditing={() => onSubmitEditing ? onSubmitEditing() : {}}
             secureTextEntry={secureTextEntry ? secureTextEntry : false}
-        />
+        >{value}</TextInput>
     )
 }
 

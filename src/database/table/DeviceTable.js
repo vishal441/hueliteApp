@@ -9,14 +9,8 @@ export const insertDevices = (deviceArr) => {
 }
 
 export const getDeviceListFromDb = async(callback) => {
-    getQuery(DeviceSchema.name,false, cb => {
-        if(cb.success){
-             callback (cb.data);
-        }
-        else {
-            callback ([]);
-        }
-    })
+    let deviceRes = await getQuery(DeviceSchema.name,false);
+    return deviceRes;
 }
 
 export const deleteDeviceTable = () => {

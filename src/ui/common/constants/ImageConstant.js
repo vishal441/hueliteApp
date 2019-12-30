@@ -20,5 +20,9 @@ export const ICON = {
     SNOWY: require('../../../assets/images/shades/SNOWY.png'),
     RAINY: require('../../../assets/images/shades/RAINY.png'),
     SUNNY: require('../../../assets/images/shades/SUNNY.png'),
-    CLOUDY: require('../../../assets/images/shades/CLOUDY.png')
+    CLOUDY: require('../../../assets/images/shades/CLOUDY.png'),
+    TWITER: require('../../../assets/images/twiter.png'),
+    WHITE_CHECK: require('../../../assets/images/whiteCheck.png'),
+    RIGHT_ARROW: require('../../../assets/images/rightArrow.png'),
+    SYNC: require('../../../assets/images/sync.png')
 };

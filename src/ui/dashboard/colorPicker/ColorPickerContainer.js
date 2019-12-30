@@ -12,6 +12,8 @@ import {updateDeviceList} from '../../../util/AppUtil';
 import {deviceListAction} from '../../../redux/actions/DeviceListAction';
 import {insertDevices} from '../../../database/table/DeviceTable';
 import ChangePicker from "./ChangePicker";
+import {reduxConstant} from '../../../redux/ReduxConstant' 
+
 class ColorPickerContainer extends React.Component{
     constructor(props){
         super(props)
@@ -47,16 +49,19 @@ class ColorPickerContainer extends React.Component{
     onColorChangeComplete = (color) => {
         let {navigation, deviceListAction} = this.props,
         {deviceList, selectedDevice} = navigation.getParam('otherParam'),
-        updateObj = {};
+        updateObj = {},
+        updatedColor = "";
         if(selectedDevice.SSID.includes("OW")){
-            updateObj["Last_State"] = color
+            updateObj["Last_State"] = color;
+            updatedColor = color;
         }
         else{
             let {selectedColor} =  getSelectedGradientColors(color);
             updateObj["Last_State"] = selectedColor;
+            updatedColor = selectedColor;
         }
         let newList = updateDeviceList(updateObj, selectedDevice, deviceList);
-        // selectedDevice.Web_Socket.send(selectedColor);
+        typeof selectedDevice.Web_Socket === 'object' && selectedDevice.Web_Socket.send(updatedColor);
          deviceListAction(newList);
          /** Update the list in DB so user get the updated list when he came back */
          insertDevices(newList);
@@ -100,5 +105,10 @@ mapStateToProps = (state) => {
     }
 }
 
+mapDispatchToProps = dispatch => {
+    return{
+        deviceListAction: (deviceList) => dispatch({type: reduxConstant.DEVICE_LIST, deviceList: deviceList})
+    }
+}
 
-export  default connect(mapStateToProps, {deviceListAction})(ColorPickerContainer);
+export  default connect(mapStateToProps, mapDispatchToProps)(ColorPickerContainer);

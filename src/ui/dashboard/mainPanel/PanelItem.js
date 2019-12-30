@@ -38,9 +38,9 @@ const styles = StyleSheet.create({
         width: 25
     },
     txt: {
-        fontSize: 22,
+        fontSize: 16,
         fontWeight: '500',
         color: '#000',
-        marginTop: 25
+        marginTop: 5
     }
 })

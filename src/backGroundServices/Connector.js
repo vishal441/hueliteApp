@@ -1,12 +1,12 @@
 import {authoriseApi} from './webApi/WebApi';
 import {getWebSocket} from './webSocketProcess/webSocket';
  
-const connectToDevice = async (ipAddr, wsHandler) =>{
+const connectToDevice = async (ipAddr, wsHandler, OnMessageRecieved) =>{
     let authoriseResponse = await authoriseApi(ipAddr),
     webSocket;
 
-    if(authoriseResponse.includes("Authorized")){
-        webSocket = await getWebSocket(ipAddr, wsHandler);
+    if(authoriseResponse && authoriseResponse.includes("Authorized")){
+        webSocket = await getWebSocket(ipAddr, wsHandler, OnMessageRecieved);
     }
     if(webSocket){
         return webSocket;

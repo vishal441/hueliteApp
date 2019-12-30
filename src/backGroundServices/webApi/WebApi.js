@@ -12,7 +12,7 @@ const getStatusApi = async (ipAddr) => {
     }).catch((e)=>{console.log("Error: ",e);});
 }
 
-const pairDeviceApi = async ()=>{
+const pairDeviceApi = async (wifiName, password)=>{
     return await fetch("http://192.168.4.1/config",
     {
         method: "POST",
@@ -20,10 +20,12 @@ const pairDeviceApi = async ()=>{
             "Accept": "application/json, application/text",
             "Content-Type" : "application/x-www-form-urlencoded",
         },
-        body: "config=wifi_connect&ssid=Homelink1&pass=Ioplmkjnb@1"
+        body: `config=wifi_connect&ssid=${wifiName}&pass=${password}`
         
     }).then((res)=>{
-        return  res.text();
+        let resText =res.text();
+        console.log("pairDeviceApi res : ",resText);
+        return  resText;
     }).catch((e)=>{console.log("Error: ",e);});
 };
 

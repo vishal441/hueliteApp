@@ -17,7 +17,7 @@ class HandleBack extends Component {
   }
 
   onBack = () => {
-      console.log("back");
+      // console.log("back");
     return this.props.onBack();
   };
 

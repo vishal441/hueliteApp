@@ -17,7 +17,7 @@ class AddDevice extends Component{
     onDeviceClick = () => {
         let {deviceInfo: {SSID}} = this.props;
         NetInfo.fetch().then(info => {
-            console.log("connection state: ", info);
+           // console.log("connection state: ", info);
             this.setState({deviceHotspot: SSID});
             /**Condition needs to implement for redirection to wifi setting or pairing form screen */
                 if(info.type === 'wifi' && info.details.ssid === SSID){
@@ -30,9 +30,9 @@ class AddDevice extends Component{
     }
 
     navigateToPairingForm = () => {
-        let {deviceList, deviceInfo: {SSID}} = this.props;
+        let {deviceList, deviceInfo} = this.props;
         this.props.navigation.navigate('PairingForm', {
-            otherParam: {wifiList: deviceList, name: SSID}
+            otherParam: {wifiList: deviceList, selectedDevice: deviceInfo}
         })
     };
 
@@ -42,10 +42,6 @@ class AddDevice extends Component{
             'Alert',
             `You need to connect your device from wifi '${deviceHotspot}' with password ${password}.`,
             [
-                {
-                    text: 'Pairing Form',
-                    onPress: () => this.navigateToPairingForm()
-                },
                 {
                     text: 'Cancel',
                     style: 'cancel',

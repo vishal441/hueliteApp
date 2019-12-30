@@ -8,8 +8,8 @@ class ColorChooser extends Component {
         super(props)
         this.state = { 
             circleArr: [],
-            warmWhiteColor:["#E9967A", "#FA8072", "#FFA07A"],
-            coolWhiteColor:["#800080", "#FF00FF", "#000080"]
+            coolWhiteColor:[{color: "#A3E7FF", send: "#0000004000"}, {color: "#C9F8FF", send: "#0000007f00"}, {color:"#CDF7FF", send:" #000000bf00"},{color:"#E9FCFF", send:"#000000ff00"}],
+            warmWhiteColor:[{color: "#F4F3E7", send:"#00000000ff"}, {color: "#F5F3DE", send:"#00000000bf"}, {color: "#F6EBCC", send:"#000000007f"}, {color: "#F5E1A6", send:"#0000000040"}]
          }
     }
 
@@ -30,7 +30,7 @@ class ColorChooser extends Component {
                         <View style={styles.underline}/>
                     </View>
                     <View style={{height: "100%", width: "100%"}}>
-                            <View style ={{height:"50%",width: "100%", alignItems:'center'}}>
+                            <View style ={{height:"45%",width: "100%", alignItems:'center'}}>
                                 <ColorWheel initialColor= {selectedColor}
                                             onColorChange={color => this.props.onColorChange(color)}
                                             style={{width: "100%", height: "100%"}}
@@ -41,8 +41,8 @@ class ColorChooser extends Component {
                             </View>
                             <View style={{flexDirection:'row'}}>
                                 <View style={{width:'100%', alignItems:"center"}}>
-                                    <Circle circleArr={warmWhiteColor}/>
-                                    <Circle circleArr={coolWhiteColor}/>
+                                    <Circle circleArr={coolWhiteColor} onColorChangeComplete={this.props.onColorChangeComplete}/>
+                                    <Circle circleArr={warmWhiteColor} onColorChangeComplete={this.props.onColorChangeComplete}/>
                                 </View>
                                 {/* <View style={{width:'15%'}}>
                                     <AddCircle addCircle={this.addCircle} bgColor={selectedColor} />
@@ -55,11 +55,14 @@ class ColorChooser extends Component {
     }
 }
 
-const Circle = ({circleArr}) => {
-    
+const Circle = ({circleArr, onColorChangeComplete}) => {  
     return(
         <View style={{flexWrap:'wrap', flexDirection:'row'}}>
-            {circleArr && circleArr.map(rgColor => <View style={[styles.circle,{backgroundColor: rgColor}]}/>) }
+            {circleArr && circleArr.map(rgColor => 
+            <TouchableOpacity onPress={()=>onColorChangeComplete(rgColor.send)}>
+                     <View style={[styles.circle,{backgroundColor: rgColor.color}]}/>
+            </TouchableOpacity>
+        )}
         </View>
     )
 }

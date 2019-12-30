@@ -17,17 +17,16 @@ class ChangePicker extends Component{
     render(){
         return(
             <View style={styles.container}>
-                 {/* <Swiper scrollViewStyle = {{width:"50%"}} style = {styles.body} width={"100%"} automaticallyAdjustContentInsets={true} loop={false} showsButtons={true} showsButtons={false} horizontal={true}>
-                   <View>
+                 <Swiper pagingEnabled={false} scrollViewStyle = {{width:"50%"}} style = {styles.body} width={"100%"} automaticallyAdjustContentInsets={true} loop={false} showsPagination={false} showsButtons={false} horizontal={true}>
+                 <View style={styles.child}>
                         <ColorChooser {...this.props}/>
                     </View>
                     <View>
                         <ModesPresets/>
                     </View>
-                </Swiper> */}
-
+                </Swiper>
+{/* 
                 <ViewPagerAndroid
-                style={styles.pager}
                 initialPage={0}>
                    <View style={styles.child}>
                         <ColorChooser {...this.props}/>
@@ -35,7 +34,7 @@ class ChangePicker extends Component{
                     <View>
                         <ModesPresets/>
                     </View>
-                </ViewPagerAndroid>
+                </ViewPagerAndroid> */}
             </View>
             
         )

@@ -28,14 +28,12 @@ class Splash extends Component{
         let dbRes = await getDeviceListFromDb(),
             deviceListing = dbRes.data;
         this.props.deviceListAction(deviceListing);
-        if(deviceListing.length) {
-            this.props.navigation.navigate('Dashboard');
-        }
-        else {
-            setTimeout(function(){
-                self.props.navigation.navigate('WifiScreen');
-            },2000);
-        }
+        setTimeout(function(){
+            if(deviceListing.length)
+                self.props.navigation.replace('Dashboard');
+            else
+            self.props.navigation.replace('WifiScreen');
+        }, 2000); 
     }
 
     componentDidUpdate(){

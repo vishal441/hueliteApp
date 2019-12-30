@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, ScrollView, Keyboard, AppState } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Keyboard, BackHandler } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { ICON } from '../../ui/common/constants/ImageConstant';
 import { FONT_SIZE, FONT_COLOR } from '../common/constants/StyleConstant';
@@ -38,6 +38,7 @@ class PairingForm extends Component{
     componentDidMount() {
         this.getWifiList();
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     }
 
 
@@ -95,6 +96,7 @@ class PairingForm extends Component{
         this.setState({isDialogVisible: false, showBtn: false, message: ""});
         this.socket.close();
         this.keyboardDidHideListener.remove();
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     }
 
     backButton = () => {
@@ -160,6 +162,14 @@ class PairingForm extends Component{
     
     keyboardDidHide () {
         Keyboard.dismiss();
+    }
+
+    handleBackButton = () => {
+        if(this.state.isDialogVisible){
+            return true
+        }
+        else
+            return false;
     }
 
     render() {

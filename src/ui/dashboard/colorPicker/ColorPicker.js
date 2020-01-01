@@ -8,9 +8,9 @@ class ColorChooser extends Component {
         super(props)
         this.state = { 
             circleArr: [],
-            coolWhiteColor:[{color: "#A3E7FF", send: "#0000004000"}, {color: "#C9F8FF", send: "#0000007f00"}, {color:"#CDF7FF", send:" #000000bf00"},{color:"#E9FCFF", send:"#000000ff00"}],
-            warmWhiteColor:[{color: "#F4F3E7", send:"#00000000ff"}, {color: "#F5F3DE", send:"#00000000bf"}, {color: "#F6EBCC", send:"#000000007f"}, {color: "#F5E1A6", send:"#0000000040"}]
-         }
+            coolWhiteColor:[{color: "#A3E7FF", send: "#000000ff00"}, {color: "#C9F8FF", send: "#000000bf00"}, {color:"#CDF7FF", send: "#0000007f00"},{color:"#E9FCFF", send:"#0000004000"}],
+            warmWhiteColor:[{color: "#F4F3E7", send:"#0000000040"}, {color: "#F5F3DE", send:"#000000007f"}, {color: "#F6EBCC", send:"#00000000bf"}, {color: "#F5E1A6", send:"#00000000ff"}]
+        }
     }
 
     addCircle = (circleColor) => {

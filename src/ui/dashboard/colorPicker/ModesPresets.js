@@ -81,7 +81,9 @@ const styles = StyleSheet.create({
      color:'grey',
      fontSize:20,
      fontWeight:'bold',
-     marginTop:10
+     marginTop:10,
+     textAlign: "center",
+     width: "100%"
     },
     imageWrapper:{
         padding: 10

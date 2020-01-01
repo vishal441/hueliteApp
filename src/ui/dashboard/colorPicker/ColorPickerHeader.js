@@ -10,7 +10,7 @@ export const ColorPickerHeader = (props) => {
                 <Image source={ICON.BULB} style={{width:50, height:50}}/>
                 <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between', width:'85%'}}>
                     <Text style={[styles.txt,{marginLeft:20}]}>{deviceName}</Text>
-                    <Text style={styles.txt}>{sliderVal + "%"}</Text>
+                    <Text style={[styles.txt, styles.percentageBar]}>{sliderVal + "%"}</Text>
                 </View>
             </View>
         </View>
@@ -23,5 +23,12 @@ const styles = StyleSheet.create({
         fontSize:24,
         fontWeight:'500',
         alignItems:'center'
+    },
+    percentageBar:{
+        fontSize:24,
+        fontWeight:'500',
+        width: "20%",
+        height: "100%",
+        paddingVertical: 5
     }
  });

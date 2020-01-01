@@ -18,25 +18,12 @@ class ChangePicker extends Component{
         return(
             <View style={styles.container}>
                  <Swiper pagingEnabled={false} scrollViewStyle = {{width:"50%"}} style = {styles.body} width={"100%"} automaticallyAdjustContentInsets={true} loop={false} showsPagination={false} showsButtons={false} horizontal={true}>
-                 <View style={styles.child}>
-                        <ColorChooser {...this.props}/>
-                    </View>
-                    <View>
-                        <ModesPresets/>
-                    </View>
+                 <Swiper pagingEnabled={false} scrollViewStyle = {{width:"50%"}} style = {styles.body} width={"100%"} automaticallyAdjustContentInsets={true} loop={false} showsPagination={false} showsButtons={false} horizontal={true}>
+                    <ColorChooser {...this.props}/>
+                    <ModesPresets/>
+                  </Swiper>
                 </Swiper>
-{/* 
-                <ViewPagerAndroid
-                initialPage={0}>
-                   <View style={styles.child}>
-                        <ColorChooser {...this.props}/>
-                    </View>
-                    <View>
-                        <ModesPresets/>
-                    </View>
-                </ViewPagerAndroid> */}
             </View>
-            
         )
     }
 }
@@ -57,7 +44,7 @@ const styles = StyleSheet.create({
     body:{
         position: "absolute",
         height:'100%',
-        width:"100%",
+        width:"100%"
     },
     pager:{
         width: "100%",

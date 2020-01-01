@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity, Alert} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity, Alert, AppState} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {ICON} from '../common/constants/ImageConstant';
 import NetInfo from "@react-native-community/netinfo";
@@ -10,31 +10,60 @@ class AddDevice extends Component{
         super(props);
         this.state = {
             deviceHotspot: '', 
-            password: '12345678'
+            password: '12345678',
+            currentWifi: '',
+            selDeviceName: ''
         }
     }
 
-    onDeviceClick = () => {
-        let {deviceInfo: {SSID}} = this.props;
-        NetInfo.fetch().then(info => {
-           // console.log("connection state: ", info);
-            this.setState({deviceHotspot: SSID});
-            /**Condition needs to implement for redirection to wifi setting or pairing form screen */
-                if(info.type === 'wifi' && info.details.ssid === SSID){
-                    this.navigateToPairingForm();
-                }
-                else{
-                    this.showPopup();
-                }
+    componentDidMount(){
+        NetInfo.addEventListener(info => {
+            if(info.isConnected && info.type ==='wifi'){
+                this.setState({currentWifi: info.details.ssid})
+            }
           });
+        AppState.addEventListener('change', this.handleAppStateChange);
+    }
+
+    handleAppStateChange = (nextAppState) => {
+        let {currentWifi, selDeviceName} = this.state,
+            self = this;
+        if (nextAppState === 'active' && currentWifi === selDeviceName) {
+            this.setState({selDeviceName: ''})
+            setTimeout( () => {
+                self.navigateToPairingForm();
+            }, 1000)
+        }
+        else{
+            //this.setState({appState: 'inactive'})
+        }
+      };
+
+    onDeviceClick = () => {
+        let {deviceInfo: {SSID}} = this.props,
+            {currentWifi} = this.state;
+        this.setState({deviceHotspot: SSID});
+        if(currentWifi === SSID){
+            this.navigateToPairingForm();
+        }
+        else{
+            this.showPopup();
+        }
+
     }
 
     navigateToPairingForm = () => {
-        let {deviceList, deviceInfo} = this.props;
+        let {deviceInfo, wifiList} = this.props;
         this.props.navigation.navigate('PairingForm', {
-            otherParam: {wifiList: deviceList, selectedDevice: deviceInfo}
+            otherParam: {wifiList: wifiList, selectedDevice: deviceInfo}
         })
     };
+
+    redirectToWifi = () => {
+        let {deviceInfo: {SSID}} = this.props;
+        this.setState({selDeviceName: SSID})
+        DeviceSettings.wifi();
+    }
 
     showPopup = () => {
         let {deviceHotspot, password} = this.state;
@@ -48,12 +77,16 @@ class AddDevice extends Component{
                 },
                 {
                     text: 'OK', 
-                    onPress: () => DeviceSettings.wifi()
+                    onPress: () => this.redirectToWifi()
                 }
             ],
             
           );
     };
+
+    componentWillUnmount(){
+        AppState.removeEventListener('change', this._handleAppStateChange);
+    }
 
     render(){
         return (

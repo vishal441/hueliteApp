@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ICON } from '../../common/constants/ImageConstant';
-import { View, Text, FlatList, StyleSheet, Image, Button, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity, BackHandler } from 'react-native';
 import { RenameDialog } from '../../common/customComponents/RenameDialog';
 import _ from 'underscore';
 
@@ -16,6 +16,7 @@ class EditDashboard extends Component {
     componentDidMount() {
         let { selectedCard:{SSID} } = this.props;
         this.setState({deviceName: SSID});
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     }
 
     onRenamingDevice = (text) => {
@@ -40,6 +41,19 @@ class EditDashboard extends Component {
 
     renameDlgHadler = () =>{
         this.setState({isRenameDlg : !this.state.isRenameDlg});
+    }
+
+    handleBackButton = () => {
+        if(this.state.isRenameDlg){
+            this.renameDlgHadler();
+            return true
+        }
+        else
+            return false;
+    }
+
+    componentWillUnmount(){
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     }
 
     render() {

@@ -14,18 +14,19 @@ class WifiSearchScreen extends Component {
         this.redirectToPage = this.redirectToPage.bind(this);
     }
     redirectToPage(screen, data){
-            this.props.navigation.replace(screen, {deviceList: data});
+            this.props.navigation.replace(screen, {otherParam: data});
             // this.props.navigation.navigate();
     }
     getWifiList(){
          getAvailableDevice(cbRes =>{
             let deviceList = cbRes,
-                self = this;
-                // hueDeviceList = deviceList.length && deviceList.filter((item) => !item.SSID.includes("HUE"));            
+                self = this,
+                wifiList = deviceList.length && deviceList.filter((item) => !item.SSID.includes("HUE"));
+                hueDeviceList = deviceList.length && deviceList.filter((item) => item.SSID.includes("HUE"));            
                 setTimeout(function(){
-                        if(deviceList.length){
+                        if(hueDeviceList.length){
                             //self.props.deviceListAction(hueDeviceList);
-                            self.redirectToPage("AddDevice", deviceList);
+                            self.redirectToPage("AddDevice", {deviceList: hueDeviceList, wifiList: wifiList});
                         }
                         else{
                             self.redirectToPage("EmptySerachScreen", []);

@@ -8,18 +8,19 @@ class Application extends Component {
     constructor(props){
         super(props);
         this.state = {
-            deviceList: []
+            deviceList: [],
+            wifiList: []
         }
     }
 
     componentDidMount(){
         let {navigation} = this.props,
-        devices = navigation.getParam('deviceList');
-        this.setState({deviceList: devices});
+        {deviceList, wifiList} = navigation.getParam('otherParam', 'default value');
+        this.setState({deviceList: deviceList, wifiList: wifiList});
     }
 
     render(){
-        let {deviceList} = this.state;
+        let {deviceList, wifiList} = this.state;
         return(
             <View style={styles.container}>
                 <View style={styles.dashBoardContainer}>
@@ -36,7 +37,8 @@ class Application extends Component {
                                     name = {item.SSID}
                                     navigation = {this.props.navigation}
                                     deviceInfo = {item}
-                                    deviceList = {deviceList}/>
+                                    deviceList = {deviceList}
+                                    wifiList = {wifiList} />
                             </Slider>)}}/>
                     </View>
                 </View>

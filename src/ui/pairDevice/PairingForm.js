@@ -250,6 +250,9 @@ class PairingForm extends Component{
                             </View>
                         </TouchableOpacity>
                     </View>
+                    <TouchableOpacity onPress={() => bugsnag.notify(new Error("Test error"))}>
+                        <Text>Produce error for Bugsnag</Text>
+                    </TouchableOpacity>
                     <Loader isDialogVisile = {this.state.isDialogVisible} showBtn = {this.state.showBtn} message ={this.state.message} onBtnPress={this.onBtnPress}/>
                 </ScrollView>
             </View>

@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-native-community/netinfo": "^4.6.1",
     "@react-native-community/viewpager": "^3.3.0",
+    "bugsnag-react-native": "^2.23.3",
     "fs": "0.0.1-security",
     "moment": "^2.24.0",
     "node-wifi": "^2.0.12",

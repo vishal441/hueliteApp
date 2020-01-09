@@ -14,7 +14,13 @@ class MainPanel extends React.Component {
     }
 
     moveToColorPicker = () => {
-        //this.props.navigation.navigate("ColorPickerContainer");
+        this.props.navigation.navigate("ColorPickerContainer");
+    }
+    moveToDashboard = () => {
+        this.props.navigation.navigate("Dashboard");
+    }
+    moveToSearchWifi = () => {
+        this.props.navigation.navigate("WifiSearchScreen");
     }
 
     render() {
@@ -43,6 +49,7 @@ class MainPanel extends React.Component {
                     <PanelItem panelName={"Dashboard"}
                         panelTxtStyle={{ color: "red" }}
                         icon={ICON.BULB}
+                        onPanelPress={this.moveToDashboard}
                         gradColorArr={["#40b9ed","#0faef2","#0980b3"]} />
 
                     <PanelItem panelName={"Color Picker"}
@@ -61,6 +68,7 @@ class MainPanel extends React.Component {
                         panelTxtStyle={{ color: "#ff6a00" }}
                         containerStyle={{ backgroundColor: '#fff' }}
                         icon={ICON.TWITER} 
+                        onPanelPress={this.moveToSearchWifi}
                         gradColorArr={["#fff", "#fff"]}/>
                 </View>
 

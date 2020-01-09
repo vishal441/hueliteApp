@@ -44,6 +44,7 @@ class Card extends Component {
     }
 
     handleWebSocket = (wsVal) => {
+        console.log("FROM CARD COMPONENT");
         let {deviceListAction, data, deviceList } = this.props,
             newList = deviceList.map(item => {
             if(item.Mac === data.Mac){
@@ -60,8 +61,9 @@ class Card extends Component {
     // }
 
     async componentDidMount() {
-        console.log("devixxe ====>.", this.props.deviceList);
-        await connectToDevice(this.props.data.IP_Address, this.handleWebSocket, () =>{});
+        // console.log("devixxe ====>.", this.props.deviceList);
+        // console.log("CardComponent device List: ",this.props.deviceList);
+        // await connectToDevice(this.props.data.IP_Address, this.handleWebSocket, () =>{});
     }
 
     render() {

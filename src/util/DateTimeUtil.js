@@ -1,7 +1,8 @@
 import moment from 'moment';
 
-const currentTimeStamp = () => {
-    return  moment().unix();
+const getCurrentTimeStamp = () => {
+    let timestamp = new Date().getTime()/1000;
+    return Math.round(timestamp);
 }
 
 const addTimeIntoTimeStamp = (timeStamp, addTime, timeUnit, timeFormat) => {
@@ -34,21 +35,17 @@ const cnvrtTmStmpToDtTm = (timeStamp, dtTmFormat) => {
 
 }
 
-const findDiffBtTmStmp = (timeStamp1, timeStamp2, timeUnit) => {
-    let diff = 0,
-        tmUnit = timeUnit ? timeUnit : "seconds";
-      
+const findTimestampDiffInSec = (timeStamp1, timeStamp2) => {
+    let diff = 0; 
     if (timeStamp1 && timeStamp2) {
-        let dt1 = moment.unix(timeStamp1);
-        let dt2 = moment.unix(timeStamp2);
-        diff = dt2.diff(dt1, tmUnit);
+        diff = timeStamp2 - timeStamp1;
     }
     return diff;
 }
 
 export {
-    currentTimeStamp,
+    getCurrentTimeStamp,
     cnvrtTmStmpToDtTm,
     addTimeIntoTimeStamp,
-    findDiffBtTmStmp
+    findTimestampDiffInSec
 }

@@ -1,4 +1,4 @@
-import {currentTimeStamp} from './DateTimeUtil'; 
+import {getCurrentTimeStamp} from './DateTimeUtil';
 
  const filterDashoard = (array, filterName) => {
     let arr = [];
@@ -58,7 +58,7 @@ const updateDeviceList = (updateObj, selectedDevice, deviceArr) => {
                 for(let i = 0; i < fields.length; i++){
                     item[fields[i]] = val[i];
                 }
-                item.Last_WS_Msg_Sent_Time_Stamp = currentTimeStamp();
+                item.Last_WS_Msg_Sent_Time_Stamp = getCurrentTimeStamp();
             }
             return item;
         })
@@ -70,15 +70,16 @@ const updateDeviceList = (updateObj, selectedDevice, deviceArr) => {
  * this helps to create a device by providing all the below args, mac and ip is necessary.
 */
 const createNewDevice = ({type, BSSID, hostName, SSID, IP, webSocket ="", lastMsgSent, lastMsgRec, lastHbeat, connected, lastState, dashboardType}) => {
-    let val =  {
+    let ts = getCurrentTimeStamp(),
+        val =  {
         Type : type ? type : "Device",
         Mac : BSSID,
         Host_Name : hostName ? hostName : "",
         SSID : SSID ? SSID : "",
         IP_Address : IP,
-        Last_WS_Msg_Sent_Time_Stamp : lastMsgSent ? lastMsgSent : 0,
-        Last_WS_Msg_Received_Time_Stam : lastMsgRec ? lastMsgRec : 0,
-        Last_Heart_Time_Stamp : lastHbeat ? lastHbeat : 0,
+        Last_WS_Msg_Sent_Time_Stamp : lastMsgSent ? lastMsgSent : ts,
+        Last_WS_Msg_Received_Time_Stamp : lastMsgRec ? lastMsgRec : ts,
+        Last_Heart_Time_Stamp : lastHbeat ? lastHbeat : ts,
         Connected : connected ? connected : false,
         Last_State : lastState ? lastState : "#637AFF",
         Web_Socket: webSocket,
@@ -91,6 +92,7 @@ const parseStringToObject = (value) =>{
     let result = value && JSON.parse(JSON.stringify(value)),
     ip = '',
     resCode = '',
+    ssid = '',
     data = result.replace("{","").replace("}","").replace(/"/g, '');
     let properties = data.split(',');
     let obj = {};
@@ -100,13 +102,15 @@ const parseStringToObject = (value) =>{
     });
     if(obj && obj.status && (obj.status === 'WL_CONNECTED')){
         ip = obj["ip_add"];
+        ssid = obj && obj.ssid;
     }
     if(obj && obj.res_code || obj.err_code){
         resCode = obj["res_code"] || obj["err_code"]
     }
     return {
         IP: ip,
-        resCode: resCode
+        resCode,
+        wifiSSID: ssid
     };
 }
 

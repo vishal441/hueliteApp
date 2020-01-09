@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {reduxConstant} from '../../redux/ReduxConstant';
 import {deviceArr} from '../../util/DummyData'
 import {heartBeatHandler} from '../../backGroundServices/Heartbeat';
+import {deviceListAction} from '../../redux/actions/DeviceListAction';
 
 
 class Splash extends Component{
@@ -23,7 +24,7 @@ class Splash extends Component{
         /**
          * To delete all the data from DB unComment the next line, otherwise no need for same.
          */
-         //deleteDeviceTable();
+        //  deleteDeviceTable();
 
         let dbRes = await getDeviceListFromDb(),
             deviceListing = dbRes.data;
@@ -33,18 +34,20 @@ class Splash extends Component{
                 self.props.navigation.replace('Dashboard');
             else
             self.props.navigation.replace('WifiScreen');
-        }, 2000); 
+        }, 2000);
     }
 
     componentDidUpdate(){
         let self = this;
-        let {deviceList, deviceListAction} = this.props;
-        setInterval(async () => {
-            await heartBeatHandler( deviceList, (updateList) => {
-                self.props.deviceListAction(updateList);
-            });
+        let {deviceList, deviceListAction} = self.props;
+        if(window._interval){
+            clearInterval(window._interval);
+        }
+        window._interval = setInterval(async () => {
+            await heartBeatHandler(deviceList, deviceListAction);
         }, 3000);
     }
+
     render(){
         return(
          <View style={styles.container}>

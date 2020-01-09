@@ -1,4 +1,5 @@
 import React from "react";
+import {Image, TouchableOpacity} from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator, HeaderBackButton} from 'react-navigation-stack';
 import SplashScreen from '../ui/splash/Splash';
@@ -10,6 +11,7 @@ import Dashboard from '../ui/dashboard/Dashboard';
 import PairingForm from '../ui/pairDevice/PairingForm';
 import ColorPickerContainer from '../ui/dashboard/colorPicker/ColorPickerContainer'; 
 import MainPanel from '../ui/dashboard/mainPanel/MainPanel';
+import { ICON } from '../ui/common/constants/ImageConstant';
 
 export const AppStackNavigator = createStackNavigator(
       { 
@@ -30,7 +32,10 @@ export const AppStackNavigator = createStackNavigator(
             navigationOptions: ({navigation})=>({
                 title: "Add Device",
                 headerLeft:(<HeaderBackButton onPress={()=>{navigation.navigate('Dashboard')}}/>),
-                headerRight:(<RouteHeader customStyle={{paddingRight: 15}} onPress={()=>{navigation.navigate('WifiScreen')}}/>),
+                headerRight:(<TouchableOpacity onPress={()=>{navigation.navigate('WifiScreen')}}
+                                style={{width:'20%', alignItems: "flex-end"}}>
+                                <Image source={ICON.SYNC} style={{height:25, width:25, opacity:0.8}}/>
+                            </TouchableOpacity>),
             })
         },
         EmptySerachScreen:{

@@ -8,6 +8,7 @@ const SOCKET_ERROR_TYPES = {
     "ERR-044": 'Unexpected error..!!',
     "ERR-045": 'Time out..!!',
     "ERR-046": 'Incorrect Password..!!',
+    "ERR-048": 'Pairing Request Failed!!'
 }
 
 export {

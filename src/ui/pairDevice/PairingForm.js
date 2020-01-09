@@ -5,7 +5,7 @@ import { ICON } from '../../ui/common/constants/ImageConstant';
 import { FONT_SIZE, FONT_COLOR } from '../common/constants/StyleConstant';
 import { Dropdown } from 'react-native-material-dropdown';
 import {connectToDevice} from '../../backGroundServices/Connector';
-import {pairDeviceApi} from '../../backGroundServices/webApi/WebApi';
+import {pairDeviceApi, saveWifiConfigApi} from '../../backGroundServices/webApi/WebApi';
 import {createNewDevice, parseStringToObject, isEmptyFields} from '../../util/AppUtil';
 import {insertDevices, getDeviceListFromDb} from '../../database/table/DeviceTable';
 import {connect} from 'react-redux';
@@ -54,8 +54,8 @@ class PairingForm extends Component{
             })
         }
         this.setState({deviceName: SSID, wifiList: wifiArray, selectedWifi: wifiList[0].SSID, deviceMAC: BSSID})
-        this.socket = await connectToDevice('192.168.4.1', wsHandler => {},
-        async (message)=>{
+        this.socket = await connectToDevice('192.168.4.1', wsHandler => {console.log("FROM PAIRING")},
+        async (message, ws)=>{
             let self = this;
             if(message.data){
                 let {data = ""} = message;
@@ -63,18 +63,35 @@ class PairingForm extends Component{
                     !this.state.isDialogVisible && this.setState({isDialogVisible: true});
                 }
                 else{
-                    let {IP, resCode }= parseStringToObject(message.data);
+                    let {IP, resCode, wifiSSID }= parseStringToObject(message.data);
                     if(IP && IP.length){
-                        let newDevice = [createNewDevice({BSSID: BSSID.toUpperCase(), SSID, IP})];
-                        insertDevices(newDevice);
-                        let dbRes = await getDeviceListFromDb(),
-                            newDeviceList = dbRes.data;
-                        if(newDeviceList.length){
-                            this.props.deviceListAction(newDeviceList);
-                            setTimeout(()=> {
-                                self.setState({isDialogVisible: false, showBtn: false, message: ""});
-                                self.props.navigation.replace('Dashboard');
-                            }, 1000)
+                        saveWifiRes = await saveWifiConfigApi();
+                        if(saveWifiRes === "RES-551"){
+                            let newDevice = [createNewDevice({BSSID: BSSID.toUpperCase(), SSID, IP})];
+                            insertDevices(newDevice);
+                            let dbRes = await getDeviceListFromDb(),
+                                newDeviceList = dbRes.data;
+                            if(newDeviceList.length){
+                                let newList = newDeviceList.map(item => {
+                                    if(item.IP_Address == IP){
+                                        item.Web_Socket = ws;
+                                    }
+                                    return item;
+                                });
+                                this.props.deviceListAction(newList);
+                                // if(window._interval){
+                                //     clearInterval(window._interval);
+                                // }
+                                setTimeout(()=> {
+                                    self.setState({isDialogVisible: false, showBtn: false, message: ""});
+                                    self.props.navigation.replace('Dashboard', {
+                                        otherParam: {SSID: wifiSSID}
+                                    });
+                                }, 1000)
+                            }
+                        }
+                        else{
+                            this.setState({message: SOCKET_ERROR_TYPES["ERR-048"], showBtn: true});
                         }
                     }
                     else if(resCode && SOCKET_ERROR_TYPES.hasOwnProperty(resCode)){
@@ -94,7 +111,6 @@ class PairingForm extends Component{
 
     async componentWillUnmount(){
         this.setState({isDialogVisible: false, showBtn: false, message: ""});
-        this.socket.close();
         this.keyboardDidHideListener.remove();
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     }
@@ -117,12 +133,12 @@ class PairingForm extends Component{
             self = this;
             if(!anyEmptyFld && password === cnfPass){
             this.setState({isDialogVisible: true, message: "Connecting...", showBtn: false});
-            await pairDeviceApi(selectedWifi, password);     
+            await pairDeviceApi(selectedWifi, password);
             setTimeout(()=>{
                 if(self.state.isDialogVisible){
                     this.setState({showBtn: true, message: "Time out..!!"});
                 }
-            }, 30000);  
+            }, 30000);
             }
             else{
                 this.setState({passwordMatched: false})
@@ -159,7 +175,7 @@ class PairingForm extends Component{
             //this.props.navigation.navigate('AddDevice');
         });
     }
-    
+
     keyboardDidHide () {
         Keyboard.dismiss();
     }

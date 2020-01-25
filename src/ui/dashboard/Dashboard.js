@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text,FlatList, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {View, Text,FlatList, StyleSheet, Image, TouchableOpacity, Alert} from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 import DeviceSettings from 'react-native-device-settings';
 import {connect} from 'react-redux';
@@ -16,35 +16,35 @@ class Dashboard extends Component{
         super(props);
     }
 
-    componentDidUpdate(){
-        let {SSID} = this.props.navigation.getParam('otherParam', 'default value');
-        console.log("Component Did update called::: ",SSID);
-        if(SSID){
-            NetInfo.fetch().then(info => {
-                /**Condition needs to implement for redirection to wifi setting or pairing form screen */
-                    if(info.type === 'wifi' && info.details.ssid === SSID){
-                        // this.navigateToPairingForm();
-                    }
-                    else{
-                        Alert.alert(
-                            'Alert',
-                            `You need to connect your device from wifi '${SSID}'.`,
-                            [
-                                {
-                                    text: 'Cancel',
-                                    style: 'cancel',
-                                },
-                                {
-                                    text: 'OK', 
-                                    onPress: () => DeviceSettings.wifi()
-                                }
-                            ],
-                            
-                          );
-                    }
-              });
-        }
-    }
+    // componentDidUpdate(){
+    //     let {SSID} = this.props.navigation.getParam('otherParam', 'default value');
+    //     console.log("Component Did update called::: ",SSID);
+    //     if(SSID){
+    //         NetInfo.fetch().then(info => {
+    //             /**Condition needs to implement for redirection to wifi setting or pairing form screen */
+    //                 if(info.type === 'wifi' && info.details.ssid === SSID){
+    //                     // this.navigateToPairingForm();
+    //                 }
+    //                 else{
+    //                     Alert.alert(
+    //                         'Alert',
+    //                         `You need to connect your device from wifi '${SSID}'.`,
+    //                         [
+    //                             {
+    //                                 text: 'Cancel',
+    //                                 style: 'cancel',
+    //                             },
+    //                             {
+    //                                 text: 'OK',
+    //                                 onPress: () => DeviceSettings.wifi()
+    //                             }
+    //                         ],
+    //
+    //                       );
+    //                 }
+    //           });
+    //     }
+    // }
 
     componentDidMount(){
         let {SSID} = this.props.navigation.getParam('otherParam', 'default value');
@@ -65,11 +65,11 @@ class Dashboard extends Component{
                                     style: 'cancel',
                                 },
                                 {
-                                    text: 'OK', 
+                                    text: 'OK',
                                     onPress: () => DeviceSettings.wifi()
                                 }
                             ],
-                            
+
                           );
                     }
               });
@@ -93,9 +93,9 @@ class Dashboard extends Component{
                     renderItem={({item, index})=> {
                         return(
                         <Slider index = {index}>
-                            <CardComponent data = {item} 
+                            <CardComponent data = {item}
                                 deviceList = {deviceList}
-                                deviceListAction = {deviceListAction} 
+                                deviceListAction = {deviceListAction}
                                 navigation = {this.props.navigation}/>
                         </Slider>)}}/>
              </View>
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     }
 })
 
-mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
     return{
         deviceList: state
     }

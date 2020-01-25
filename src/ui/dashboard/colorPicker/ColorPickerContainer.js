@@ -12,12 +12,12 @@ import {updateDeviceList} from '../../../util/AppUtil';
 import {deviceListAction} from '../../../redux/actions/DeviceListAction';
 import {insertDevices} from '../../../database/table/DeviceTable';
 import ChangePicker from "./ChangePicker";
-import {reduxConstant} from '../../../redux/ReduxConstant' 
+import {reduxConstant} from '../../../redux/ReduxConstant'
 
 class ColorPickerContainer extends React.Component{
     constructor(props){
         super(props)
-        this.state = { 
+        this.state = {
             selectedColor: 'rgb(0,128,255)',
             sliderVal: 0 ,
             gradColorArr: ["#668cff","#4d79ff","#3366ff"]
@@ -26,7 +26,7 @@ class ColorPickerContainer extends React.Component{
 
     componentWillMount() {
         let param = this.props.navigation.getParam('otherParam'),
-        selDevice = param.selectedDevice, 
+        selDevice = param.selectedDevice,
         colorArr = [],
         selectedColor = selDevice.Last_State ? selDevice.Last_State : '#ff0000',
         col_1 = changeColorBrigntess(selectedColor, 30),
@@ -36,7 +36,7 @@ class ColorPickerContainer extends React.Component{
         this.setState({selectedColor: selectedColor, gradColorArr: colorArr})
     }
 
-    onColorChange = (color) => {   
+    onColorChange = (color) => {
        let {selectedColor, gradColorArr} =  getSelectedGradientColors(color);
        this.setState({selectedColor: selectedColor, gradColorArr: gradColorArr});
     }
@@ -77,14 +77,14 @@ class ColorPickerContainer extends React.Component{
                                     <Image source={ICON.LEFT_ARROW} style={{height:"100%"}}/>
                                 </TouchableOpacity>
                                 <ColorPickerHeader sliderVal={sliderVal} deviceName={" Device Bulb-1"}/>
-                                <CustomeSlider customStyle = {styles.sliderStyle}   
+                                <CustomeSlider customStyle = {styles.sliderStyle}
                                             onSlidingComplete={this.onSlidingComplete}
                                             selectedColor={selectedColor}
                                             gradColorArr={gradColorArr}/>
-                            </LinearGradient> 
+                            </LinearGradient>
                         </View>
-                    <ChangePicker onColorChange={this.onColorChange} 
-                                selectedColor={selectedColor} 
+                    <ChangePicker onColorChange={this.onColorChange}
+                                selectedColor={selectedColor}
                                 onColorChangeComplete = {this.onColorChangeComplete} />
                 </View>
         )
@@ -98,13 +98,13 @@ const styles = StyleSheet.create({
    }
 });
 
-mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
     return{
         deviceList: state
     }
 }
 
-mapDispatchToProps = dispatch => {
+const mapDispatchToProps = dispatch => {
     return{
         deviceListAction: (deviceList) => dispatch({type: reduxConstant.DEVICE_LIST, deviceList: deviceList})
     }

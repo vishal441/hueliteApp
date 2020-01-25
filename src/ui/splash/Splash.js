@@ -24,16 +24,16 @@ class Splash extends Component{
         /**
          * To delete all the data from DB unComment the next line, otherwise no need for same.
          */
-        //  deleteDeviceTable();
+         // deleteDeviceTable();
 
         let dbRes = await getDeviceListFromDb(),
             deviceListing = dbRes.data;
         this.props.deviceListAction(deviceListing);
         setTimeout(function(){
             if(deviceListing.length)
-                self.props.navigation.replace('Dashboard');
+                self.props.navigation.navigate('Dashboard');
             else
-            self.props.navigation.replace('WifiScreen');
+            self.props.navigation.navigate('WifiScreen');
         }, 2000);
     }
 
@@ -72,16 +72,24 @@ const styles = StyleSheet.create({
     }
 })
 
-mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
     return {
         deviceList: state
     }
 }
 
-mapDispatchToProps = dispatch => {
+const mapDispatchToProps = dispatch => {
     return{
         deviceListAction: (deviceList) => dispatch({type: reduxConstant.DEVICE_LIST, deviceList: deviceList})
     }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Splash);
+
+// const mapStateToProps = (state) => {
+//     return{
+//         deviceList: state
+//     }
+// }
+//
+// export default withNavigationFocus(connect(mapStateToProps, {deviceListAction})(Splash));

@@ -65,7 +65,7 @@ class PairingForm extends Component{
                 else{
                     let {IP, resCode, wifiSSID }= parseStringToObject(message.data);
                     if(IP && IP.length){
-                        saveWifiRes = await saveWifiConfigApi();
+                        let saveWifiRes = await saveWifiConfigApi();
                         if(saveWifiRes === "RES-551"){
                             let newDevice = [createNewDevice({BSSID: BSSID.toUpperCase(), SSID, IP})];
                             insertDevices(newDevice);
@@ -79,9 +79,6 @@ class PairingForm extends Component{
                                     return item;
                                 });
                                 this.props.deviceListAction(newList);
-                                // if(window._interval){
-                                //     clearInterval(window._interval);
-                                // }
                                 setTimeout(()=> {
                                     self.setState({isDialogVisible: false, showBtn: false, message: ""});
                                     self.props.navigation.replace('Dashboard', {
@@ -98,7 +95,7 @@ class PairingForm extends Component{
                         this.setState({message: SOCKET_ERROR_TYPES[resCode], showBtn: true});
                     }
                 }
-            }   
+            }
         }
         );
     }
@@ -340,15 +337,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     }
-}) 
+})
 
-mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
     return{
         deviceList: state
     }
 }
 
-mapDispatchToProps = dispatch => {
+const mapDispatchToProps = dispatch => {
     return{
         deviceListAction: (deviceList) => dispatch({type: reduxConstant.DEVICE_LIST, deviceList: deviceList})
     }

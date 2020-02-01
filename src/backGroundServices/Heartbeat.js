@@ -10,7 +10,7 @@ const heartBeatHandler = async (deviceList, updateList) => {
                 let ts = getCurrentTimeStamp();
                 let diff = findTimestampDiffInSec(deviceList[i].Last_WS_Msg_Received_Time_Stamp, ts);
                 console.log("DIFFERENCE , ",diff);
-                if(diff > 15){
+                if(diff > 8){
                     deviceList[i].Web_Socket = null
                     deviceList[i].Last_WS_Msg_Received_Time_Stamp = 0;
                     deviceList[i].Connected = false;

@@ -1,17 +1,20 @@
-import React, { Component } from "react"
-import { View } from "react-native"
+import React, { useState, useEffect } from "react"
 import NetInfo from "@react-native-community/netinfo"
 
-export default class NetInfoListner extends Component {
-    componentWillMount() {
-        NetInfo.addEventListener(info => {
-            console.log("<<Net Info Listner>>")
-            if (info.isConnected && info.type === "wifi") {
-                this.setState({ currentWifi: info.details.ssid })
-            }
+export default function NetInfoListner(props) {
+    //const [count, setCount] = useState(0)
+
+    // Similar to componentDidMount and componentDidUpdate:
+    useEffect(() => {
+        console.log("Now subscribing NetInfo")
+        const UnSubscribe = NetInfo.addEventListener(info => {
+            props.onNetChange(info)
         })
-    }
-    render() {
-        return null
-    }
+        return () => {
+            console.log("Now Unsubscribing NetInfo")
+            //UnSubscribe()
+        }
+    })
+
+    return null
 }

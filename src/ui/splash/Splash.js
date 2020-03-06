@@ -19,6 +19,7 @@ import NetInfo from "./NetInfoListner"
 class Splash extends Component {
     constructor(props) {
         super(props)
+        this.ssid = null
     }
     async componentDidMount() {
         let self = this
@@ -50,15 +51,28 @@ class Splash extends Component {
             clearInterval(window._interval)
         }
         window._interval = setInterval(async () => {
-            await heartBeatHandler(deviceList, deviceListAction)
+            await heartBeatHandler(deviceList, deviceListAction, this.ssid)
         }, 3000)
         //EXP_STOP:
+    }
+
+    netFunction = info => {
+        //console.log("NetInfo From Splash" + info.details.ssid)
+        if (info.type == "wifi") {
+            if (info.details.ssid) {
+                console.log("conneccted to " + info.details.ssid)
+                this.ssid = info.details.ssid
+            }
+        } else {
+            console.log("<<<not connected>>>")
+            this.ssid = null
+        }
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <NetInfo />
+                <NetInfo onNetChange={this.netFunction} />
                 <Image style={styles.image} source={ICON.LOGO} />
             </View>
         )

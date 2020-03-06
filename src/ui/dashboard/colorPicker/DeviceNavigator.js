@@ -2,45 +2,33 @@ import React, { Component } from "react"
 import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from "react-native"
 import { ICON } from "../../common/constants/ImageConstant"
 import ColorChooser from "./ColorPicker"
-import ModesPresets from "./ModesPresets"
+import ModesPresets from "./ModesNpresets/ModesPresets"
 import Swiper from "react-native-swiper"
 import ViewPagerAndroid from "@react-native-community/viewpager"
 
-class ChangePicker extends Component {
+class DeviceNavigator extends Component {
     constructor(props) {
         super(props)
         this.state = {
             showPicker: true,
+            screen: "color-RGB",
             gestureName: "none",
         }
     }
+
+    deviceNavigation = navigation => {
+        this.setState({ screen: navigation })
+    }
+
     render() {
         return (
             <View style={styles.container}>
-                {/*   <Swiper
-                    pagingEnabled={false}
-                    scrollViewStyle={{ width: "50%" }}
-                    style={styles.body}
-                    width={"100%"}
-                    automaticallyAdjustContentInsets={true}
-                    loop={false}
-                    showsPagination={false}
-                    showsButtons={false}
-                    horizontal={true}>
-                    <Swiper
-                        pagingEnabled={false}
-                        scrollViewStyle={{ width: "50%" }}
-                        style={styles.body}
-                        width={"100%"}
-                        automaticallyAdjustContentInsets={true}
-                        loop={false}
-                        showsPagination={false}
-                        showsButtons={false}
-                        horizontal={true}> */}
-                <ColorChooser {...this.props} />
-                {/*  <ModesPresets />
-                    </Swiper>
-                </Swiper> */}
+                {this.state.screen === "color-RGB" && (
+                    <ColorChooser {...this.props} deviceNavigation={this.deviceNavigation} />
+                )}
+                {this.state.screen === "modes" && (
+                    <ModesPresets {...this.props} deviceNavigation={this.deviceNavigation} />
+                )}
             </View>
         )
     }
@@ -73,4 +61,4 @@ const styles = StyleSheet.create({
     child: {},
 })
 
-export default ChangePicker
+export default DeviceNavigator

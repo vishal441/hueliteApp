@@ -43,27 +43,30 @@ class ColorChooser extends Component {
                     <ColorWheel
                         initialColor={selectedColor}
                         onColorChange={color => this.props.onColorChange(color)}
-                        style={{ width: 300, height: 300, marginTop: 60 }}
+                        style={{ width: 300, height: 300, marginTop: 100 }}
                         thumbSize={20}
                         thumbStyle={{ alignItems: "center" }}
                         onColorChangeComplete={color => this.props.onColorChangeComplete(color)}
                     />
                 </View>
-                {/* <View style={{ flexDirection: "row" }}>
-                            <View style={{ width: "100%", alignItems: "center" }}>
-                                <Circle
-                                    circleArr={coolWhiteColor}
-                                    onColorChangeComplete={this.props.onColorChangeComplete}
-                                />
-                                <Circle
-                                    circleArr={warmWhiteColor}
-                                    onColorChangeComplete={this.props.onColorChangeComplete}
-                                />
-                            </View>
-                            <View style={{ width: "15%" }}>
-                                <AddCircle addCircle={this.addCircle} bgColor={selectedColor} />
-                            </View>
-                        </View> */}
+                <View
+                    style={{
+                        //backgroundColor: "#ff0",
+                        flex: 1,
+                        width: "100%",
+                    }}>
+                    <TouchableOpacity
+                        style={{ position: "absolute", bottom: 60, right: 30 }}
+                        onPress={() => this.props.deviceNavigation("modes")}>
+                        <Image
+                            style={{
+                                height: 60,
+                                width: 60,
+                            }}
+                            source={ICON.MODES_BUTTON}
+                        />
+                    </TouchableOpacity>
+                </View>
             </View>
         )
     }
@@ -96,8 +99,9 @@ const AddCircle = ({ bgColor, addCircle }) => {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
+        //justifyContent: "center",
         alignItems: "center",
-        height: "100%",
     },
     circle: {
         height: 40,

@@ -11,7 +11,7 @@ import { connect } from "react-redux"
 import { updateDeviceList } from "../../../util/AppUtil"
 import { deviceListAction } from "../../../redux/actions/DeviceListAction"
 import { insertDevices } from "../../../database/table/DeviceTable"
-import ChangePicker from "./ChangePicker"
+import DeviceNavigator from "./DeviceNavigator"
 import { reduxConstant } from "../../../redux/ReduxConstant"
 import ColorPicker_temp from "./ColorPicker_temp"
 
@@ -98,7 +98,7 @@ class ColorPickerContainer extends React.Component {
                     </LinearGradient>
                 </View>
                 {/* <ColorPicker_temp /> */}
-                <ChangePicker
+                <DeviceNavigator
                     onColorChange={this.onColorChange}
                     selectedColor={selectedColor}
                     onColorChangeComplete={this.onColorChangeComplete}

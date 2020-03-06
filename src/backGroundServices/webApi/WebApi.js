@@ -59,4 +59,27 @@ const saveWifiConfigApi = async cb => {
         })
 }
 
-export { getStatusApi, authoriseApi, pairDeviceApi, saveWifiConfigApi }
+const modesApi = async (IP, mode_msg, cbRes) => {
+    let modesUrl = `http://${IP}/config`
+    await fetch(modesUrl, {
+        method: "POST",
+        headers: {
+            Accept: "application/json, application/text",
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `config=mode_start&mode_msg=${mode_msg}`,
+    })
+        .then(res => {
+            //res.json()
+            let resText = res.text()
+            console.log("modesApi res : ", resText)
+            if (resText == "rainbow") return cbRes("RAINBOW")
+            else return cbRes("ELSE")
+        })
+        .catch(e => {
+            console.log("Error: ", e)
+            return cbRes("ERR")
+        })
+}
+
+export { getStatusApi, authoriseApi, pairDeviceApi, saveWifiConfigApi, modesApi }

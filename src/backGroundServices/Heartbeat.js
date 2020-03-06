@@ -15,8 +15,10 @@ const declareDisconnected = item => {
     dataChanged = true
 }
 
-const heartBeatHandler = async (deviceList, updateList) => {
+const heartBeatHandler = async (deviceList, updateList, currSSID) => {
     // if(deviceList.lenght>0){
+    if (!currSSID) console.log("HB::no ssid")
+    else console.log("HB:: ssid")
     change = false
     deviceList.map((item, i) => {
         console.log(i)

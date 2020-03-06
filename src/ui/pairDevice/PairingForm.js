@@ -53,7 +53,7 @@ class PairingForm extends Component {
         BackHandler.addEventListener("hardwareBackPress", this.handleBackButton)
         NetInfo.addEventListener(info => {
             if (info.isConnected && info.type === "wifi") {
-                console.log("<<WiFi Listner 2>>")
+                console.log("<<WiFi Listner on pairing form>>")
                 let {
                     selectedDevice: { SSID },
                 } = this.props.navigation.getParam("otherParam", "default value")

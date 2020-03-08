@@ -4,7 +4,6 @@ import { ICON } from "../../common/constants/ImageConstant"
 import ColorChooser from "./ColorPicker"
 import ModesPresets from "./ModesNpresets/ModesPresets"
 import Swiper from "react-native-swiper"
-import ViewPagerAndroid from "@react-native-community/viewpager"
 
 class DeviceNavigator extends Component {
     constructor(props) {

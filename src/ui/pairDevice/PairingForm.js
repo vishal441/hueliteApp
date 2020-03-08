@@ -51,7 +51,7 @@ class PairingForm extends Component {
         this.getWifiList()
         this.keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", this.keyboardDidHide)
         BackHandler.addEventListener("hardwareBackPress", this.handleBackButton)
-        NetInfo.addEventListener(info => {
+        this.unsubscribe = NetInfo.addEventListener(info => {
             if (info.isConnected && info.type === "wifi") {
                 console.log("<<WiFi Listner on pairing form>>")
                 let {
@@ -177,6 +177,7 @@ class PairingForm extends Component {
         this.setState({ isDialogVisible: false, showBtn: false, message: "" })
         this.keyboardDidHideListener.remove()
         BackHandler.removeEventListener("hardwareBackPress", this.handleBackButton)
+        this.unsubscribe()
     }
 
     backButton = () => {

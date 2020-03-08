@@ -36,8 +36,6 @@ target 'hueliteApp' do
 
   pod 'RealmJS', :path => '../node_modules/realm'
 
-  pod 'react-native-viewpager', :path => '../node_modules/@react-native-community/viewpager'
-
   target 'hueliteAppTests' do
     inherit! :search_paths
     # Pods for testing

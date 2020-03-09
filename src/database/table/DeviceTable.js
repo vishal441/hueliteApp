@@ -10,7 +10,7 @@ export const insertDevices = (deviceArr) => {
 
 export const getDeviceListFromDb = async(callback) => {
     let deviceRes = await getQuery(DeviceSchema.name,false);
-    return deviceRes;
+    return deviceRes; 
 }
 
 export const deleteDeviceTable = () => {

@@ -1,7 +1,7 @@
 import { connectToDevice } from "./Connector"
 import {
     getCurrentTimeStamp,
-    addTimeIntoTimeStamp,
+    addTimeIntoTimeStamp, //TODO: REMOVE THIS UNUSED VARIABLE
     findTimestampDiffInSec,
 } from "../util/DateTimeUtil"
 import _ from "underscore"
@@ -23,15 +23,15 @@ const heartBeatHandler = async (deviceList, updateList, currSSID) => {
         change = false
         deviceList.map((item, i) => {
             console.log(i)
-            //console.log('test :: ' + i);
+            //console.log("test :: " + i)
             if (item.Web_Socket && Object.entries(item.Web_Socket)) {
-                console.log("Mac :: " + item.Mac)
+                //console.log("Mac :: " + item.Mac)
                 let ts = getCurrentTimeStamp()
                 let diff = findTimestampDiffInSec(item.Last_WS_Msg_Received_Time_Stamp, ts)
-                //console.log("DIFFERENCE , ", diff)
-                if (diff > 8) {
+                console.log("HB DIFFERENCE , ", diff)
+                if (diff > 8000) {
                     declareDisconnected(item)
-                } else if (diff >= 3 && item.Web_Socket && item.Web_Socket.send) {
+                } else if (diff >= 3000 && item.Web_Socket /*  && item.Web_Socket.send */) {
                     item.Web_Socket.send("Heartbeat")
                 }
             } else {
@@ -44,7 +44,7 @@ const heartBeatHandler = async (deviceList, updateList, currSSID) => {
                     (mgsRecievedRes, wsRes) => {
                         if (wsRes) {
                             if (mgsRecievedRes && wsRes) {
-                                console.log("ws_msg:: " + mgsRecievedRes.data)
+                                //console.log("ws_msg:: " + mgsRecievedRes.data)
                                 item.Web_Socket = wsRes
                                 item.Last_WS_Msg_Received_Time_Stamp = getCurrentTimeStamp()
                                 item.Connected = true
@@ -60,7 +60,7 @@ const heartBeatHandler = async (deviceList, updateList, currSSID) => {
                 )
             }
             if (i === deviceList.length - 1 && dataChanged) {
-                console.log("changing data in last Heartbeat cycle")
+                //console.log("changing data in last Heartbeat cycle")
                 updateList(deviceList)
             }
             //if (item.Connected) console.log("Connected")

@@ -102,6 +102,20 @@ const createNewDevice = ({
     return val
 }
 
+/* User_Id: { type: "string", default: "" },
+        Email_Id: { type: "string", default: "" },
+        Phone_Version: { type: "string", default: "" },
+        Device_Id: { type: "string", default: "" }, */
+const createNewUser = ({ User_Id, Email_Id, Phone_Version, Device_Id }) => {
+    let user = {
+        User_Id: User_Id,
+        Email_Id: Email_Id ? Email_Id : "iamlive24@gmail.com",
+        Phone_Version: Phone_Version ? Phone_Version : "ios",
+        Device_Id: Device_Id ? Device_Id : "nill",
+    }
+    return user
+}
+
 const parseStringToObject = value => {
     let result = value && JSON.parse(JSON.stringify(value)),
         ip = "",
@@ -151,4 +165,5 @@ export {
     createNewDevice,
     parseStringToObject,
     isEmptyFields,
+    createNewUser,
 }

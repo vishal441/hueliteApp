@@ -3,6 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 target 'hueliteApp' do
   # Pods for hueliteApp
+  #'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -35,6 +36,9 @@ target 'hueliteApp' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   pod 'RealmJS', :path => '../node_modules/realm'
+
+  pod 'react-native-zeroconf', :path => '../node_modules/react-native-zeroconf'
+
 
   target 'hueliteAppTests' do
     inherit! :search_paths

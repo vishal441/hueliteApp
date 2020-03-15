@@ -1,3 +1,5 @@
+import axios from "axios"
+
 const authoriseApi = async ipAddr => {
     let authUrl = `http://${ipAddr}/auth`
     //console.log("auth URL: ",authUrl);
@@ -82,4 +84,32 @@ const modesApi = async (IP, mode_msg, cbRes) => {
         })
 }
 
-export { getStatusApi, authoriseApi, pairDeviceApi, saveWifiConfigApi, modesApi }
+const getWiFiList = async cbRes => {
+    await axios
+        .post("http://192.168.4.1/config", "config=wifi_scan", {
+            headers: {
+                Accept: "application/json, application/text",
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+        })
+        .then(response => {
+            const d = response.data
+            let { Status } = d
+            wifiArray = []
+            console.log(":::::" + Status)
+            /* Networks.map(item => {
+                console.log(":::::" + item.ssid)
+                let wifiName = {}
+                wifiName["value"] = item.SSID
+                wifiArray.push(wifiName)
+            }) */
+            cbRes(response.data)
+        })
+        .catch(error => {
+            console.log("axios error:", error)
+            cbRes(null)
+        })
+        .finally(function() {})
+}
+
+export { getWiFiList, getStatusApi, authoriseApi, pairDeviceApi, saveWifiConfigApi, modesApi }

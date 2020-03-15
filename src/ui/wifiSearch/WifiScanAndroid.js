@@ -4,7 +4,7 @@ import RNAndroidLocationEnabler from 'react-native-android-location-enabler'
 
 export const getAvailableDevice = async cbRes => {
   console.log('getAvailableDevice::' + 'PARENT')
-  let {reScanAndLoadWifiList} = wifi
+  let {reScanAndLoadWifiList} = wifi 
   try {
     const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
       title: 'Wifi networks',

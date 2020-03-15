@@ -25,7 +25,7 @@ class Card extends Component {
             color_2 = changeColorBrigntess(device.Last_State, 60),
             color_3 = changeColorBrigntess(device.Last_State, 90)
         colorArr.push(color_1, color_2, color_3)
-        console.log("<<<<<<" + hsvToRgb(device.HSV.h, device.HSV.s, device.HSV.v))
+        //console.log("<<<<<<" + hsvToRgb(device.HSV.h, device.HSV.s, device.HSV.v))
         return colorArr
     }
 

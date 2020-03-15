@@ -59,7 +59,7 @@ export const UserInfoSchema = {
     name: "UserInfo",
     primaryKey: "User_Id",
     properties: {
-        User_Id: { type: "string", default: "" },
+        User_Id: { type: "string", default: "user_id" },
         Email_Id: { type: "string", default: "" },
         Phone_Version: { type: "string", default: "" },
         Device_Id: { type: "string", default: "" },

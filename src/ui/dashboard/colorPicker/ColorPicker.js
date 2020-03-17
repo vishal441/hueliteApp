@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native"
 import { ICON } from "../../common/constants/ImageConstant"
-import { ColorWheel } from "./ColorWheel"
+import { ColorWheel1 } from "./ColorWheel1"
 
 class ColorChooser extends Component {
     constructor(props) {
@@ -31,16 +31,16 @@ class ColorChooser extends Component {
     }
 
     render() {
-        let { selectedColor } = this.props,
+        let { selectedColor, ttX } = this.props,
             { circleArr, warmWhiteColor, coolWhiteColor } = this.state
         return (
             <View style={styles.container}>
-                <View style={styles.body}>
+                <View>
                     <View style={{ alignItems: "center" }}>
                         <Text style={styles.txt}>Select Color</Text>
                         <View style={styles.underline} />
                     </View>
-                    <ColorWheel
+                    <ColorWheel1
                         initialColor={selectedColor}
                         HSV={this.props.HSV}
                         onColorChange={color => this.props.onColorChange(color)}

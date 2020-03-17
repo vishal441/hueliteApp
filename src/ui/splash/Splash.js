@@ -61,7 +61,7 @@ class Splash extends Component {
         //deleteDeviceTable()
 
         //insertUserInfo(userInfo)
-        //deleteUserInfoTable();
+        //deleteUserInfoTable()
 
         let dbRes = await getDeviceListFromDb(),
             deviceListing = dbRes.data

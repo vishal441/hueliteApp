@@ -126,11 +126,10 @@ class ColorPickerContainer extends React.Component {
             console.log(
                 "<><><><>------------" + (getCurrentTimeStamp() - this.colorUpdateTimestamp) / 1000,
             )
-            if (true) {
-                ///selectedDevice.Web_Socket
-                /* selectedDevice.Web_Socket.send(
-          colorsys.hsv2Hex(updateObj.HSV.h, updateObj.HSV.s, updateObj.HSV.v)
-        ); */
+            if (selectedDevice.Web_Socket) {
+                selectedDevice.Web_Socket.send(
+                    colorsys.hsv2Hex(updateObj.HSV.h, updateObj.HSV.s, updateObj.HSV.v),
+                )
                 this.colorUpdateTimestamp = getCurrentTimeStamp()
                 let newList = updateDeviceList(updateObj, selectedDevice, deviceList)
                 deviceListAction(newList)

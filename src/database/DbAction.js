@@ -1,5 +1,5 @@
 import Realm from "realm"
-import { dataOptions } from "./Schema"
+import Schema, { dataOptions } from "./Schema"
 import { convertToArray } from "./DbUtils"
 import { DeviceSchema, TutorialSchema } from "./Schema"
 
@@ -46,6 +46,7 @@ export const getQuery = async (schemaName, filter) => {
 }
 
 export const deleteSchema = (delSchemaArr, callback) => {
+    console.log("Deleting Schema")
     let dbResponse = {}
     Realm.open(dataOptions).then(realm => {
         try {

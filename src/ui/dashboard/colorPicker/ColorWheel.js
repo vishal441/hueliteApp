@@ -1,7 +1,9 @@
 // @flow
 
 import React, { Component } from "react"
-import { Animated, Image, Dimensions, PanResponder, StyleSheet, View } from "react-native"
+import { Image, Dimensions, PanResponder, StyleSheet, View } from "react-native"
+import { Animated } from "react-native-reanimated"
+import { PanGestureHandler } from "react-native-gesture-handler"
 import colorsys from "colorsys"
 import { ICON } from "../../common/constants/ImageConstant"
 import { hsvToRgb, rgbToHex } from "./ColorUtil"
@@ -24,7 +26,7 @@ export class ColorWheel extends Component {
     }
 
     componentDidMount = () => {
-        this._panResponder = PanResponder.create({
+        /*   this._panResponder = PanResponder.create({
             onStartShouldSetPanResponderCapture: ({ nativeEvent }) => {
                 if (this.outBounds(nativeEvent)) return
                 this.updateColor({ nativeEvent })
@@ -60,15 +62,15 @@ export class ColorWheel extends Component {
                 this.setState({ panHandlerReady: true })
                 this.state.pan.flattenOffset()
                 const { radius } = this.calcPolar(nativeEvent)
-                /* if (radius < 0.1) {
-          this.forceUpdate("#00ffff");
-        } */
+                // if (radius < 0.1) {
+                //this.forceUpdate("#00ffff");
+                //}
 
                 if (this.props.onColorChangeComplete) {
                     this.props.onColorChangeComplete(this.state.hsv)
                 }
             },
-        })
+        }) */
     }
 
     onLayout() {
@@ -178,6 +180,8 @@ export class ColorWheel extends Component {
         }).start()
     }
 
+    onGestureEvent = () => {}
+
     render() {
         const { radius } = this.state
         const thumbStyle = [
@@ -195,25 +199,33 @@ export class ColorWheel extends Component {
         const panHandlers = (this._panResponder && this._panResponder.panHandlers) || {}
 
         return (
-            <View
-                ref={node => {
-                    this.self = node
+            <PanGestureHandler
+                maxPointers={1}
+                onGestureEvent={e => {
+                    console.log(e)
                 }}
-                {...panHandlers}
-                onLayout={nativeEvent => this.onLayout(nativeEvent)}
-                style={[styles.coverResponder, this.props.style]}>
-                <Image
-                    style={[
-                        styles.img,
-                        {
-                            height: radius * 2,
-                            width: radius * 2,
-                        },
-                    ]}
-                    source={ICON.COLOR_WHEEL}
-                />
-                <Animated.View style={[this.state.pan.getLayout(), thumbStyle]} />
-            </View>
+                onHandlerStateChange={this.onGestureEvent}>
+                <View
+                    ref={node => {
+                        this.self = node
+                    }}
+                    onLayout={nativeEvent => this.onLayout(nativeEvent)}
+                    style={[styles.coverResponder, this.props.style]}>
+                    <Image
+                        style={[
+                            styles.img,
+                            {
+                                height: radius * 2,
+                                width: radius * 2,
+                            },
+                        ]}
+                        source={ICON.COLOR_WHEEL}
+                    />
+
+                    {/* <Animated.View style={[this.state.pan.getLayout(), thumbStyle]} /> */}
+                    <Animated.View style={thumbStyle} />
+                </View>
+            </PanGestureHandler>
         )
     }
 }

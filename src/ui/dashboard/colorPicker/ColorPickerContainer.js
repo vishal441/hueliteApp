@@ -60,7 +60,6 @@ class ColorPickerContainer extends React.Component {
         let { selectedColor, gradColorArr } = getSelectedGradientColors(color)
         this.setState({ selectedColor: selectedColor, gradColorArr: gradColorArr })
 
-        //TODO: send ws color event to device
         if (getCurrentTimeStamp() - this.colorUpdateTimestamp >= 200) {
             /* console.log(
         "<><><><>------------" +

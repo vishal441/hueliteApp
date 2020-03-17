@@ -157,7 +157,7 @@ class PairingForm extends Component {
                                     console.log("devicelist length::" + newDeviceList.length)
                                     let newList = newDeviceList.map(item => {
                                         if (item.IP_Address == IP) {
-                                            console.log("Updating WS resource")
+                                            console.log("ITEM_MAC" + item.MAC)
                                             item.Web_Socket = ws
                                         }
                                         return item
@@ -248,6 +248,7 @@ class PairingForm extends Component {
         if (newDeviceList.length) {
             console.log("devicelist length::" + newDeviceList.length)
             let newList = newDeviceList.map(item => {
+                //TODO: this check has to be with SSID
                 if (item.IP_Address == newDevice.IP) {
                     console.log("Updating WS resource")
                     item.Web_Socket = ws

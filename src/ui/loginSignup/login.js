@@ -21,7 +21,7 @@ const Login = props => {
     }
 
     GoToPairing = () => {
-        /*  if (Platform.OS === "ios") {
+        /*  if (Platform.OS === "ios") { 
             props.navigation.replace("PairIos1")
         } else {
             props.navigation.replace("WifiScreen")

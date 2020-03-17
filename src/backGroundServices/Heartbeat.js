@@ -6,6 +6,7 @@ import {
 } from "../util/DateTimeUtil"
 import NetInfo from "@react-native-community/netinfo"
 import _ from "underscore"
+import { connect, useSelector } from "react-redux"
 
 let dataChanged = false
 
@@ -16,7 +17,9 @@ const declareDisconnected = item => {
     dataChanged = true
 }
 
-const heartBeatHandler = async (deviceList, updateList, netInfo) => {
+const heartBeatHandler = async (deviceList, updateList) => {
+    //const Dlist = useSelector(state => state.deviceList)
+    console.log("---" + deviceList.length)
     // if(deviceList.lenght>0){
     //if (!currSSID) console.log("HB::no ssid")
     //else {
@@ -24,20 +27,17 @@ const heartBeatHandler = async (deviceList, updateList, netInfo) => {
     //console.log("HB:: " + netInfo.type)
     change = false
     deviceList.map((item, i) => {
-        //console.log(i)
-        //console.log("test :: " + i)
         if (item.Web_Socket && Object.entries(item.Web_Socket)) {
-            //console.log("Mac :: " + item.Mac)
             let ts = getCurrentTimeStamp()
             let diff = findTimestampDiffInSec(item.Last_WS_Msg_Received_Time_Stamp, ts)
-            console.log("HB DIFFERENCE , ", diff)
+            console.log("HB DIFFERENCE:: ", diff + " for device:: " + item.HSV.h)
             if (diff > 8000) {
                 declareDisconnected(item)
             } else if (diff >= 3000 && item.Web_Socket /*  && item.Web_Socket.send */) {
                 item.Web_Socket.send("Heartbeat")
             }
         } else {
-            //console.log("device not connected")
+            console.log("device not connected::Attempting Connect")
             connectToDevice(
                 item.IP_Address,
                 wsRes => {

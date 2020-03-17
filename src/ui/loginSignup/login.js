@@ -106,24 +106,36 @@ const Login = props => {
                     />
                 </Item>
             </Form>
-            {login && <Text onPress={onLogin}>Login</Text>}
-            {login && (
-                <Text
-                    onPress={() => {
-                        setLogin(false)
-                    }}>
-                    SignUp
-                </Text>
-            )}
-            {!login && <Text onPress={onSignup}>SignUp</Text>}
-            {!login && (
-                <Text
-                    onPress={() => {
-                        setLogin(true)
-                    }}>
-                    Login
-                </Text>
-            )}
+            <View style={styles.ButtonView}>
+                {login && (
+                    <Text style={styles.LoginButton} nPress={onLogin}>
+                        Login
+                    </Text>
+                )}
+                {login && (
+                    <Text
+                        style={styles.SignupButton}
+                        onPress={() => {
+                            setLogin(false)
+                        }}>
+                        SignUp
+                    </Text>
+                )}
+                {!login && (
+                    <Text style={styles.LoginButton} onPress={onSignup}>
+                        SignUp
+                    </Text>
+                )}
+                {!login && (
+                    <Text
+                        style={styles.SignupButton}
+                        onPress={() => {
+                            setLogin(true)
+                        }}>
+                        Login
+                    </Text>
+                )}
+            </View>
             <Text style={styles.goToDashboard} onPress={GoToDashboard}>
                 Skip to DashBoard
             </Text>
@@ -153,5 +165,21 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         margin: 50,
+    },
+    LoginButton: {
+        alignSelf: "flex-start",
+    },
+    SignupButton: {
+        position: "absolute",
+        alignSelf: "flex-end",
+        paddingRight: 40,
+        paddingLeft: 40,
+    },
+    ButtonView: {
+        flexDirection: "column",
+        width: "100%",
+        marginTop: 50,
+        paddingLeft: 40,
+        paddingRight: 40,
     },
 })

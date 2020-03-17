@@ -128,6 +128,7 @@ class PairingForm extends Component {
             deviceName: SSID,
             wifiList: wifiArray,
             deviceMAC: BSSID,
+            selectedWifi: wifiArray[0].SSID,
         })
         this.socket = await connectToDevice(
             "192.168.4.1",
@@ -203,7 +204,7 @@ class PairingForm extends Component {
         this.props.navigation.navigate("AddDevice")
     }
 
-    selectWifiConn = (value, index, list) => {
+    selectWifiConn = (value, index) => {
         this.setState({ selectedWifi: value })
     }
 

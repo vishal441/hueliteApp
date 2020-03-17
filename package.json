@@ -8,7 +8,7 @@
         "android_debug_build": "cd android && npm run androidB",
         "android_release_build": "cd android && ./gradlew bundleRelease",
         "run_android_release": "react-native run-android --variant=release",
-        "ios": "react-native run-ios",
+        "ios": "react-native run-ios --verbose",
         "ios-R": "npx react-native run-ios --configuration Release",
         "ios-R_Device": "react-native run-ios --configuration Release --device \"Abhimanyu’s iPhone\"",
         "ios-D_Device": "react-native run-ios --device \"Abhimanyu’s iPhone\"",

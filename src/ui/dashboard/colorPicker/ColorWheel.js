@@ -2,7 +2,7 @@
 
 import React, { Component } from "react"
 import { Image, Dimensions, PanResponder, StyleSheet, View } from "react-native"
-import { Animated } from "react-native-reanimated"
+import Animated from "react-native-reanimated"
 import { PanGestureHandler } from "react-native-gesture-handler"
 import colorsys from "colorsys"
 import { ICON } from "../../common/constants/ImageConstant"
@@ -20,7 +20,7 @@ export class ColorWheel extends Component {
         this.state = {
             offset: { x: 0, y: 0 },
             currentColor: props.initialColor,
-            pan: new Animated.ValueXY(),
+            //pan: new Animated.ValueXY(),
             radius: 1,
         }
     }
@@ -128,11 +128,11 @@ export class ColorWheel extends Component {
         }
 
         this.setState({ panHandlerReady: false })
-        this.state.pan.setOffset({
+        /*  this.state.pan.setOffset({
             x: this.state.pan.x._value,
             y: this.state.pan.y._value,
         })
-        this.state.pan.setValue({ x: 0, y: 0 })
+        this.state.pan.setValue({ x: 0, y: 0 }) */
     }
 
     calcCartesian(deg, radius) {
@@ -161,10 +161,10 @@ export class ColorWheel extends Component {
         console.log("OOOOOO" + colorsys.hsv2Hex(color.h, color.s, color.v))
         this.setState({ currentColor: colorsys.hsv2Hex(color.h, color.s, color.v) })
         //this.props.onColorChange({ h, s, v });
-        this.state.pan.setValue({
+        /* this.state.pan.setValue({
             x: left - this.props.thumbSize / 2,
             y: top - this.props.thumbSize / 2,
-        })
+        }) */
     }
 
     animatedUpdate = color => {
@@ -204,7 +204,9 @@ export class ColorWheel extends Component {
                 onGestureEvent={e => {
                     console.log(e)
                 }}
-                onHandlerStateChange={this.onGestureEvent}>
+                onHandlerStateChange={e => {
+                    console.log(e)
+                }}>
                 <View
                     ref={node => {
                         this.self = node

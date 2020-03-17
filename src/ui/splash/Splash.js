@@ -55,10 +55,10 @@ class Splash extends Component {
         this.setState({ _mDNS: true })
 
         //NOTE: -->insert dummy device data in DB
-        ///insertDevices(deviceArr);
+        insertDevices(deviceArr)
 
         //NOTE: -->delete device data from DB
-        deleteDeviceTable()
+        ///deleteDeviceTable()
 
         //insertUserInfo(userInfo)
         //deleteUserInfoTable()

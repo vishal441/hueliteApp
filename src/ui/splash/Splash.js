@@ -58,7 +58,7 @@ class Splash extends Component {
         ///insertDevices(deviceArr);
 
         //NOTE: -->delete device data from DB
-        deleteDeviceTable()
+        //deleteDeviceTable()
 
         //insertUserInfo(userInfo)
         //deleteUserInfoTable();

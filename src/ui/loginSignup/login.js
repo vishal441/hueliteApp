@@ -108,32 +108,32 @@ const Login = props => {
             </Form>
             <View style={styles.ButtonView}>
                 {login && (
-                    <Text style={styles.LoginButton} nPress={onLogin}>
-                        Login
-                    </Text>
+                    <View style={styles.LoginButton} nPress={onLogin}>
+                        <Text>Login</Text>
+                    </View>
                 )}
                 {login && (
-                    <Text
+                    <View
                         style={styles.SignupButton}
                         onPress={() => {
                             setLogin(false)
                         }}>
-                        SignUp
-                    </Text>
+                        <Text>SignUp</Text>
+                    </View>
                 )}
                 {!login && (
-                    <Text style={styles.LoginButton} onPress={onSignup}>
-                        SignUp
-                    </Text>
+                    <View style={styles.LoginButton} onPress={onSignup}>
+                        <Text>SignUp</Text>
+                    </View>
                 )}
                 {!login && (
-                    <Text
+                    <View
                         style={styles.SignupButton}
                         onPress={() => {
                             setLogin(true)
                         }}>
-                        Login
-                    </Text>
+                        <Text>Login</Text>
+                    </View>
                 )}
             </View>
             <Text style={styles.goToDashboard} onPress={GoToDashboard}>
@@ -168,12 +168,17 @@ const styles = StyleSheet.create({
     },
     LoginButton: {
         alignSelf: "flex-start",
+        height: 40,
+        justifyContent: "center",
+        width: 80,
     },
     SignupButton: {
         position: "absolute",
         alignSelf: "flex-end",
         paddingRight: 40,
         paddingLeft: 40,
+        height: 40,
+        justifyContent: "center",
     },
     ButtonView: {
         flexDirection: "column",

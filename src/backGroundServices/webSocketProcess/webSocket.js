@@ -1,4 +1,4 @@
-const getWebSocket = async (ipAddr, wsHandler, OnMessageRecieved) => {
+const getWebSocket = async (ipAddr, wsHandler, OnMessageRecieved, wsErr) => {
     let wsUrl = `ws://${ipAddr}/ws`
     let ws = await new WebSocket(wsUrl)
     console.log("WSURL 0:   ", wsUrl)
@@ -16,11 +16,11 @@ const getWebSocket = async (ipAddr, wsHandler, OnMessageRecieved) => {
 
     ws.onerror = e => {
         console.log("WS Error: ", e.message)
-        OnMessageRecieved(e, null)
+        wsErr(e, null)
     }
 
     ws.onmessage = e => {
-        console.log("WS Message: ", e.data)
+        //console.log("WS Message: ", e.data)
         OnMessageRecieved(e, ws)
     }
 

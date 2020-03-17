@@ -237,7 +237,7 @@ class PairingForm extends Component {
         if (self.state.isDialogVisible) {
           this.setState({ showBtn: true, message: "Time out..!!" });
         }
-      }, 30000);
+      }, 20000);
     } else {
       this.setState({ passwordMatched: false });
     }

@@ -86,7 +86,7 @@ const modesApi = async (IP, mode_msg, cbRes) => {
 
 const getWiFiList = async cbRes => {
     await axios
-        .post("http://192.168.4.1/config", "config=wifi_scan", {
+        .post("http://192.168.4.1/config", /* <--urlEncodedParameters--> */ "config=wifi_scan", {
             headers: {
                 Accept: "application/json, application/text",
                 "Content-Type": "application/x-www-form-urlencoded",
@@ -112,4 +112,71 @@ const getWiFiList = async cbRes => {
         .finally(function() {})
 }
 
-export { getWiFiList, getStatusApi, authoriseApi, pairDeviceApi, saveWifiConfigApi, modesApi }
+const loginAPI = async (_username, _pass) => {
+    return new Promise(async (resolve, reject) => {
+        await axios
+            .post(
+                "https://www.huelite.in/user/authenticate",
+                {
+                    username: _username,
+                    password: _pass,
+                },
+                { timeout: 2000 },
+            )
+            .then(response => {
+                console.log(
+                    "axios response-- " +
+                        "LoginAPI_status::" +
+                        response.status +
+                        "LoginAPI_body::" +
+                        response.data,
+                )
+                resolve(response)
+                //cbRes("pass")
+            })
+            .catch(error => {
+                console.log("axios error:", error.response.data)
+                reject(error.response.data)
+            })
+    })
+}
+
+const signUpAPI = async (_username, _pass) => {
+    return new Promise(async (resolve, reject) => {
+        await axios
+            .post(
+                "https://www.huelite.in/user/register",
+                {
+                    username: _username,
+                    password: _pass,
+                },
+                { timeout: 2000 },
+            )
+            .then(response => {
+                console.log(
+                    "axios response-- " +
+                        "LoginAPI_status::" +
+                        response.status +
+                        "LoginAPI_body::" +
+                        response.data,
+                )
+                resolve(response)
+                //cbRes("pass")
+            })
+            .catch(error => {
+                console.log("axios error:", error.response.data)
+                reject(error.response.data)
+            })
+    })
+}
+
+export {
+    signUpAPI,
+    loginAPI,
+    getWiFiList,
+    getStatusApi,
+    authoriseApi,
+    pairDeviceApi,
+    saveWifiConfigApi,
+    modesApi,
+}

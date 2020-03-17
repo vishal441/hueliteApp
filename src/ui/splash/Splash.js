@@ -7,6 +7,10 @@ import {
   deleteDeviceTable,
   insertDevices
 } from "../../database/table/DeviceTable";
+import {
+  insertUserInfo,
+  deleteUserInfoTable
+} from "../../database/table/UserInfoTable";
 import { connect } from "react-redux";
 import { reduxConstant } from "../../redux/ReduxConstant";
 import { deviceArr } from "../../util/DummyData";
@@ -55,10 +59,13 @@ class Splash extends Component {
     this.setState({ _mDNS: true });
 
     //NOTE: -->insert dummy device data in DB
-    ///insertDevices(deviceArr)
+    ///insertDevices(deviceArr);
 
     //NOTE: -->delete device data from DB
     deleteDeviceTable();
+
+    //insertUserInfo(userInfo)
+    //deleteUserInfoTable();
 
     let dbRes = await getDeviceListFromDb(),
       deviceListing = dbRes.data;

@@ -7,7 +7,7 @@ import axios from "axios";
 import { Spinner } from "native-base";
 
 PairIos1 = props => {
-  const [Show, setShow] = useState(true);
+  const [Show, setShow] = useState(false);
   const [wifiList, setWifiList] = useState([]);
   const [selectedWiFi, setSelectedWiFi] = useState("New Device");
 
@@ -21,12 +21,12 @@ PairIos1 = props => {
           // handle success
           count = count + 1;
           console.log("--" + count);
-          //setShow(true)
+          setShow(true);
         })
         .catch(function(error) {
           // handle error
           console.log(error);
-          //setShow(false)
+          setShow(false);
         })
         .finally(function() {
           // always executed
@@ -81,7 +81,7 @@ PairIos1 = props => {
         </View>
       ) : (
         <View style={styles.spinnerView}>
-          <Spinner color="red" style={{ height: 10, width: 10 }} />
+          <Spinner color="#aaa" style={{ height: 10, width: 10 }} />
         </View>
       )}
     </View>

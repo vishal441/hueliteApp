@@ -4,7 +4,8 @@
     "private": true,
     "scripts": {
         "android": "react-native run-android",
-        "android_debug_build": "cd android && ./gradlew bundleDebug",
+        "androidB": "./gradlew bundleDebug",
+        "android_debug_build": "cd android && npm run androidB",
         "android_release_build": "cd android && ./gradlew bundleRelease",
         "run_android_release": "react-native run-android --variant=release",
         "ios": "react-native run-ios",

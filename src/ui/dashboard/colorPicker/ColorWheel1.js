@@ -33,8 +33,8 @@ export class ColorWheel1 extends Component {
         const window = Dimensions.get("window")
         this.refs.Marker.measure((x, y, width, height, pageX, pageY) => {
             console.log(x, y, width, height, pageX, pageY)
-            console.log("offsetX::" + (pageX + width / 2))
-            console.log("offsetY::" + (pageY + height / 2))
+            console.log("X::" + pageX)
+            console.log("Y::" + pageY)
             const offset = {
                 x: pageX + width / 2,
                 y: pageY + height / 2,
@@ -86,7 +86,7 @@ export class ColorWheel1 extends Component {
     calcPolar(event) {
         //const { pageX, pageY, moveX, moveY } = gestureState
         const [x, y] = [event.nativeEvent.absoluteX, event.nativeEvent.absoluteY]
-        console.log("X:: " + x + "   " + "Y:: " + y)
+        console.log("X:: " + x + "   " + "Y:: " + y + "rad::" + this.state.radius)
         const [dx, dy] = [x - this.state.offset.x, y - this.state.offset.y]
         return {
             deg: Math.atan2(dy, dx) * (-180 / Math.PI),
@@ -97,6 +97,8 @@ export class ColorWheel1 extends Component {
 
     outBounds(event) {
         const { radius } = this.calcPolar(event)
+        console.log("::" + radius)
+
         return radius > 1
     }
 
@@ -105,7 +107,6 @@ export class ColorWheel1 extends Component {
         const hsv = { h: deg, s: 100 * radius, v: 100 }
         const currentColor = colorsys.hsv2Hex(hsv)
         console.log(currentColor)
-
         this.setState({ hsv, currentColor })
         this.props.onColorChange(hsv)
     }
@@ -115,15 +116,13 @@ export class ColorWheel1 extends Component {
         if (this.outBounds(event)) {
             return
         } else {
-            this.updateColor(event)
             this.setState({
                 dragX: event.nativeEvent.absoluteX - this.state.left - 10,
                 dragY: event.nativeEvent.absoluteY - this.state.top - 10,
             })
+            this.updateColor(event)
         }
         //if (!(event.nativeEvent.absoluteX - this.state.left - 10 > 200)) {
-        if (true) {
-        }
     }
 
     render() {

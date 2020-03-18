@@ -16,6 +16,7 @@ import { reduxConstant } from "../../../redux/ReduxConstant"
 import ColorPicker_temp from "./ColorPicker_temp"
 import colorsys from "colorsys"
 import { getCurrentTimeStamp } from "../../../util/DateTimeUtil"
+import { SafeAreaView } from "react-navigation"
 
 class ColorPickerContainer extends React.Component {
     /*
@@ -66,10 +67,10 @@ class ColorPickerContainer extends React.Component {
         "<><><><>------------" +
           (getCurrentTimeStamp() - this.colorUpdateTimestamp) / 1000
       ); */
-            if (selectedDevice.Web_Socket) {
-                selectedDevice.Web_Socket.send(
+            if (true) {
+                /* selectedDevice.Web_Socket.send(
                     colorsys.hsv2Hex(color.h, color.s, selectedDevice.HSV.v),
-                )
+                ) */
                 this.colorUpdateTimestamp = getCurrentTimeStamp()
                 updateObj["HSV"] = { h: color.h, s: color.s, v: selectedDevice.HSV.v }
                 let newList = updateDeviceList(updateObj, selectedDevice, deviceList)
@@ -145,40 +146,42 @@ class ColorPickerContainer extends React.Component {
         let { navigation } = this.props,
             { selectedDevice } = navigation.getParam("otherParam")
         return (
-            <View style={{ height: "100%" }}>
-                <View style={{ height: "40%" }}>
-                    <LinearGradient
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 1, y: 0 }}
-                        colors={gradColorArr}
-                        style={{ height: "100%" }}>
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.goBack()}
-                            style={{ marginHorizontal: 15, height: "10%", marginTop: 10 }}>
-                            <Image source={ICON.LEFT_ARROW} style={{ height: "100%" }} />
-                        </TouchableOpacity>
-                        <ColorPickerHeader
-                            sliderVal={selectedDevice.HSV.v}
-                            deviceName={" Device Bulb-1"}
-                        />
+            <SafeAreaView>
+                <View style={{ height: "100%" }}>
+                    <View style={{ height: "40%" }}>
+                        <LinearGradient
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 1, y: 0 }}
+                            colors={gradColorArr}
+                            style={{ height: "100%" }}>
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.replace("Dashboard")}
+                                style={{ marginHorizontal: 15, height: "10%", marginTop: 10 }}>
+                                <Image source={ICON.LEFT_ARROW} style={{ height: "100%" }} />
+                            </TouchableOpacity>
+                            <ColorPickerHeader
+                                sliderVal={selectedDevice.HSV.v}
+                                deviceName={" Device Bulb-1"}
+                            />
 
-                        <CustomeSlider
-                            value={selectedDevice.HSV.v}
-                            customStyle={styles.sliderStyle}
-                            onSlidingComplete={this.onSlidingComplete}
-                            selectedColor={selectedColor}
-                            gradColorArr={gradColorArr}
-                        />
-                    </LinearGradient>
+                            <CustomeSlider
+                                value={selectedDevice.HSV.v}
+                                customStyle={styles.sliderStyle}
+                                onSlidingComplete={this.onSlidingComplete}
+                                selectedColor={selectedColor}
+                                gradColorArr={gradColorArr}
+                            />
+                        </LinearGradient>
+                    </View>
+                    {/* <ColorPicker_temp /> */}
+                    <DeviceNavigator
+                        onColorChange={this.onColorChange}
+                        selectedColor={selectedColor}
+                        HSV={this.state.HSV}
+                        onColorChangeComplete={this.onColorChangeComplete}
+                    />
                 </View>
-                {/* <ColorPicker_temp /> */}
-                <DeviceNavigator
-                    onColorChange={this.onColorChange}
-                    selectedColor={selectedColor}
-                    HSV={this.state.HSV}
-                    onColorChangeComplete={this.onColorChangeComplete}
-                />
-            </View>
+            </SafeAreaView>
         )
     }
 }

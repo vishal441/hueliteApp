@@ -69,7 +69,7 @@ class Card extends Component {
 
     openColorPicker = () => {
         let { device, deviceList } = this.props
-        this.props.navigation.navigate("ColorPickerContainer", {
+        this.props.navigation.replace("ColorPickerContainer", {
             otherParam: { selectedDevice: device, deviceList: deviceList },
         })
     }

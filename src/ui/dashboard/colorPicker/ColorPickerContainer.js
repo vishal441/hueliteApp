@@ -59,18 +59,14 @@ class ColorPickerContainer extends React.Component {
         colorsys.hsv2Hex(color.h, color.s, selectedDevice.HSV.v)
     ); */
         let { selectedColor, gradColorArr } = getSelectedGradientColors(color)
-        this.setState({ selectedColor: selectedColor, gradColorArr: gradColorArr })
+        //this.setState({ selectedColor: selectedColor /* , gradColorArr: gradColorArr  */ })
 
         //TODO: send ws color event to device
         if (getCurrentTimeStamp() - this.colorUpdateTimestamp >= 200) {
-            /* console.log(
-        "<><><><>------------" +
-          (getCurrentTimeStamp() - this.colorUpdateTimestamp) / 1000
-      ); */
-            if (true) {
-                /* selectedDevice.Web_Socket.send(
+            if (selectedDevice.Web_Socket) {
+                selectedDevice.Web_Socket.send(
                     colorsys.hsv2Hex(color.h, color.s, selectedDevice.HSV.v),
-                ) */
+                )
                 this.colorUpdateTimestamp = getCurrentTimeStamp()
                 updateObj["HSV"] = { h: color.h, s: color.s, v: selectedDevice.HSV.v }
                 let newList = updateDeviceList(updateObj, selectedDevice, deviceList)
@@ -99,17 +95,17 @@ class ColorPickerContainer extends React.Component {
         updatedColor = selectedColor
 
         //EXP_START: why this check
-        if (!(selectedDevice.SSID.includes("OW") || selectedDevice.SSID.includes("S02"))) {
+        /* if (!(selectedDevice.SSID.includes("OW") || selectedDevice.SSID.includes("S02"))) {
             if (typeof color === "object") {
             }
-        }
-        let newList = updateDeviceList(updateObj, selectedDevice, deviceList)
+        } */
+        //let newList = updateDeviceList(updateObj, selectedDevice, deviceList)
         //EXP_START: why this check (typeof selectedDevice.Web_Socket === 'object')
         //typeof selectedDevice.Web_Socket === "object" &&
-        if (selectedDevice.Web_Socket)
-            selectedDevice.Web_Socket.send(colorsys.hsv2Hex(color.h, color.s, selectedDevice.HSV.v))
-        deviceListAction(newList)
-        insertDevices(newList)
+        /* if (selectedDevice.Web_Socket)
+            selectedDevice.Web_Socket.send(colorsys.hsv2Hex(color.h, color.s, selectedDevice.HSV.v)) */
+        //deviceListAction(newList)
+        //insertDevices(newList)
     }
 
     onSlidingComplete = value => {

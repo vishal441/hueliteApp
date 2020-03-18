@@ -86,7 +86,7 @@ export class ColorWheel1 extends Component {
     calcPolar(event) {
         //const { pageX, pageY, moveX, moveY } = gestureState
         const [x, y] = [event.nativeEvent.absoluteX, event.nativeEvent.absoluteY]
-        console.log("X:: " + x + "   " + "Y:: " + y + "rad::" + this.state.radius)
+        //console.log("X:: " + x + "   " + "Y:: " + y + "rad::" + this.state.radius)
         const [dx, dy] = [x - this.state.offset.x, y - this.state.offset.y]
         return {
             deg: Math.atan2(dy, dx) * (-180 / Math.PI),
@@ -98,7 +98,6 @@ export class ColorWheel1 extends Component {
     outBounds(event) {
         const { radius } = this.calcPolar(event)
         console.log("::" + radius)
-
         return radius > 1
     }
 
@@ -107,12 +106,13 @@ export class ColorWheel1 extends Component {
         const hsv = { h: deg, s: 100 * radius, v: 100 }
         const currentColor = colorsys.hsv2Hex(hsv)
         console.log(currentColor)
-        this.setState({ hsv, currentColor })
+        //this.setState({ hsv, currentColor })
         this.props.onColorChange(hsv)
     }
 
     onGestureEvent = event => {
         //console.log(event.nativeEvent.absoluteX)
+        console.log(".")
         if (this.outBounds(event)) {
             return
         } else {
@@ -125,13 +125,18 @@ export class ColorWheel1 extends Component {
         //if (!(event.nativeEvent.absoluteX - this.state.left - 10 > 200)) {
     }
 
+    onHandlerStateChange = e => {
+        console.log("-----5555555555555555555555555555555555555")
+        console.log(e.nativeEvent.state)
+    }
+
     render() {
         return (
-            <TapGestureHandler onHandlerStateChange={this.onGestureEvent}>
+            <TapGestureHandler onHandlerStateChange={this.onHandlerStateChange}>
                 <PanGestureHandler
                     maxPointers={1}
                     onGestureEvent={this.onGestureEvent}
-                    onHandlerStateChange={this.onGestureEvent}>
+                    onHandlerStateChange={this.onHandlerStateChange}>
                     <View
                         style={{
                             borderWidth: 0,

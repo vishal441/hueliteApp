@@ -126,7 +126,7 @@ export class ColorWheel1 extends Component {
     }
 
     onHandlerStateChange = e => {
-        console.log("-----5555555555555555555555555555555555555")
+        console.log("-----55555555555555555555555555555555555555")
         console.log(e.nativeEvent.state)
     }
 

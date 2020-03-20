@@ -1,7 +1,8 @@
 import React, { Component } from "react"
-import { View, StyleSheet, Image, Platform } from "react-native"
+import { View, StyleSheet, Image, Text, Platform } from "react-native"
 import { ICON } from "../common/constants/ImageConstant"
 import { getUserInfoFromDb } from "../../database/table/UserInfoTable"
+import LinearGradient from "react-native-linear-gradient"
 import {
     getDeviceListFromDb,
     deleteDeviceTable,
@@ -55,7 +56,7 @@ class Splash extends Component {
         this.setState({ _mDNS: true })
 
         //NOTE: -->insert dummy device data in DB
-        insertDevices(deviceArr)
+        ///insertDevices(deviceArr)
 
         //NOTE: -->delete device data from DB
         ///deleteDeviceTable()
@@ -81,7 +82,7 @@ class Splash extends Component {
                     self.props.navigation.replace("WifiScreen")
                 }
             }
-        }, 2000)
+        }, 1000)
     }
 
     componentDidUpdate() {}
@@ -96,10 +97,18 @@ class Splash extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
-                <NetInfo onNetChange={this.netFunction} />
-                <Image style={styles.image} source={ICON.LOGO} />
-            </View>
+            <LinearGradient
+                start={{ x: 0.5, y: 1.5 }}
+                end={{ x: 1.5, y: 0.5 }}
+                colors={["#aaa", "#fff"]}
+                /* style={[styles.cardContainer, { elevation: isShowEditDashoard ? 15 : 5 }]} */
+            >
+                <View style={styles.container}>
+                    {Platform.OS === "android" && <NetInfo onNetChange={this.netFunction} />}
+                    <Image style={styles.image} source={ICON.LOGO} />
+                    <Text style={styles.text}>HUElite</Text>
+                </View>
+            </LinearGradient>
         )
     }
 }
@@ -108,14 +117,18 @@ const styles = StyleSheet.create({
     container: {
         width: "100%",
         height: "100%",
-        backgroundColor: "#3097e4",
+        justifyContent: "center",
+        flexDirection: "column",
     },
     image: {
-        width: 150,
-        height: 50,
-        position: "absolute",
-        top: "35%",
-        left: "30%",
+        alignSelf: "center",
+    },
+    text: {
+        alignSelf: "center",
+        color: "#aaa",
+        fontSize: 30,
+        fontWeight: "bold",
+        marginTop: 20,
     },
 })
 

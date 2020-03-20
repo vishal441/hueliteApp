@@ -126,7 +126,7 @@ class Dashboard extends Component {
                         }}
                     />
                 </View>
-                <View style={styles.warning}>
+                <View style={[styles.warning, { display: "none" }]}>
                     <Text>this is deffault text</Text>
                 </View>
             </View>

@@ -68,9 +68,9 @@ class ColorPickerContainer extends React.Component {
                     colorsys.hsv2Hex(color.h, color.s, selectedDevice.HSV.v),
                 )
                 this.colorUpdateTimestamp = getCurrentTimeStamp()
-                updateObj["HSV"] = { h: color.h, s: color.s, v: selectedDevice.HSV.v }
-                let newList = updateDeviceList(updateObj, selectedDevice, deviceList)
-                deviceListAction(newList)
+                //updateObj["HSV"] = { h: color.h, s: color.s, v: selectedDevice.HSV.v }
+                //let newList = updateDeviceList(updateObj, selectedDevice, deviceList)
+                //deviceListAction(newList)
                 //insertDevices(newList)
             }
         } else {
@@ -93,6 +93,7 @@ class ColorPickerContainer extends React.Component {
         updateObj["Last_State"] = selectedColor
         updateObj["HSV"] = { h: color.h, s: color.s, v: selectedDevice.HSV.v }
         updatedColor = selectedColor
+        console.log("--------complete---------------------")
 
         //EXP_START: why this check
         /* if (!(selectedDevice.SSID.includes("OW") || selectedDevice.SSID.includes("S02"))) {
@@ -106,6 +107,18 @@ class ColorPickerContainer extends React.Component {
             selectedDevice.Web_Socket.send(colorsys.hsv2Hex(color.h, color.s, selectedDevice.HSV.v)) */
         //deviceListAction(newList)
         //insertDevices(newList)
+        if (true) {
+            /*  selectedDevice.Web_Socket.send(
+                colorsys.hsv2Hex(color.h, color.s, selectedDevice.HSV.v),
+            ) */
+            this.colorUpdateTimestamp = getCurrentTimeStamp()
+            updateObj["HSV"] = { h: color.h, s: color.s, v: selectedDevice.HSV.v }
+            let newList = updateDeviceList(updateObj, selectedDevice, deviceList)
+            deviceListAction(newList)
+            insertDevices(newList)
+            let { selectedColor, gradColorArr } = getSelectedGradientColors(color)
+            this.setState({ selectedColor: selectedColor, gradColorArr: gradColorArr })
+        }
     }
 
     onSlidingComplete = value => {
@@ -134,6 +147,8 @@ class ColorPickerContainer extends React.Component {
             }
         } else {
             console.log("Time gap not meet")
+            let newList = updateDeviceList(updateObj, selectedDevice, deviceList)
+            deviceListAction(newList)
         }
     }
 
@@ -141,6 +156,7 @@ class ColorPickerContainer extends React.Component {
         let { sliderVal, selectedColor, gradColorArr } = this.state
         let { navigation } = this.props,
             { selectedDevice } = navigation.getParam("otherParam")
+        let { v } = selectedDevice.HSV.v
         return (
             <SafeAreaView>
                 <View style={{ height: "100%" }}>
@@ -155,13 +171,10 @@ class ColorPickerContainer extends React.Component {
                                 style={{ marginHorizontal: 15, height: "10%", marginTop: 10 }}>
                                 <Image source={ICON.LEFT_ARROW} style={{ height: "100%" }} />
                             </TouchableOpacity>
-                            <ColorPickerHeader
-                                sliderVal={selectedDevice.HSV.v}
-                                deviceName={" Device Bulb-1"}
-                            />
+                            <ColorPickerHeader sliderVal={v} deviceName={" Device Bulb-1"} />
 
                             <CustomeSlider
-                                value={selectedDevice.HSV.v}
+                                value={v}
                                 customStyle={styles.sliderStyle}
                                 onSlidingComplete={this.onSlidingComplete}
                                 selectedColor={selectedColor}

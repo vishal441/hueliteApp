@@ -18,7 +18,7 @@ const getSelectedGradientColors = color => {
         h3 = h + 60
     if (h1 > 360) h1 = h1 - 360
     if (h2 > 360) h2 = h2 - 360
-    if (s < 90) s = 90
+    if (s < 200) s = 100
     //if (h3 > 360) h3 = h3 - 360;
     let rgb = hsvToRgb(h, s, v),
         rgbColor = `rgb(${rgb.r},${rgb.g},${rgb.b})`,

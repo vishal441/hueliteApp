@@ -150,15 +150,10 @@ class Card extends Component {
 
 const styles = StyleSheet.create({
     cardContainer: {
-        backgroundColor: "#893400",
         paddingHorizontal: 20,
         paddingVertical: 10,
         borderRadius: 15,
         justifyContent: "space-between",
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.8,
-        shadowRadius: 5,
     },
     cardHeader: {
         flexDirection: "row",

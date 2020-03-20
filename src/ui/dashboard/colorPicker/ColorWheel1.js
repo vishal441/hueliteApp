@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { Image, Dimensions, StyleSheet, View } from "react-native"
 import Animated from "react-native-reanimated"
 import { ICON } from "../../common/constants/ImageConstant"
-import { PanGestureHandler, TapGestureHandler } from "react-native-gesture-handler"
+import { State, PanGestureHandler, TapGestureHandler } from "react-native-gesture-handler"
 import colorsys from "colorsys"
 
 const { event, Value, set, cond, add, call } = Animated
@@ -75,7 +75,7 @@ export class ColorWheel1 extends Component {
         const rad = (Math.PI * deg) / 180
         const x = r * Math.cos(rad)
         const y = r * Math.sin(rad)
-        console.log("ee:" + x)
+        //console.log("ee:" + x)
 
         return {
             left: this.state.width / 2 + x,
@@ -97,74 +97,94 @@ export class ColorWheel1 extends Component {
 
     outBounds(event) {
         const { radius } = this.calcPolar(event)
-        console.log("::" + radius)
+        //console.log("::" + radius)
         return radius > 1
     }
 
-    updateColor = event => {
-        const { deg, radius } = this.calcPolar(event)
+    /**Send *_state* true to send onChangeComplete Callback  */
+    updateColor = obj => {
+        console.log(":::::::" + obj._state)
+        const { deg, radius } = this.calcPolar(obj.event)
         const hsv = { h: deg, s: 100 * radius, v: 100 }
         const currentColor = colorsys.hsv2Hex(hsv)
-        console.log(currentColor)
+        //console.log(currentColor)
         //this.setState({ hsv, currentColor })
-        this.props.onColorChange(hsv)
+        if (!obj._state) this.props.onColorChange(hsv)
+        else if (obj._state) this.props.onColorChangeComplete(hsv)
     }
 
     onGestureEvent = event => {
         //console.log(event.nativeEvent.absoluteX)
-        console.log(".")
-        if (this.outBounds(event)) {
-            return
-        } else {
-            this.setState({
-                dragX: event.nativeEvent.absoluteX - this.state.left - 10,
-                dragY: event.nativeEvent.absoluteY - this.state.top - 10,
-            })
-            this.updateColor(event)
+        if (event.nativeEvent.state === State.END) {
+            console.log("---------------------------------")
+            console.log("motion END")
+            if (this.outBounds(event)) {
+                this.updateColor({ event, _state: true })
+                return
+            } else {
+                this.setState({
+                    dragX: event.nativeEvent.absoluteX - this.state.left - 10,
+                    dragY: event.nativeEvent.absoluteY - this.state.top - 10,
+                })
+                console.log("onColorUpdateEnd")
+                this.updateColor({ event, _state: true })
+            }
+        } else if (event.nativeEvent.state === State.ACTIVE) {
+            console.log("---------------------------------")
+            if (this.outBounds(event)) {
+                console.log(".OUTBOUNDS")
+                return
+            } else {
+                this.setState({
+                    dragX: event.nativeEvent.absoluteX - this.state.left - 10,
+                    dragY: event.nativeEvent.absoluteY - this.state.top - 10,
+                })
+                this.updateColor({ event, _state: false })
+            }
         }
+
         //if (!(event.nativeEvent.absoluteX - this.state.left - 10 > 200)) {
     }
 
-    onHandlerStateChange = e => {
-        console.log("-----55555555555555555555555555555555555555")
-        console.log(e.nativeEvent.state)
-    }
+    onHandlerStateChange = e => {}
 
     render() {
         return (
-            <TapGestureHandler onHandlerStateChange={this.onHandlerStateChange}>
-                <PanGestureHandler
-                    maxPointers={1}
-                    onGestureEvent={this.onGestureEvent}
-                    onHandlerStateChange={this.onHandlerStateChange}>
-                    <View
-                        style={{
-                            borderWidth: 0,
-                            borderColor: "#EE0",
-                            marginTop: 100,
-                        }}>
-                        <View style={styles.view} ref="Marker" onLayout={this.onLayout}>
-                            <Image
-                                style={[
-                                    styles.img,
-                                    {
-                                        height: 300,
-                                        width: 300,
-                                    },
-                                ]}
-                                source={ICON.COLOR_WHEEL}
-                            />
-                            <Animated.View
-                                style={[
-                                    styles.circle,
-                                    {
-                                        left: this.state.dragX,
-                                        top: this.state.dragY,
-                                    },
-                                ]}></Animated.View>
+            <TapGestureHandler onHandlerStateChange={this.onGestureEvent}>
+                <View>
+                    <PanGestureHandler
+                        maxPointers={1}
+                        onGestureEvent={this.onGestureEvent}
+                        onHandlerStateChange={this.onGestureEvent}>
+                        <View
+                            style={{
+                                borderWidth: 0,
+                                borderColor: "#EE0",
+                                marginTop: 100,
+                            }}>
+                            <View style={styles.view} ref="Marker" onLayout={this.onLayout}>
+                                <Image
+                                    style={[
+                                        styles.img,
+                                        {
+                                            height: 300,
+                                            width: 300,
+                                        },
+                                    ]}
+                                    source={ICON.COLOR_WHEEL}
+                                />
+                                <Animated.View
+                                    style={[
+                                        styles.circle,
+                                        {
+                                            left: this.state.dragX,
+                                            top: this.state.dragY,
+                                        },
+                                    ]}></Animated.View>
+                            </View>
                         </View>
-                    </View>
-                </PanGestureHandler>
+                    </PanGestureHandler>
+                </View>
             </TapGestureHandler>
         )
     }

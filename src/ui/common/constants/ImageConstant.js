@@ -1,5 +1,6 @@
 export const ICON = {
-    LOGO: require("../../../assets/images/Logo.png"),
+    LOGO: require("../../../assets/images/huelite-logo.png"),
+    LOGO_W: require("../../../assets/images/huelite-logo-white.png"),
     BULB: require("../../../assets/images/bulb.png"),
     HamburgerIcon: require("../../../assets/images/HamburgerIcon.png"),
     LEFT_ARROW: require("../../../assets/images/leftArrow.png"),

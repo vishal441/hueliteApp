@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "android": "react-native run-android",
+        "android-OPPO_F9": "react-native run-android --device\"W8HY8DAUKZ799SVG\"",
         "androidB": "./gradlew bundleDebug",
         "android_debug_build": "cd android && npm run androidB",
         "android_release_build": "cd android && ./gradlew bundleRelease",

@@ -107,8 +107,8 @@ export class ColorWheel1 extends Component {
         const { deg, radius } = this.calcPolar(obj.event)
         const hsv = { h: deg, s: 100 * radius, v: 100 }
         const currentColor = colorsys.hsv2Hex(hsv)
-        //console.log(currentColor)
-        //this.setState({ hsv, currentColor })
+        console.log("::--" + currentColor)
+        this.setState({ hsv, currentColor })
         if (!obj._state) this.props.onColorChange(hsv)
         else if (obj._state) this.props.onColorChangeComplete(hsv)
     }
@@ -119,7 +119,7 @@ export class ColorWheel1 extends Component {
             console.log("---------------------------------")
             console.log("motion END")
             if (this.outBounds(event)) {
-                this.updateColor({ event, _state: true })
+                //this.updateColor({ event, _state: true })
                 return
             } else {
                 this.setState({

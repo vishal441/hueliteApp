@@ -24,7 +24,7 @@ class ColorPickerContainer extends React.Component {
     */
     constructor(props) {
         super(props)
-        this.colorUpdateTimestamp = getCurrentTimeStamp() - 300
+        this.colorUpdateTimestamp = getCurrentTimeStamp() - 100
         this.state = {
             selectedColor: "rgb(0,128,255)",
             HSV: this.props.navigation.getParam("otherParam").selectedDevice.HSV,
@@ -94,25 +94,9 @@ class ColorPickerContainer extends React.Component {
         updateObj["HSV"] = { h: color.h, s: color.s, v: selectedDevice.HSV.v }
         updatedColor = selectedColor
         console.log("--------complete---------------------")
-
-        //EXP_START: why this check
-        /* if (!(selectedDevice.SSID.includes("OW") || selectedDevice.SSID.includes("S02"))) {
-            if (typeof color === "object") {
-            }
-        } */
-        //let newList = updateDeviceList(updateObj, selectedDevice, deviceList)
-        //EXP_START: why this check (typeof selectedDevice.Web_Socket === 'object')
-        //typeof selectedDevice.Web_Socket === "object" &&
-        /* if (selectedDevice.Web_Socket)
-            selectedDevice.Web_Socket.send(colorsys.hsv2Hex(color.h, color.s, selectedDevice.HSV.v)) */
-        //deviceListAction(newList)
-        //insertDevices(newList)
-        if (true) {
-            /*  selectedDevice.Web_Socket.send(
-                colorsys.hsv2Hex(color.h, color.s, selectedDevice.HSV.v),
-            ) */
+        if (selectedDevice.Web_Socket) {
+            selectedDevice.Web_Socket.send(colorsys.hsv2Hex(color.h, color.s, selectedDevice.HSV.v))
             this.colorUpdateTimestamp = getCurrentTimeStamp()
-            updateObj["HSV"] = { h: color.h, s: color.s, v: selectedDevice.HSV.v }
             let newList = updateDeviceList(updateObj, selectedDevice, deviceList)
             deviceListAction(newList)
             insertDevices(newList)
@@ -131,7 +115,7 @@ class ColorPickerContainer extends React.Component {
             s: selectedDevice.HSV.s,
             v: value,
         }
-        console.log(colorsys.hsv2Hex(updateObj.HSV.h, updateObj.HSV.s, updateObj.HSV.v))
+        console.log(value)
         if (getCurrentTimeStamp() - this.colorUpdateTimestamp >= 200) {
             console.log(
                 "<><><><>------------" + (getCurrentTimeStamp() - this.colorUpdateTimestamp) / 1000,
@@ -156,7 +140,6 @@ class ColorPickerContainer extends React.Component {
         let { sliderVal, selectedColor, gradColorArr } = this.state
         let { navigation } = this.props,
             { selectedDevice } = navigation.getParam("otherParam")
-        let { v } = selectedDevice.HSV.v
         return (
             <SafeAreaView>
                 <View style={{ height: "100%" }}>
@@ -171,10 +154,13 @@ class ColorPickerContainer extends React.Component {
                                 style={{ marginHorizontal: 15, height: "10%", marginTop: 10 }}>
                                 <Image source={ICON.LEFT_ARROW} style={{ height: "100%" }} />
                             </TouchableOpacity>
-                            <ColorPickerHeader sliderVal={v} deviceName={" Device Bulb-1"} />
+                            <ColorPickerHeader
+                                sliderVal={selectedDevice.HSV.v}
+                                deviceName={" Device Bulb-1"}
+                            />
 
                             <CustomeSlider
-                                value={v}
+                                value={selectedDevice.HSV.v}
                                 customStyle={styles.sliderStyle}
                                 onSlidingComplete={this.onSlidingComplete}
                                 selectedColor={selectedColor}

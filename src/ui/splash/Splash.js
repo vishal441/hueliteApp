@@ -59,7 +59,7 @@ class Splash extends Component {
         ///insertDevices(deviceArr)
 
         //NOTE: -->delete device data from DB
-        ///deleteDeviceTable()
+        deleteDeviceTable()
 
         //insertUserInfo(userInfo)
         //deleteUserInfoTable()
@@ -71,6 +71,7 @@ class Splash extends Component {
         let userRes = await getUserInfoFromDb()
 
         if (userRes) console.log("name : ", userRes.User_Id)
+        //self.props.navigation.navigate("PairIos1")
         setTimeout(function() {
             ///self.props.navigation.replace("PairIos1")
             if (!userRes && !deviceListing.length) self.props.navigation.replace("Welcome")

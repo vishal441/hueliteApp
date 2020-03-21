@@ -46,9 +46,6 @@ class Card extends Component {
         }
         console.log("===" + colorsys.hsv2Hex(updateObj.HSV.h, updateObj.HSV.s, updateObj.HSV.v))
         if (getCurrentTimeStamp() - this.colorUpdateTimestamp >= 200) {
-            console.log(
-                "<><><><>------------" + (getCurrentTimeStamp() - this.colorUpdateTimestamp) / 1000,
-            )
             if (device.Web_Socket) {
                 device.Web_Socket.send(
                     colorsys.hsv2Hex(updateObj.HSV.h, updateObj.HSV.s, updateObj.HSV.v),

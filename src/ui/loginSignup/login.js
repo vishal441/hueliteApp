@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { StyleSheet, Text, View, Image, Platform } from "react-native"
-import { insertUserInfo, deleteUserInfoTable } from "../../database/table/UserInfoTable"
+import { getUserInfoFromDb } from "../../database/table/UserInfoTable"
+import { insertUserInfo } from "../../database/table/UserInfoTable"
 import { createNewUser } from "../../util/AppUtil"
 import { Form, Item, Input, Label } from "native-base"
 import { loginAPI, signUpAPI } from "../../backGroundServices/webApi/WebApi"
@@ -10,15 +11,28 @@ import { TouchableOpacity } from "react-native-gesture-handler"
 
 ///import { useNetInfo } from "@react-native-community/netinfo"
 
+//TODO: create temp userID upon skip and save to DB
+//TODO: Google login
+//TODO: FB login
+
 const Login = props => {
-    ///const netInfo = useNetInfo()
     const [usernameStyle, setUsernameStyle] = useState({ color: "#aaa" })
     const [passStyle, setPassStyle] = useState({ color: "#aaa" })
     const [login, setLogin] = useState(true)
-    let _username = ""
-    let _pass = ""
+    const [_username, setUsername] = useState()
+    const [_pass, setPass] = useState()
+    const [_RePass, setRePass] = useState()
 
-    //NOTE: -->Navigate to Dashboard by replacing the current Stack Position
+    /*-------------------------------------------------------------------------------
+     * Lifecycle Functions
+     *-------------------------------------------------------------------------------*/
+    useEffect(() => {
+        return () => {}
+    })
+
+    /*-------------------------------------------------------------------------------
+     * Navigation Functions
+     *-------------------------------------------------------------------------------*/
     GoToDashboard = () => {
         props.navigation.replace("Dashboard")
     }
@@ -32,69 +46,129 @@ const Login = props => {
         props.navigation.replace("PairIos1")
     }
 
-    useEffect(() => {
-        let User_Id = "12345678"
-        let userInfo = [
-            createNewUser({
-                User_Id,
-            }),
-        ]
+    onBack = () => {
+        //console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.")
+        //props.navigation.replace("Welcome")
+    }
 
-        return () => {
-            //console.log("Inserting User Data")
-            //insertUserInfo(userInfo)
-            //deleteUserInfoTable()
-        }
-    })
-
+    /*-------------------------------------------------------------------------------
+     * Helper Functions
+     *-------------------------------------------------------------------------------*/
     onLogin = async () => {
-        await loginAPI(_username, _pass)
-            .then(response => {
-                console.log(response.data)
-                setPassStyle({ color: "#0f0" })
-                setUsernameStyle({ color: "#0f0" })
-            })
-            .catch(err => {
-                let { message } = err
-                console.log(err.message)
-                if (message == "Invalid Username") {
-                    setPassStyle({ color: "#aaa" })
-                    setUsernameStyle({ color: "red" })
-                } else if (message == "Wrong Password") {
-                    console.log("<><><>")
-                    setUsernameStyle({ color: "#aaa" })
-                    setPassStyle({ color: "red" })
-                }
-            })
+        let debug = false
+        if (_username != "" && _pass != "") {
+            await loginAPI(_username, _pass)
+                .then(async response => {
+                    {
+                        debug && console.log(response.data)
+                    }
+                    setPassStyle({ color: "#0f0" })
+                    setUsernameStyle({ color: "#0f0" })
+                    processLogin(response.data)
+                })
+                .catch(err => {
+                    {
+                        debug && console.log(err)
+                    }
+                    if (err == "Invalid Username") {
+                        setPassStyle({ color: "#aaa" })
+                        setUsernameStyle({ color: "red" })
+                    } else if (err == "Wrong Password") {
+                        setUsernameStyle({ color: "#aaa" })
+                        setPassStyle({ color: "red" })
+                    }
+                })
+        } else {
+            {
+                debug && console.log("enter username and pass")
+            }
+        }
+    }
+
+    processLogin = _props => {
+        console.log("<Login.processLogin::>" + JSON.stringify(_props))
+        //TODO: fetch previous devices data from server
+        //TODO: ask user to restore devices data if any
+        setTimeout(async () => {
+            GoToPairing()
+        }, 500)
     }
 
     onSignup = async () => {
-        console.log("Signup")
-        await signUpAPI(_username, _pass)
-            .then(response => {
-                console.log(response.data)
-            })
-            .catch(err => {
-                let { message } = err
-                console.log(err.message)
-                if (message == "Username Required") {
-                    console.log("Username Required")
-                } else if (message == "Username Required") {
-                    console.log("Password Required")
-                }
-            })
+        let debug = true
+        if (_username != "" && _pass != "") {
+            if (_pass == _RePass) {
+                setPassStyle({ color: "#0f0" })
+                setUsernameStyle({ color: "#0f0" })
+                await signUpAPI(_username, _pass)
+                    .then(async response => {
+                        {
+                            debug && console.log("<onSignup.then.MSG::>" + response.data.message)
+                        }
+                        addNewUser(response.data.message)
+                    })
+                    .catch(err => {
+                        {
+                            debug && console.log("<onSignup.catch.ERR::>" + err)
+                        }
+                        if (err == "Username Required") {
+                            {
+                                debug &&
+                                    console.log("<onSignup.catch.ERR::>" + "-->Username Required")
+                            }
+                        } else if (err == "Username Required") {
+                            {
+                                debug &&
+                                    console.log("<onSignup.catch.ERR::>" + "-->Password Required")
+                            }
+                        } else if (err == "Username taken") {
+                            {
+                                debug && console.log("<onSignup.catch.ERR::>" + "-->Username taken")
+                            }
+                            setUsernameStyle({ color: "#f00" })
+                        }
+                    })
+            } else {
+                setPassStyle({ color: "#f00" })
+            }
+        }
     }
 
-    onBack = () => {
-        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.")
-        props.navigation.replace("Welcome")
+    addNewUser = async _props => {
+        let debug = true
+        {
+            debug && console.log("<addNewUser>" + _props)
+        }
+        //-->create user dataset
+        const userInfo = [
+            {
+                User_Id: _username,
+                Email_Id: "email1",
+                Phone_Version: "",
+                Device_Id: "",
+            },
+        ]
+        //-->save user data to local DB
+        insertUserInfo(userInfo)
+        //-->navigate to pairing after timeout
+        setTimeout(async () => {
+            let userRes = await getUserInfoFromDb()
+            if (userRes) {
+                //-->data saved successfully
+                console.log("User : ", userRes)
+                GoToPairing()
+            } else {
+                //-->data not saved
+                console.log("No User")
+            }
+        }, 500)
     }
 
     return (
         <View style={styles.container}>
             <View
                 style={{
-                    flex: 1.7,
+                    flex: 1.5,
                     width: "100%",
                     backgroundColor: "#aaa",
                     justifyContent: "center",
@@ -108,10 +182,10 @@ const Login = props => {
                     <Item floatingLabel>
                         <Label>Username</Label>
                         <Input
+                            /* autoFocus={true} */
                             style={usernameStyle}
                             onChangeText={text => {
-                                console.log(text)
-                                _username = text
+                                setUsername(text)
                             }}
                         />
                     </Item>
@@ -120,16 +194,26 @@ const Login = props => {
                         <Input
                             style={passStyle}
                             onChangeText={text => {
-                                console.log(text)
-                                _pass = text
+                                setPass(text)
                             }}
                         />
                     </Item>
-                    <View style={styles.ButtonView}>
+                    {!login && (
+                        <Item floatingLabel>
+                            <Label>Re-Type Password</Label>
+                            <Input
+                                style={passStyle}
+                                onChangeText={text => {
+                                    setRePass(text)
+                                }}
+                            />
+                        </Item>
+                    )}
+                    <View style={[styles.ButtonView]}>
                         {login && (
                             <Button
                                 style={[styles.LoginButton, styles.Button, {}]}
-                                nPress={onLogin}>
+                                onPress={onLogin}>
                                 <Text style={{ fontWeight: "bold", color: "#aaa" }}>Login</Text>
                             </Button>
                         )}
@@ -168,9 +252,11 @@ const Login = props => {
                     </Text>
                 </View>
                 <View style={{ borderWidth: 0, alignItems: "center", paddingTop: 20 }}>
-                    <Text style={{ fontWeight: "bold", color: "#aaa" }} onPress={GoToPairing}>
-                        Skip
-                    </Text>
+                    <Button
+                        style={[styles.Button, { /* borderWidth: 1, */ width: "30%" }]}
+                        onPress={GoToPairing}>
+                        <Text style={{ fontWeight: "bold", color: "#aaa" }}>Skip</Text>
+                    </Button>
                 </View>
             </View>
         </View>

@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
-    view1: { width: "100%", backgroundColor: "#aaa", flex: 1.7, justifyContent: "center" },
+    view1: { width: "100%", backgroundColor: "#aaa", flex: 1.5, justifyContent: "center" },
     textView: {
         width: "100%",
         backgroundColor: "#fff",

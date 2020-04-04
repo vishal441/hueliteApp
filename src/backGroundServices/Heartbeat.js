@@ -18,6 +18,7 @@ const declareDisconnected = item => {
 }
 
 const heartBeatHandler = async (deviceList, updateList) => {
+    let debug = true
     //const Dlist = useSelector(state => state.deviceList)
     //console.log("---" + deviceList.length)
     // if(deviceList.lenght>0){

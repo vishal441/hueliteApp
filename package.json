@@ -22,6 +22,7 @@
         "@react-native-community/netinfo": "^4.6.1",
         "axios": "^0.19.2",
         "fs": "0.0.1-security",
+        "intersects": "^2.7.1",
         "moment": "^2.24.0",
         "native-base": "^2.13.8",
         "node-wifi": "^2.0.12",
@@ -51,6 +52,7 @@
         "realm": "^3.6.5",
         "redux": "^4.0.4",
         "styled-components": "^5.0.1",
+        "toggle-switch-react-native": "^2.1.0",
         "underscore": "^1.9.1",
         "wifi-control": "^2.0.1"
     },

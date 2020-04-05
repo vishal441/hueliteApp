@@ -9,7 +9,7 @@ import {
   Alert,
   Button
 } from "react-native";
-import { withNavigationFocus } from "react-navigation";
+import { withNavigationFocus, SafeAreaView } from "react-navigation";
 import { heartBeatHandler } from "../../backGroundServices/Heartbeat";
 import DeviceSettings from "react-native-device-settings";
 import { connect } from "react-redux";
@@ -58,7 +58,6 @@ class Dashboard extends Component {
 
   async componentDidUpdate() {
     let dl = await getDeviceListFromDb();
-    console.log("()()" + JSON.stringify(dl.data));
     let { deviceList, deviceListAction } = this.props;
     //console.log("++++" + JSON.stringify(deviceList));
   }
@@ -108,43 +107,45 @@ class Dashboard extends Component {
     let { deviceList, deviceListAction } = this.props;
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate("MainPanel");
-            }}
-          >
-            <Image style={styles.image} source={ICON.HamburgerIcon} />
-          </TouchableOpacity>
-          <RouteHeader
-            onPress={() => {
-              this.props.navigation.navigate("WifiSearchScreen");
-            }}
-          />
-        </View>
-        <View style={styles.body}>
-          <Text style={styles.textinput}>Dashboard</Text>
-          <FlatList
-            data={deviceList}
-            keyExtractor={(item, index) => item.SSID + index}
-            extraData={deviceList}
-            renderItem={({ item, index }) => {
-              return (
-                <Slider index={index}>
-                  <CardComponent
-                    device={item}
-                    deviceList={deviceList}
-                    deviceListAction={deviceListAction}
-                    navigation={this.props.navigation}
-                  />
-                </Slider>
-              );
-            }}
-          />
-        </View>
-        <View style={[styles.warning, { display: "none" }]}>
-          <Text>this is deffault text</Text>
-        </View>
+        <SafeAreaView style={{ height: "100%" }}>
+          <View style={styles.header}>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate("MainPanel");
+              }}
+            >
+              <Image style={styles.image} source={ICON.HamburgerIcon} />
+            </TouchableOpacity>
+            <RouteHeader
+              onPress={() => {
+                this.props.navigation.navigate("WifiSearchScreen");
+              }}
+            />
+          </View>
+          <View style={styles.body}>
+            <Text style={styles.textinput}>Dashboard</Text>
+            <FlatList
+              data={deviceList}
+              keyExtractor={(item, index) => item.SSID + index}
+              extraData={deviceList}
+              renderItem={({ item, index }) => {
+                return (
+                  <Slider index={index}>
+                    <CardComponent
+                      device={item}
+                      deviceList={deviceList}
+                      deviceListAction={deviceListAction}
+                      navigation={this.props.navigation}
+                    />
+                  </Slider>
+                );
+              }}
+            />
+          </View>
+          <View style={[styles.warning, { display: "none" }]}>
+            <Text>this is deffault text</Text>
+          </View>
+        </SafeAreaView>
       </View>
     );
   }
@@ -157,19 +158,20 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
     height: "100%",
     backgroundColor: "#fff",
-    paddingTop: 30,
-    paddingHorizontal: 20,
     flex: 1
   },
   header: {
-    height: 20,
+    height: 30,
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    paddingHorizontal: 10,
+    borderWidth: 0
   },
   body: {
     flex: 1,
-    padding: 20,
-    height: "95%"
+    paddingHorizontal: 20,
+    height: "100%",
+    borderWidth: 0
   },
   textinput: {
     paddingTop: 5,

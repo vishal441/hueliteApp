@@ -50,7 +50,7 @@ class EditDashboard extends Component {
       }
       return clonedItem;
     });
-    this.renameDlgHadler();
+    //this.renameDlgHadler();
     setTimeout(function() {
       deviceListAction(newList);
     });
@@ -141,13 +141,44 @@ class EditDashboard extends Component {
             <View style={{ width: "100%" }}>
               <TouchableOpacity
                 onPress={async () => {
-                  console.log("save last state");
-                  await ConfigAPI()
+                  let debug = true;
+                  {
+                    debug &&
+                      console.log(
+                        "save last state" +
+                          "--" +
+                          this.props.selectedCard.IP_Address
+                      );
+                  }
+                  let IPAddress = this.props.selectedCard.IP_Address,
+                    SET = !this.props.selectedCard.Save_State;
+                  await ConfigAPI(IPAddress, SET)
                     .then(response => {
-                      console.log("then");
+                      {
+                        debug && console.log("SET---" + response);
+                      }
+                      let {
+                          deviceList,
+                          deviceListAction,
+                          selectedCard
+                        } = this.props,
+                        { deviceName } = this.state;
+                      let newList = deviceList.map(item => {
+                        let clonedItem = _.clone(item);
+                        if (item.Mac === selectedCard.Mac) {
+                          clonedItem.Save_State = response;
+                        }
+                        return clonedItem;
+                      });
+                      //this.renameDlgHadler();
+                      setTimeout(function() {
+                        deviceListAction(newList);
+                      });
                     })
                     .catch(err => {
-                      console.log("catch");
+                      {
+                        debug && console.log("catch");
+                      }
                     });
                 }}
               >
@@ -157,12 +188,12 @@ class EditDashboard extends Component {
                     flexDirection: "row"
                   }}
                 >
-                  <Text style={{ color: "#aaa", flex: 1 }}>
+                  <Text style={{ color: "#aaa", fontWeight: "bold", flex: 1 }}>
                     Save Last State
                   </Text>
 
                   <ToggleSwitch
-                    isOn={false}
+                    isOn={this.props.selectedCard.Save_State}
                     onColor="green"
                     offColor="#aaa"
                     labelStyle={{ color: "black", fontWeight: "900" }}

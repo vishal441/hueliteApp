@@ -52,7 +52,7 @@ export class ColorWheel1 extends Component {
       this.initials.pageX = pageX;
       this.initials.pageY = pageY;
       this.initials.radius = width / 2;
-      //console.log(this.initials)
+      console.log(this.initials);
       const offset = {
         x: pageX + width / 2,
         y: pageY + height / 2
@@ -94,7 +94,6 @@ export class ColorWheel1 extends Component {
     const rad = (Math.PI * deg) / 180;
     const x = r * Math.cos(rad);
     const y = r * Math.sin(rad);
-    //console.log("ee:" + x)
 
     return {
       left: this.state.width / 2 + x,
@@ -102,10 +101,14 @@ export class ColorWheel1 extends Component {
     };
   }
 
+  outBounds(event) {
+    const { radius } = this.calcPolar(event);
+    return radius > 1;
+  }
+
   calcPolar(event) {
-    //const { pageX, pageY, moveX, moveY } = gestureState
     const [x, y] = [event.nativeEvent.absoluteX, event.nativeEvent.absoluteY];
-    //console.log("X:: " + x + "   " + "Y:: " + y + "rad::" + this.state.radius)
+    console.log("<<--X>" + x + "--Y>" + y + "-->>");
     const [dx, dy] = [x - this.state.offset.x, y - this.state.offset.y];
     return {
       deg: Math.atan2(dy, dx) * (-180 / Math.PI),
@@ -114,30 +117,25 @@ export class ColorWheel1 extends Component {
     };
   }
 
-  outBounds(event) {
-    const { radius } = this.calcPolar(event);
-    //console.log("::" + radius)
-    return radius > 1;
-  }
-
   /**Send *_state* true to send onChangeComplete Callback  */
   updateColor = obj => {
-    //console.log(":::::::" + obj._state)
     const { deg, radius } = this.calcPolar(obj.event);
     const hsv = { h: deg, s: 100 * radius, v: 100 };
     const currentColor = colorsys.hsv2Hex(hsv);
-    //console.log("::--" + currentColor)
     this.setState({ hsv, currentColor });
     if (!obj._state) this.props.onColorChange(hsv);
     else if (obj._state) this.props.onColorChangeComplete(hsv);
   };
 
   onGestureEvent = event => {
-    this.initials.touchPoint.x1 = event.nativeEvent.absoluteX;
-    this.initials.touchPoint.y1 = event.nativeEvent.absoluteY;
-    console.log(this.initials);
+    let debug = true;
+    /* console.log(
+      "absoluteX>>" +
+        event.nativeEvent.absoluteX +
+        "absoluteY>>" +
+        event.nativeEvent.absoluteY
+    ); */
     if (event.nativeEvent.state === State.END) {
-      console.log("---------------------------------");
       console.log("motion END");
       if (this.outBounds(event)) {
         //this.updateColor({ event, _state: true })
@@ -148,31 +146,55 @@ export class ColorWheel1 extends Component {
           dragY: event.nativeEvent.absoluteY - this.state.top - 10
         });
         console.log("onColorUpdateEnd");
-        this.updateColor({ event, _state: true });
+        //this.updateColor({ event, _state: true });
       }
     } else if (event.nativeEvent.state === State.ACTIVE) {
       if (this.outBounds(event)) {
-        console.log(".OUTBOUNDS");
         //NOTE: circle outbounds intersection calculation
-        /**this.initials = {
-                    screeHeight: 0,
-                    screeWidth: 0,
-                    pageX: 0,
-                    pageY: 0,
-                    radius: 0,
-                    center: { x: 0, y: 0 },
-                    touchPoint: { x1: 0, y1: 0 },
-        } */
-        //<---
-        let delta = 0;
+        let m =
+          (event.nativeEvent.absoluteY - this.initials.center.y) /
+          (event.nativeEvent.absoluteX - this.initials.center.x);
+        let dt = this.initials.radius,
+          d = Math.sqrt(
+            Math.pow(event.nativeEvent.absoluteX - this.initials.center.x, 2) +
+              Math.pow(event.nativeEvent.absoluteY - this.initials.center.y, 2)
+          ),
+          t = dt / d;
+        let newX =
+          (1 - t) * this.initials.center.x + t * event.nativeEvent.absoluteX;
+        let newY =
+          (1 - t) * this.initials.center.y + t * event.nativeEvent.absoluteY;
+        this.setState({
+          dragX: newX - this.state.left - 10,
+          dragY: newY - this.state.top - 10
+        });
+        let event1 = {
+          nativeEvent: {
+            absoluteX: this.state.dragX.toFixed(1) + 10 + this.initials.pageX,
+            absoluteY: this.state.dragY.toFixed(1) + 10 + this.initials.pageY
+          }
+        };
+        console.log(
+          "--newY>>" +
+            event1.nativeEvent.absoluteY +
+            "--newX>>" +
+            event1.nativeEvent.absoluteX
+        );
 
-        //--->
-        return;
+        this.updateColor({ event: event1, _state: false });
       } else {
         this.setState({
           dragX: event.nativeEvent.absoluteX - this.state.left - 10,
           dragY: event.nativeEvent.absoluteY - this.state.top - 10
         });
+        console.log(
+          "---------------------------" +
+            "--newY>>" +
+            this.state.dragY +
+            "--newX>>" +
+            this.state.dragX
+        );
+
         this.updateColor({ event, _state: false });
       }
     }
@@ -217,6 +239,15 @@ export class ColorWheel1 extends Component {
                       top: this.state.dragY
                     }
                   ]}
+                  ref={ref => {
+                    this.Marker = ref;
+                  }}
+                  onLayout={event => {
+                    /* const layout = event.nativeEvent.layout;
+                    console.log("offsetX::" + this.state.offset.x);
+                    console.log("x::", layout.x);
+                    console.log("y::", layout.y); */
+                  }}
                 ></Animated.View>
               </View>
             </View>

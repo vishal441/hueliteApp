@@ -25,6 +25,7 @@ export const DeviceSchema = {
     Type: { type: "string", default: "Device" },
     Mac: { type: "string", default: "" },
     Host_Name: { type: "string", default: "" },
+    HOST: { type: "string", default: "" },
     SSID: { type: "string", default: "" },
     IP_Address: { type: "string", default: "" },
     Last_WS_Msg_Sent_Time_Stamp: { type: "int", default: 0 },
@@ -32,6 +33,7 @@ export const DeviceSchema = {
     Last_Heart_Time_Stamp: { type: "int", default: 0 },
     Connected: { type: "bool", default: false },
     Last_State: { type: "string", default: "#00ffff" },
+    Save_State: { type: "bool", default: true },
     Web_Socket: { type: "string", default: "" },
     Intensity: { type: "int", default: 0 },
     HSV: "HSV"
@@ -105,7 +107,7 @@ export const dataOptions = {
     DashboardTypeSchema,
     HSVSchema
   ],
-  schemaVersion: 27
+  schemaVersion: 28
 };
 
 export default new Realm(dataOptions);

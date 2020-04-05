@@ -42,7 +42,7 @@ class PairingForm extends Component {
   constructor(props) {
     super(props);
     let {
-      currDeviceStatus: { MAC_ADD }
+      currDeviceStatus: { MAC_ADD, HOST, LED_SAVE }
     } = this.props.navigation.getParam("otherParam", "default value");
     this.ws;
     this.state = {
@@ -51,6 +51,8 @@ class PairingForm extends Component {
       cnfPass: "",
       wifiList: [],
       selectedWifi: "",
+      HOST: HOST,
+      LED_SAVE: LED_SAVE,
       rememberPass: false,
       deviceMAC: MAC_ADD,
       isDialogVisible: false,
@@ -168,7 +170,9 @@ class PairingForm extends Component {
                     BSSID: BSSID.toUpperCase(),
                     SSID,
                     IP,
-                    Mac: deviceMAC
+                    Mac: this.state.deviceMAC,
+                    HOST: this.state.HOST,
+                    Save_State: this.state.LED_SAVE ? true : false
                   })
                 ];
                 insertDevices(newDevice);
@@ -254,15 +258,17 @@ class PairingForm extends Component {
   };
 
   onSkip = async () => {
-    let { deviceMAC, deviceName } = this.state,
+    let { HOST, deviceMAC, deviceName } = this.state,
       deviceArr = [],
       newDevice = createNewDevice({
         SSID: deviceName,
         Mac: deviceMAC,
-        IP: "192.168.4.1"
+        IP: "192.168.4.1",
+        HOST: HOST,
+        Save_State: this.state.LED_SAVE ? true : false
       }),
       self = this;
-    console.log("---" + deviceMAC);
+    console.log("---" + deviceMAC + "---" + HOST + this.state.LED_SAVE);
 
     deviceArr.push(newDevice);
     insertDevices(deviceArr);

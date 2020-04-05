@@ -1,18 +1,23 @@
-import { authoriseApi } from "./webApi/WebApi"
-import { getWebSocket } from "./webSocketProcess/webSocket"
+import { AuthAPI } from "./webApi/WebApi";
+import { getWebSocket } from "./webSocketProcess/webSocket";
 
 const connectToDevice = async (ipAddr, wsHandler, OnMessageRecieved, wsErr) => {
-    let authoriseResponse = await authoriseApi(ipAddr),
-        webSocket
+  AuthAPI((IPAddress = ipAddr))
+    .then(async response => {
+      console.log(response.body);
+      let webSocket = await getWebSocket(
+        ipAddr,
+        wsHandler,
+        OnMessageRecieved,
+        wsErr
+      );
+      if (webSocket) return webSocket;
+      else return false;
+    })
+    .catch(err => {
+      console.log(err);
+      return false;
+    });
+};
 
-    if (authoriseResponse && authoriseResponse.includes("Authorized")) {
-        webSocket = await getWebSocket(ipAddr, wsHandler, OnMessageRecieved, wsErr)
-    }
-    if (webSocket) {
-        return webSocket
-    } else {
-        return false
-    }
-}
-
-export { connectToDevice }
+export { connectToDevice };

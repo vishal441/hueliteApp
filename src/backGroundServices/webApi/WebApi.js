@@ -3,16 +3,31 @@ import axios from "axios";
 const _server = "http://192.168.1.6:80";
 //const _server = "https://www.huelite.in"
 
-const authoriseApi = async ipAddr => {
-  let authUrl = `http://${ipAddr}/auth`;
-  //console.log("auth URL: ",authUrl);
-  return await fetch(authUrl)
-    .then(res => {
-      return res.text();
-    })
-    .catch(e => {
-      // console.log("Error: ", e)
-    });
+const AuthAPI = async IPAddress => {
+  let debug = true;
+  return new Promise(async (resolve, reject) => {
+    await axios
+      .get("http://" + IPAddress + "/auth", { timeout: 1000 })
+      .then(response => {
+        {
+          debug &&
+            console.log(
+              "axios response-- " +
+                "LoginAPI_status::" +
+                response.status +
+                "LoginAPI_body::" +
+                response.data
+            );
+        }
+        resolve(response);
+      })
+      .catch(error => {
+        {
+          debug && console.log("axios error:", error);
+        }
+        reject(error);
+      });
+  });
 };
 
 const getStatusApi = async ipAddr => {
@@ -223,17 +238,18 @@ const UnpairAPI = async IPAddress => {
  * @param {config-->`SET` parameter --required} props
  * look into the CONFIG file for available commands
  */
-const ConfigAPI = async props => {
+const ConfigAPI = async (IPAddress, SET) => {
   //TODO: add the props for set parameter
   let debug = true;
+  {
+    debug && console.log("CONFIG API--" + IPAddress);
+  }
   return new Promise(async (resolve, reject) => {
+    let param = "";
+    if (SET) param = "SET=SET101";
+    else param = "SET=SET102";
     await axios
-      .post(
-        "http://" + props.IPAddress + "/set",
-        "SET=SET102",
-        {},
-        { timeout: 2000 }
-      )
+      .post("http://" + IPAddress + "/set", param, { timeout: 2000 })
       .then(response => {
         {
           debug &&
@@ -242,15 +258,15 @@ const ConfigAPI = async props => {
                 "LoginAPI_status::" +
                 response.status +
                 "LoginAPI_body::" +
-                response.data
+                response.data.LED_SAVE
             );
         }
-        resolve(response);
+        resolve(response.data.LED_SAVE);
         //cbRes("pass")
       })
       .catch(error => {
         {
-          debug && console.log("axios error:", error);
+          debug && console.log("axios error+++CONFIGAPI:", error);
         }
         reject(error);
       });
@@ -266,7 +282,7 @@ const StatusAPI = async (IPAddress, timeout) => {
   let debug = false;
   return new Promise(async (resolve, reject) => {
     await axios
-      .get("http://" + IPAddress + "/status", {}, { timeout: timeout })
+      .get("http://" + IPAddress + "/status", { timeout: timeout })
       .then(response => {
         {
           debug &&
@@ -283,14 +299,15 @@ const StatusAPI = async (IPAddress, timeout) => {
       })
       .catch(error => {
         {
-          debug && console.log("StatusAPI error:", error.response.data);
+          debug && console.log("StatusAPI error:", error);
         }
-        reject(error.response.data);
+        reject(error);
       });
   });
 };
 
 export {
+  AuthAPI,
   StatusAPI,
   ConfigAPI,
   UnpairAPI,
@@ -298,7 +315,6 @@ export {
   loginAPI,
   getWiFiList,
   getStatusApi,
-  authoriseApi,
   pairDeviceApi,
   saveWifiConfigApi,
   modesApi

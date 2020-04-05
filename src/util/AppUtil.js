@@ -83,13 +83,16 @@ const createNewDevice = ({
   connected,
   lastState,
   dashboardType,
-  HSV
+  HSV,
+  HOST,
+  Save_State
 }) => {
   let ts = getCurrentTimeStamp(),
     val = {
       Type: type ? type : "Device",
       Mac: Mac ? Mac : "noMAC",
       Host_Name: hostName ? hostName : "",
+      HOST: HOST ? HOST : "",
       SSID: SSID ? SSID : "",
       IP_Address: IP,
       Last_WS_Msg_Sent_Time_Stamp: lastMsgSent ? lastMsgSent : ts,
@@ -97,6 +100,7 @@ const createNewDevice = ({
       Last_Heart_Time_Stamp: lastHbeat ? lastHbeat : ts,
       Connected: connected ? connected : false,
       Last_State: lastState ? lastState : "#00ffff",
+      Save_State: Save_State ? Save_State : false,
       Web_Socket: webSocket,
       Dashoard_Type: dashboardType ? dashboardType : "",
       HSV: HSV ? HSV : { h: 120, s: 80, v: 80 }

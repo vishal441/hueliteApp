@@ -22,7 +22,7 @@ PairIos1 = props => {
   const [currDeviceStatus, setCurrDeviceStatus] = useState("X");
 
   useEffect(() => {
-    let debug = false;
+    let debug = true;
     statusInterval = setInterval(async () => {
       StatusAPI((IPAddress = "192.168.4.1"), (timeout = 500))
         .then(response => {
@@ -36,6 +36,7 @@ PairIos1 = props => {
           {
             debug && console.log(err);
           }
+          setCurrDeviceStatus("");
           setShow(false);
         });
     }, 2000);

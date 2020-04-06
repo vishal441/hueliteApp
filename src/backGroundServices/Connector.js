@@ -2,9 +2,12 @@ import { AuthAPI } from "./webApi/WebApi";
 import { getWebSocket } from "./webSocketProcess/webSocket";
 
 const connectToDevice = async (ipAddr, wsHandler, OnMessageRecieved, wsErr) => {
+  let debug = false;
   AuthAPI((IPAddress = ipAddr))
     .then(async response => {
-      console.log(response.body);
+      {
+        debug && console.log(response.body);
+      }
       let webSocket = await getWebSocket(
         ipAddr,
         wsHandler,
@@ -15,7 +18,9 @@ const connectToDevice = async (ipAddr, wsHandler, OnMessageRecieved, wsErr) => {
       else return false;
     })
     .catch(err => {
-      console.log(err);
+      {
+        debug && console.log(err);
+      }
       return false;
     });
 };

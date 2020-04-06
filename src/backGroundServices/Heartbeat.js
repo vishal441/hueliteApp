@@ -18,7 +18,7 @@ const declareDisconnected = item => {
 };
 
 const heartBeatHandler = async (deviceList, updateList) => {
-  let debug = true;
+  let debug = false;
   //const Dlist = useSelector(state => state.deviceList)
   //console.log("---" + deviceList.length)
   // if(deviceList.lenght>0){
@@ -28,7 +28,7 @@ const heartBeatHandler = async (deviceList, updateList) => {
   //console.log("HB:: " + netInfo.type)
   change = false;
   deviceList.map((item, i) => {
-    let debug = true;
+    let debug = false;
     if (item.Web_Socket && Object.entries(item.Web_Socket)) {
       let ts = getCurrentTimeStamp();
       let diff = findTimestampDiffInSec(
@@ -45,7 +45,9 @@ const heartBeatHandler = async (deviceList, updateList) => {
         item.Web_Socket.send("Heartbeat");
       }
     } else {
-      console.log("device not connected::Attempting Connect");
+      {
+        debug && console.log("device not connected::Attempting Connect");
+      }
       connectToDevice(
         item.IP_Address,
         wsRes => {
@@ -54,7 +56,9 @@ const heartBeatHandler = async (deviceList, updateList) => {
         (mgsRecievedRes, wsRes) => {
           if (wsRes) {
             if (mgsRecievedRes && wsRes) {
-              console.log("ws_msg:: " + mgsRecievedRes.data);
+              {
+                debug && console.log("ws_msg:: " + mgsRecievedRes.data);
+              }
               item.Web_Socket = wsRes;
               item.Last_WS_Msg_Received_Time_Stamp = getCurrentTimeStamp();
               item.Connected = true;

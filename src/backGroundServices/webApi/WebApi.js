@@ -4,7 +4,7 @@ const _server = "http://192.168.1.6:80";
 //const _server = "https://www.huelite.in"
 
 const AuthAPI = async IPAddress => {
-  let debug = true;
+  let debug = false;
   return new Promise(async (resolve, reject) => {
     await axios
       .get("http://" + IPAddress + "/auth", { timeout: 1000 })

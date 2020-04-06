@@ -65,10 +65,14 @@ var styles = StyleSheet.create({
     top: -20,
     width: 40,
     height: 40,
-    backgroundColor: "#ffffffaa",
+    backgroundColor: "#ffffff66",
     opacity: 1,
-    borderColor: "#aaaaaa66",
+    borderColor: "#aaaaaa44",
     borderWidth: 6,
-    borderRadius: 20
+    borderRadius: 20,
+    shadowColor: "rgb(46, 48, 58)",
+    shadowOffset: { width: 1, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 2
   }
 });

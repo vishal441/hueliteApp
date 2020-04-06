@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { Image, Dimensions, StyleSheet, View } from "react-native";
+import {
+  Image,
+  Dimensions,
+  StyleSheet,
+  View,
+  findNodeHandle
+} from "react-native";
 import Animated from "react-native-reanimated";
 import { ICON } from "../../common/constants/ImageConstant";
 import {
@@ -8,16 +14,16 @@ import {
   TapGestureHandler
 } from "react-native-gesture-handler";
 import colorsys from "colorsys";
+import { UIManager } from "react-native";
 
-const { event, Value, set, cond, add, call } = Animated;
-/* initialColor={selectedColor}
-HSV={this.props.HSV}
-onColorChange={color => this.props.onColorChange(color)}
-style={{ width: 300, height: 300, marginTop: 100 }}
-thumbSize={20}
-thumbStyle={{ alignItems: "center" }}
-onColorChangeComplete={color => this.props.onColorChangeComplete(color)} */
-
+/**
+ * @param       - props
+ *                - selectedColor<HEX>
+ *                - HSV<HSV>
+ * @callback    - props
+ *                 onColorChangeComplete({color<HSV>})
+ *                 onColorChangeComplete1({color<HSV>})
+ */
 export class ColorWheel1 extends Component {
   constructor(props) {
     super(props);
@@ -52,7 +58,6 @@ export class ColorWheel1 extends Component {
       this.initials.pageX = pageX;
       this.initials.pageY = pageY;
       this.initials.radius = width / 2;
-      console.log(this.initials);
       const offset = {
         x: pageX + width / 2,
         y: pageY + height / 2
@@ -101,15 +106,63 @@ export class ColorWheel1 extends Component {
     };
   }
 
-  outBounds(event) {
-    const { radius } = this.calcPolar(event);
+  outBounds(event, check) {
+    const { radius } = this.calcPolar(event, check);
     return radius > 1;
   }
 
-  calcPolar(event) {
+  calcPolar(event, check) {
     const [x, y] = [event.nativeEvent.absoluteX, event.nativeEvent.absoluteY];
-    console.log("<<--X>" + x + "--Y>" + y + "-->>");
     const [dx, dy] = [x - this.state.offset.x, y - this.state.offset.y];
+    let de = Math.atan2(dy, dx) * (-180 / Math.PI);
+    if (!check) {
+      //console.log("<<--X:" + x + "--Y:" + y + "--D:" + de.toFixed(1) + "-->>");
+    }
+    if (de <= 0 && de >= -90 && !false) {
+      //console.log("<<--X:" + x + "--Y:" + y + "--D:" + de.toFixed(1) + "-->>");
+      let [_dx, _dy] = [
+        x - 1 - this.state.offset.x,
+        y - 1 - this.state.offset.y
+      ];
+      return {
+        deg: Math.atan2(_dy, _dx) * (-180 / Math.PI),
+        // pitagoras r^2 = x^2 + y^2 normalized
+        radius: Math.sqrt(_dy * _dy + _dx * _dx) / this.state.radius
+      };
+    } else if (de >= -180 && de <= -90 && !false) {
+      //console.log("<<--X:" + x + "--Y:" + y + "--D:" + de.toFixed(1) + "-->>");
+      let [_dx, _dy] = [
+        x + 1 - this.state.offset.x,
+        y - 1 - this.state.offset.y
+      ];
+      return {
+        deg: Math.atan2(_dy, _dx) * (-180 / Math.PI),
+        // pitagoras r^2 = x^2 + y^2 normalized
+        radius: Math.sqrt(_dy * _dy + _dx * _dx) / this.state.radius
+      };
+    } else if (de >= 90 && de <= 180 && !false) {
+      //console.log("<<--X:" + x + "--Y:" + y + "--D:" + de.toFixed(1) + "-->>");
+      let [_dx, _dy] = [
+        x + 1 - this.state.offset.x,
+        y + 1 - this.state.offset.y
+      ];
+      return {
+        deg: Math.atan2(_dy, _dx) * (-180 / Math.PI),
+        // pitagoras r^2 = x^2 + y^2 normalized
+        radius: Math.sqrt(_dy * _dy + _dx * _dx) / this.state.radius
+      };
+    } else if (de >= 0 && de <= 90 && !false) {
+      //console.log("<<--X:" + x + "--Y:" + y + "--D:" + de.toFixed(1) + "-->>");
+      let [_dx, _dy] = [
+        x - 1 - this.state.offset.x,
+        y + 1 - this.state.offset.y
+      ];
+      return {
+        deg: Math.atan2(_dy, _dx) * (-180 / Math.PI),
+        // pitagoras r^2 = x^2 + y^2 normalized
+        radius: Math.sqrt(_dy * _dy + _dx * _dx) / this.state.radius
+      };
+    }
     return {
       deg: Math.atan2(dy, dx) * (-180 / Math.PI),
       // pitagoras r^2 = x^2 + y^2 normalized
@@ -117,40 +170,28 @@ export class ColorWheel1 extends Component {
     };
   }
 
-  /**Send *_state* true to send onChangeComplete Callback  */
+  /**
+   * @param     - obj
+   *              - event<nativeEvent> -- coordinates of color marker/picker
+   *              - _state<bool> -- Gesture state
+   *                - true  :: Gesture Ended
+   *                - false :: Gesture Active
+   * @summary   - calls the callback[onColorChange(color<HSV>)] upon Gesture End
+   *            - calls the callback[onColorChangeComplete({color<HSV>})] upon Gesture End
+   */
   updateColor = obj => {
     const { deg, radius } = this.calcPolar(obj.event);
     const hsv = { h: deg, s: 100 * radius, v: 100 };
     const currentColor = colorsys.hsv2Hex(hsv);
     this.setState({ hsv, currentColor });
     if (!obj._state) this.props.onColorChange(hsv);
-    else if (obj._state) this.props.onColorChangeComplete(hsv);
+    else if (obj._state) this.props.onColorChangeComplete({ color: hsv });
   };
 
   onGestureEvent = event => {
     let debug = true;
-    /* console.log(
-      "absoluteX>>" +
-        event.nativeEvent.absoluteX +
-        "absoluteY>>" +
-        event.nativeEvent.absoluteY
-    ); */
     if (event.nativeEvent.state === State.END) {
-      console.log("motion END");
-      if (this.outBounds(event)) {
-        //this.updateColor({ event, _state: true })
-        return;
-      } else {
-        this.setState({
-          dragX: event.nativeEvent.absoluteX - this.state.left - 10,
-          dragY: event.nativeEvent.absoluteY - this.state.top - 10
-        });
-        console.log("onColorUpdateEnd");
-        //this.updateColor({ event, _state: true });
-      }
-    } else if (event.nativeEvent.state === State.ACTIVE) {
-      if (this.outBounds(event)) {
-        //NOTE: circle outbounds intersection calculation
+      if (this.outBounds(event, (check = true))) {
         let m =
           (event.nativeEvent.absoluteY - this.initials.center.y) /
           (event.nativeEvent.absoluteX - this.initials.center.x);
@@ -168,33 +209,65 @@ export class ColorWheel1 extends Component {
           dragX: newX - this.state.left - 10,
           dragY: newY - this.state.top - 10
         });
-        let event1 = {
-          nativeEvent: {
-            absoluteX: this.state.dragX.toFixed(1) + 10 + this.initials.pageX,
-            absoluteY: this.state.dragY.toFixed(1) + 10 + this.initials.pageY
+        UIManager.measure(
+          findNodeHandle(this.view),
+          (x, y, width, height, pageX, pageY) => {
+            let _x = pageX;
+            let _y = pageY;
+            let event1 = {
+              nativeEvent: {
+                absoluteX: _x + 10,
+                absoluteY: _y + 10
+              }
+            };
+            this.updateColor({ event: event1, _state: true, outbound: true });
           }
-        };
-        console.log(
-          "--newY>>" +
-            event1.nativeEvent.absoluteY +
-            "--newX>>" +
-            event1.nativeEvent.absoluteX
         );
-
-        this.updateColor({ event: event1, _state: false });
       } else {
         this.setState({
           dragX: event.nativeEvent.absoluteX - this.state.left - 10,
           dragY: event.nativeEvent.absoluteY - this.state.top - 10
         });
-        console.log(
-          "---------------------------" +
-            "--newY>>" +
-            this.state.dragY +
-            "--newX>>" +
-            this.state.dragX
+        this.updateColor({ event, _state: true });
+      }
+    } else if (event.nativeEvent.state === State.ACTIVE) {
+      if (this.outBounds(event, (check = true))) {
+        let m =
+          (event.nativeEvent.absoluteY - this.initials.center.y) /
+          (event.nativeEvent.absoluteX - this.initials.center.x);
+        let dt = this.initials.radius,
+          d = Math.sqrt(
+            Math.pow(event.nativeEvent.absoluteX - this.initials.center.x, 2) +
+              Math.pow(event.nativeEvent.absoluteY - this.initials.center.y, 2)
+          ),
+          t = dt / d;
+        let newX =
+          (1 - t) * this.initials.center.x + t * event.nativeEvent.absoluteX;
+        let newY =
+          (1 - t) * this.initials.center.y + t * event.nativeEvent.absoluteY;
+        this.setState({
+          dragX: newX - this.state.left - 10,
+          dragY: newY - this.state.top - 10
+        });
+        UIManager.measure(
+          findNodeHandle(this.view),
+          (x, y, width, height, pageX, pageY) => {
+            let _x = pageX;
+            let _y = pageY;
+            let event1 = {
+              nativeEvent: {
+                absoluteX: _x + 10,
+                absoluteY: _y + 10
+              }
+            };
+            this.updateColor({ event: event1, _state: false, outbound: true });
+          }
         );
-
+      } else {
+        this.setState({
+          dragX: event.nativeEvent.absoluteX - this.state.left - 10,
+          dragY: event.nativeEvent.absoluteY - this.state.top - 10
+        });
         this.updateColor({ event, _state: false });
       }
     }
@@ -216,6 +289,7 @@ export class ColorWheel1 extends Component {
             <View
               style={{
                 borderWidth: 0,
+                borderRadius: 350,
                 borderColor: "#EE0",
                 marginTop: 100
               }}
@@ -232,22 +306,15 @@ export class ColorWheel1 extends Component {
                   source={ICON.COLOR_WHEEL}
                 />
                 <Animated.View
+                  ref={ref => (this.view = ref)}
                   style={[
                     styles.circle,
                     {
                       left: this.state.dragX,
-                      top: this.state.dragY
+                      top: this.state.dragY,
+                      borderColor: "#eee"
                     }
                   ]}
-                  ref={ref => {
-                    this.Marker = ref;
-                  }}
-                  onLayout={event => {
-                    /* const layout = event.nativeEvent.layout;
-                    console.log("offsetX::" + this.state.offset.x);
-                    console.log("x::", layout.x);
-                    console.log("y::", layout.y); */
-                  }}
                 ></Animated.View>
               </View>
             </View>
@@ -276,7 +343,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     backgroundColor: "transparent",
     borderWidth: 3,
-    borderColor: "#EEEEEE",
     elevation: 3,
     shadowColor: "rgb(46, 48, 58)",
     shadowOffset: { width: 0, height: 2 },

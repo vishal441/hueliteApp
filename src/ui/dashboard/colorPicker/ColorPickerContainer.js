@@ -1,32 +1,21 @@
 import React, { Component } from "react";
 import { View, TouchableOpacity, Image, StyleSheet } from "react-native";
-import ColorChooser from "./ColorPicker";
 import { ColorPickerHeader } from "./ColorPickerHeader";
 import { CustomeSlider } from "./Slider";
 import { ICON } from "../../common/constants/ImageConstant";
 import LinearGradient from "react-native-linear-gradient";
-import { getSelectedGradientColors, changeBrightness } from "../DashboardUtil";
-import {
-  changeColorBrigntess,
-  hexToRgb,
-  hsvToRgb,
-  rgbToHex
-} from "../colorPicker/ColorUtil";
+import { getSelectedGradientColors } from "../DashboardUtil";
 import { connect } from "react-redux";
 import { updateDeviceList } from "../../../util/AppUtil";
 import { deviceListAction } from "../../../redux/actions/DeviceListAction";
 import { insertDevices } from "../../../database/table/DeviceTable";
 import DeviceNavigator from "./DeviceNavigator";
 import { reduxConstant } from "../../../redux/ReduxConstant";
-import ColorPicker_temp from "./ColorPicker_temp";
 import colorsys from "colorsys";
 import { getCurrentTimeStamp } from "../../../util/DateTimeUtil";
 import { SafeAreaView } from "react-navigation";
 
 class ColorPickerContainer extends React.Component {
-  /*
-        PROPS:    {selectedDevice: device, deviceList: deviceList}
-    */
   constructor(props) {
     super(props);
     this.colorUpdateTimestamp = getCurrentTimeStamp() - 100;
@@ -63,7 +52,7 @@ class ColorPickerContainer extends React.Component {
         "color:: " +
         colorsys.hsv2Hex(color.h, color.s, selectedDevice.HSV.v)
     ); */
-    let { selectedColor, gradColorArr } = getSelectedGradientColors(color);
+    //let { selectedColor, gradColorArr } = getSelectedGradientColors(color);
     //this.setState({ selectedColor: selectedColor /* , gradColorArr: gradColorArr  */ })
 
     //TODO: send ws color event to device
@@ -83,35 +72,48 @@ class ColorPickerContainer extends React.Component {
     }
   };
 
-  /*  - Send the last color to the device after 150ms
-        - Update the list in DB with latest timestamp
-        TODO: add the delay timer to send thee last color after 100ms delay
-    */
-  onColorChangeComplete = color => {
+  /**
+   * @param     - props
+   *                - color<HSV>
+   * @summary   - Send the last color to the device after 150ms
+   *            - Update the list in DB with latest timestamp
+   */
+  onColorChangeComplete = props => {
+    let debug = true;
     let { navigation, deviceListAction } = this.props,
       { deviceList, selectedDevice } = navigation.getParam("otherParam"),
       updateObj = [
-        { Last_State: color },
-        { HSV: { h: color.h, s: color.s, v: selectedDevice.HSV.v } }
-      ];
-    let { selectedColor } = getSelectedGradientColors(color);
-    updateObj["Last_State"] = selectedColor;
-    updateObj["HSV"] = { h: color.h, s: color.s, v: selectedDevice.HSV.v };
-    updatedColor = selectedColor;
-    console.log("--------complete---------------------");
-    if (selectedDevice.Web_Socket) {
-      selectedDevice.Web_Socket.send(
-        colorsys.hsv2Hex(color.h, color.s, selectedDevice.HSV.v)
+        { Last_State: props.color },
+        { HSV: { h: props.color.h, s: props.color.s, v: selectedDevice.HSV.v } }
+      ],
+      _hex = colorsys.hsv2Hex(
+        props.color.h,
+        props.color.s,
+        selectedDevice.HSV.v
       );
+    updateObj["Last_State"] = _hex;
+    updateObj["HSV"] = {
+      h: props.color.h,
+      s: props.color.s,
+      v: selectedDevice.HSV.v
+    };
+    {
+      debug && console.log("Color wheel gesture complete");
+    }
+    if (selectedDevice.Web_Socket) {
+      selectedDevice.Web_Socket.send(_hex);
       this.colorUpdateTimestamp = getCurrentTimeStamp();
       let newList = updateDeviceList(updateObj, selectedDevice, deviceList);
       deviceListAction(newList);
       insertDevices(newList);
-      let { selectedColor, gradColorArr } = getSelectedGradientColors(color);
+      let { gradColorArr } = getSelectedGradientColors(props.color);
       this.setState({
-        selectedColor: selectedColor,
         gradColorArr: gradColorArr
       });
+    } else {
+      /**
+       *
+       */
     }
   };
 
@@ -185,9 +187,9 @@ class ColorPickerContainer extends React.Component {
         </View>
         {/* <ColorPicker_temp /> */}
         <DeviceNavigator
-          onColorChange={this.onColorChange}
           selectedColor={selectedColor}
           HSV={this.state.HSV}
+          onColorChange={this.onColorChange}
           onColorChangeComplete={this.onColorChangeComplete}
         />
       </View>
